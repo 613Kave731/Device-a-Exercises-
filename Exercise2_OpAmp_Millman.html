@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Exercise 2 — Op-Amp Millman's Theorem · Messina Exam</title>
+<style>
+  *{box-sizing:border-box;}
+  body{font-family:'Segoe UI',sans-serif;background:#1a1a2e;margin:0;padding:20px;color:#e8e8f0;}
+  h1{font-size:20px;color:#ffd166;margin:0 0 4px;}
+  .sub{font-size:12px;color:#888;margin-bottom:18px;}
+  .ex-tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+  .etab{padding:9px 20px;border-radius:22px;cursor:pointer;font-size:13px;font-weight:700;border:2px solid;transition:all .2s;}
+  .ea{border-color:#0f3460;color:#80a0ff;background:transparent;}
+  .ea.active,.ea:hover{background:#0f3460;color:white;}
+  .eb{border-color:#1a6b35;color:#80d080;background:transparent;}
+  .eb.active,.eb:hover{background:#1a6b35;color:white;}
+  .ec{border-color:#7b2d8b;color:#c080ff;background:transparent;}
+  .ec.active,.ec:hover{background:#7b2d8b;color:white;}
+  .ex-panel{display:none;}.ex-panel.active{display:block;}
+  .step-tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;}
+  .stab{padding:6px 14px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;border:1.5px solid #444;color:#aaa;background:#252535;transition:all .2s;}
+  .stab.active,.stab:hover{background:#ffd166;color:#1a1a2e;border-color:#ffd166;}
+  .step-panel{display:none;}.step-panel.active{display:block;}
+  .card{border-radius:12px;padding:18px;margin-bottom:14px;border:1.5px solid;}
+  .ca{background:#10172a;border-color:#1a3a7a;}
+  .cb{background:#0f1f0f;border-color:#1a5020;}
+  .cc{background:#1a0f2a;border-color:#6020a0;}
+  h2{font-size:14px;font-weight:700;margin:0 0 12px;padding-bottom:8px;}
+  .ha{color:#80a0ff;border-bottom:1px solid #1a3a7a;}
+  .hb{color:#80d080;border-bottom:1px solid #1a5020;}
+  .hc{color:#c080ff;border-bottom:1px solid #6020a0;}
+  .formula{border-radius:8px;padding:12px 16px;text-align:center;margin:10px 0;font-weight:bold;}
+  .fa{background:#0a1230;border:1px solid #2060c0;}
+  .fb{background:#0a1a0a;border:1px solid #30a030;}
+  .fc{background:#1a0a30;border:1px solid #8030c0;}
+  .fk{background:#2a2000;border:1px solid #c09000;}
+  .big{font-size:18px;color:#ffd166;line-height:2;}
+  .med{font-size:14px;color:#ffd166;line-height:1.8;}
+  .sm{font-size:13px;color:#e0e0f0;line-height:1.8;}
+  .tip{background:#2a2000;border-left:3px solid #ffc107;padding:10px 12px;border-radius:0 8px 8px 0;font-size:12.5px;margin:8px 0;line-height:1.7;color:#ffd080;}
+  .danger{background:#2a0a0a;border-left:3px solid #e63946;padding:10px 12px;border-radius:0 8px 8px 0;font-size:12.5px;margin:8px 0;line-height:1.7;color:#ff9090;}
+  .ok{background:#0a2a0a;border-left:3px solid #28a745;padding:10px 12px;border-radius:0 8px 8px 0;font-size:12.5px;margin:8px 0;line-height:1.7;color:#80d080;}
+  .result-box{background:#0a1a0a;border:2px solid #28a745;border-radius:12px;padding:16px 20px;margin:12px 0;text-align:center;}
+  .result-val{font-size:26px;font-weight:bold;color:#ffd166;margin:6px 0;}
+  .result-lbl{font-size:12px;color:#888;margin:2px 0;}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  code{background:#2a2a3a;padding:2px 6px;border-radius:4px;font-family:'Courier New',monospace;font-size:13px;color:#80d0ff;}
+  .badge{display:inline-block;padding:3px 10px;border-radius:10px;font-size:11px;font-weight:700;margin-right:6px;}
+  .ba{background:#0f3460;color:#80a0ff;}
+  .bb{background:#1a6b35;color:#80d080;}
+  .bc{background:#7b2d8b;color:#c080ff;}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.5px;}
+  th{background:#252540;color:#ffd166;padding:8px 10px;text-align:left;border:1px solid #333;}
+  td{padding:7px 10px;border:1px solid #333;color:#d0d0e0;}
+  tr:nth-child(even) td{background:#1e1e30;}
+  svg text{font-family:'Segoe UI',sans-serif;}
+  .rules-box{background:#0a0a1e;border:2px solid #ffd166;border-radius:10px;padding:14px 18px;margin-bottom:16px;}
+  .rules-box h3{color:#ffd166;font-size:14px;margin:0 0 8px;}
+  @media(max-width:600px){.two{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<h1>🔌 Exercise 2 — Op-Amp with Millman's Theorem</h1>
+<p class="sub">Messina Exam Prep · Virtual Short + Millman Node · 3 Exercises A→C · Full Solutions</p>
+
+<div class="rules-box">
+  <h3>⚡ Golden Rules — Op-Amp Analysis</h3>
+  <div class="two">
+    <div>
+      <div class="formula fa"><span class="med">Rule 1 — Virtual Short: V₋ = V₊</span><br><span style="font-size:12px;color:#aaa">The two input terminals are at the same potential</span></div>
+      <div class="formula fa"><span class="med">Rule 2 — Virtual Open: I₋ = I₊ = 0</span><br><span style="font-size:12px;color:#aaa">No current flows INTO the op-amp terminals</span></div>
+    </div>
+    <div>
+      <div class="formula fk"><span class="med">Millman at Node A (V₋):</span><br><span class="big">V_o = −R_f · Σ(Eₖ/Rₖ ± Iₖ)</span><br><span style="font-size:11px;color:#aaa">Set Millman numerator = 0 (virtual ground) → solve for V_o</span></div>
+    </div>
+  </div>
+  <div class="tip">⚡ <strong>Method:</strong> V₊ = 0 (non-inverting to ground) → Virtual Short → V₋ = 0. Node A is at virtual ground. Write Millman numerator = 0 at Node A. Solve for V_o.</div>
+</div>
+
+<div class="ex-tabs">
+  <div class="etab ea active" onclick="showEx('a')">Exercise A — Easy 🔵</div>
+  <div class="etab eb" onclick="showEx('b')">Exercise B — Medium 🟢</div>
+  <div class="etab ec" onclick="showEx('c')">Exercise C — Hard 🟣</div>
+</div>
+
+<!-- ═══════════════ EXERCISE A ═══════════════ -->
+<div class="ex-panel active" id="ex-a">
+<span class="badge ba">Exercise A</span><span style="color:#aaa;font-size:12px;">Easy — inverting amplifier with 2 input branches</span>
+<div class="step-tabs">
+  <div class="stab active" onclick="showStep('a',0)">① Circuit</div>
+  <div class="stab" onclick="showStep('a',1)">② Apply Rules</div>
+  <div class="stab" onclick="showStep('a',2)">③ Millman at A</div>
+  <div class="stab" onclick="showStep('a',3)">④ Solve V_o</div>
+  <div class="stab" onclick="showStep('a',4)">✅ Answer</div>
+</div>
+
+<div class="step-panel active" id="a-0">
+<div class="card ca">
+  <h2 class="ha">① The Circuit</h2>
+  <svg viewBox="0 0 600 280" width="100%" xmlns="http://www.w3.org/2000/svg">
+    <rect width="600" height="280" fill="#10172a" rx="10"/>
+    <!-- Op-Amp Triangle -->
+    <polygon points="310,80 310,200 430,140" fill="#1a2040" stroke="#80a0ff" stroke-width="2"/>
+    <text x="358" y="145" font-size="13" fill="#80a0ff" text-anchor="middle" font-weight="bold">A741</text>
+    <!-- Labels V- V+ -->
+    <text x="322" y="105" font-size="12" fill="#ff8080">V₋</text>
+    <text x="322" y="185" font-size="12" fill="#80d080">V₊</text>
+    <!-- V+ to ground -->
+    <line x1="310" y1="180" x2="250" y2="180" stroke="#80d080" stroke-width="2"/>
+    <line x1="250" y1="180" x2="250" y2="240" stroke="#80d080" stroke-width="2"/>
+    <text x="240" y="258" font-size="11" fill="#555" text-anchor="middle">⏚ GND</text>
+    <line x1="236" y1="248" x2="264" y2="248" stroke="#555" stroke-width="2"/>
+    <line x1="241" y1="254" x2="259" y2="254" stroke="#555" stroke-width="1.5"/>
+    <line x1="246" y1="260" x2="254" y2="260" stroke="#555" stroke-width="1"/>
+    <!-- Node A (V-) -->
+    <circle cx="310" cy="108" r="6" fill="#ffd166"/>
+    <text x="298" y="98" font-size="12" fill="#ffd166" font-weight="bold">A</text>
+    <line x1="310" y1="114" x2="310" y2="108" stroke="#ffd166" stroke-width="2"/>
+    <!-- Feedback Rf = 10Ω -->
+    <line x1="310" y1="108" x2="310" y2="50" stroke="#80a0ff" stroke-width="2"/>
+    <line x1="310" y1="50" x2="470" y2="50" stroke="#80a0ff" stroke-width="2"/>
+    <rect x="348" y="38" width="56" height="22" fill="#1a2040" stroke="#80a0ff" rx="4"/>
+    <text x="376" y="53" font-size="12" fill="#ffd166" text-anchor="middle">Rf=10Ω</text>
+    <line x1="470" y1="50" x2="470" y2="140" stroke="#80a0ff" stroke-width="2"/>
+    <!-- Output V_o -->
+    <line x1="430" y1="140" x2="500" y2="140" stroke="#80a0ff" stroke-width="2"/>
+    <circle cx="500" cy="140" r="4" fill="#80a0ff"/>
+    <text x="515" y="145" font-size="13" fill="#80a0ff" font-weight="bold">V_o</text>
+    <!-- E1=4V through R1=2Ω to A -->
+    <line x1="90" y1="108" x2="254" y2="108" stroke="#ffd166" stroke-width="2"/>
+    <ellipse cx="120" cy="108" rx="28" ry="14" fill="#2a2000" stroke="#ffd166" stroke-width="2"/>
+    <text x="120" y="112" font-size="12" fill="#ffd166" text-anchor="middle">E₁=4V</text>
+    <rect x="188" y="96" width="52" height="22" fill="#1a2040" stroke="#aaa" rx="4"/>
+    <text x="214" y="111" font-size="12" fill="#ffd166" text-anchor="middle">R₁=2Ω</text>
+    <!-- E2=6V through R2=3Ω to A -->
+    <line x1="90" y1="155" x2="310" y2="155" stroke="#c080ff" stroke-width="2"/>
+    <line x1="310" y1="155" x2="310" y2="114" stroke="#c080ff" stroke-width="2"/>
+    <ellipse cx="120" cy="155" rx="28" ry="14" fill="#1a0f2a" stroke="#c080ff" stroke-width="2"/>
+    <text x="120" y="159" font-size="12" fill="#c080ff" text-anchor="middle">E₂=6V</text>
+    <rect x="188" y="143" width="52" height="22" fill="#1a0f2a" stroke="#aaa" rx="4"/>
+    <text x="214" y="158" font-size="12" fill="#ffd166" text-anchor="middle">R₂=3Ω</text>
+  </svg>
+  <table>
+    <tr><th>Element</th><th>Value</th><th>Role</th></tr>
+    <tr><td>E₁</td><td>4 V</td><td>Input branch 1 → through R₁ to Node A</td></tr>
+    <tr><td>R₁</td><td>2 Ω</td><td>Input resistor branch 1</td></tr>
+    <tr><td>E₂</td><td>6 V</td><td>Input branch 2 → through R₂ to Node A</td></tr>
+    <tr><td>R₂</td><td>3 Ω</td><td>Input resistor branch 2</td></tr>
+    <tr><td>Rf</td><td>10 Ω</td><td>Feedback resistor (A → V_o)</td></tr>
+    <tr><td>V₊</td><td>0 V</td><td>Non-inverting input tied to ground</td></tr>
+  </table>
+</div>
+</div>
+
+<div class="step-panel" id="a-1">
+<div class="card ca">
+  <h2 class="ha">② Apply Golden Rules</h2>
+  <div class="sm">
+    <strong>Step 1 — Virtual Short:</strong> V₋ = V₊ = 0 V (V₊ is grounded)<br>
+    → <strong style="color:#ffd166;">Node A is at 0 V (Virtual Ground)</strong><br><br>
+    <strong>Step 2 — Virtual Open:</strong> No current enters V₋ terminal<br>
+    → All current from E₁ through R₁ + all current from E₂ through R₂ must flow through Rf to V_o<br><br>
+    <strong>Step 3 — KCL at Node A (Millman numerator = 0):</strong><br>
+    Sum of all currents arriving at A = 0 (no current goes into the op-amp)
+  </div>
+  <div class="ok">✅ Because V₊ = 0 → V₋ = 0, Node A is a virtual ground. Millman numerator set to zero gives us V_o directly.</div>
+</div>
+</div>
+
+<div class="step-panel" id="a-2">
+<div class="card ca">
+  <h2 class="ha">③ Write Millman Equation at Node A</h2>
+  <div class="sm">
+    <strong>Currents arriving at Node A (V<sub>A</sub> = 0):</strong><br><br>
+    From E₁ through R₁: &nbsp;<code>(E₁ − 0)/R₁ = 4/2 = 2 A</code> (into A)<br>
+    From E₂ through R₂: &nbsp;<code>(E₂ − 0)/R₂ = 6/3 = 2 A</code> (into A)<br>
+    From V_o through Rf: &nbsp;<code>(V_o − 0)/Rf = V_o/10</code> (into A from output side)<br><br>
+    <strong>KCL at A: sum = 0</strong><br>
+    <code>E₁/R₁ + E₂/R₂ + V_o/Rf = 0</code><br>
+    <code>2 + 2 + V_o/10 = 0</code>
+  </div>
+  <div class="tip">💡 The feedback resistor current direction: V_o flows back to Node A through Rf. Since V_A = 0, the current is V_o/Rf (can be negative if V_o is negative).</div>
+</div>
+</div>
+
+<div class="step-panel" id="a-3">
+<div class="card ca">
+  <h2 class="ha">④ Solve for V_o</h2>
+  <div class="sm">
+    <code>2 + 2 + V_o/10 = 0</code><br>
+    <code>V_o/10 = −4</code><br>
+    <code>V_o = −40 V</code><br><br>
+    Alternatively, using the Millman formula directly:<br>
+    <code>V_o = −Rf · (E₁/R₁ + E₂/R₂) = −10 · (4/2 + 6/3) = −10 · (2 + 2) = −40 V</code>
+  </div>
+  <div class="formula fa"><span class="big">V_o = −R_f · Σ(Eₖ/Rₖ)</span><br><span style="font-size:12px;color:#aaa">This is the inverting summer formula</span></div>
+</div>
+</div>
+
+<div class="step-panel" id="a-4">
+<div class="card ca">
+  <h2 class="ha">✅ Final Answer</h2>
+  <div class="result-box">
+    <div class="result-lbl">Output Voltage</div>
+    <div class="result-val">V_o = −40 V</div>
+  </div>
+  <div class="tip">⚡ <strong>Physical intuition:</strong> Both inputs push positive current into Node A. The op-amp drives V_o very negative to pull that current back through Rf and maintain V_A = 0.</div>
+  <div class="danger">❌ <strong>Common trap:</strong> Forgetting the minus sign. An inverting op-amp INVERTS. If the inputs are positive, V_o is negative.</div>
+</div>
+</div>
+</div>
+
+<!-- ═══════════════ EXERCISE B ═══════════════ -->
+<div class="ex-panel" id="ex-b">
+<span class="badge bb">Exercise B</span><span style="color:#aaa;font-size:12px;">Medium — current source branch + sign trap</span>
+<div class="step-tabs">
+  <div class="stab active" onclick="showStep('b',0)">① Circuit</div>
+  <div class="stab" onclick="showStep('b',1)">② Apply Rules</div>
+  <div class="stab" onclick="showStep('b',2)">③ Millman at A</div>
+  <div class="stab" onclick="showStep('b',3)">④ Solve V_o</div>
+  <div class="stab" onclick="showStep('b',4)">✅ Answer</div>
+</div>
+
+<div class="step-panel active" id="b-0">
+<div class="card cb">
+  <h2 class="hb">① The Circuit — With Current Source</h2>
+  <svg viewBox="0 0 620 300" width="100%" xmlns="http://www.w3.org/2000/svg">
+    <rect width="620" height="300" fill="#0f1f0f" rx="10"/>
+    <!-- Op-Amp Triangle -->
+    <polygon points="320,85 320,205 440,145" fill="#1a2a1a" stroke="#80d080" stroke-width="2"/>
+    <text x="368" y="150" font-size="13" fill="#80d080" text-anchor="middle" font-weight="bold">A741</text>
+    <text x="332" y="110" font-size="12" fill="#ff8080">V₋</text>
+    <text x="332" y="190" font-size="12" fill="#80d080">V₊</text>
+    <!-- V+ to ground -->
+    <line x1="320" y1="185" x2="260" y2="185" stroke="#80d080" stroke-width="2"/>
+    <line x1="260" y1="185" x2="260" y2="250" stroke="#80d080" stroke-width="2"/>
+    <line x1="246" y1="255" x2="274" y2="255" stroke="#555" stroke-width="2"/>
+    <line x1="251" y1="261" x2="269" y2="261" stroke="#555" stroke-width="1.5"/>
+    <!-- Node A -->
+    <circle cx="320" cy="113" r="6" fill="#ffd166"/>
+    <text x="308" y="103" font-size="12" fill="#ffd166" font-weight="bold">A</text>
+    <!-- Feedback Rf=6Ω -->
+    <line x1="320" y1="113" x2="320" y2="55" stroke="#80d080" stroke-width="2"/>
+    <line x1="320" y1="55" x2="480" y2="55" stroke="#80d080" stroke-width="2"/>
+    <rect x="366" y="43" width="52" height="22" fill="#1a2a1a" stroke="#80d080" rx="4"/>
+    <text x="392" y="58" font-size="12" fill="#ffd166" text-anchor="middle">Rf=6Ω</text>
+    <line x1="480" y1="55" x2="480" y2="145" stroke="#80d080" stroke-width="2"/>
+    <!-- Output -->
+    <line x1="440" y1="145" x2="510" y2="145" stroke="#80d080" stroke-width="2"/>
+    <circle cx="510" cy="145" r="4" fill="#80d080"/>
+    <text x="525" y="150" font-size="13" fill="#80d080" font-weight="bold">V_o</text>
+    <!-- E1=10V through R1=5Ω -->
+    <line x1="60" y1="113" x2="264" y2="113" stroke="#ffd166" stroke-width="2"/>
+    <ellipse cx="100" cy="113" rx="30" ry="14" fill="#2a2000" stroke="#ffd166" stroke-width="2"/>
+    <text x="100" y="117" font-size="11" fill="#ffd166" text-anchor="middle">E₁=10V</text>
+    <rect x="188" y="101" width="52" height="22" fill="#1a2a1a" stroke="#aaa" rx="4"/>
+    <text x="214" y="116" font-size="12" fill="#ffd166" text-anchor="middle">R₁=5Ω</text>
+    <!-- E2=4V through R2=2Ω -->
+    <line x1="60" y1="155" x2="320" y2="155" stroke="#c080ff" stroke-width="2"/>
+    <line x1="320" y1="155" x2="320" y2="119" stroke="#c080ff" stroke-width="2"/>
+    <ellipse cx="100" cy="155" rx="30" ry="14" fill="#1a0f2a" stroke="#c080ff" stroke-width="2"/>
+    <text x="100" y="159" font-size="11" fill="#c080ff" text-anchor="middle">E₂=4V</text>
+    <rect x="188" y="143" width="52" height="22" fill="#1a0f2a" stroke="#aaa" rx="4"/>
+    <text x="214" y="158" font-size="12" fill="#ffd166" text-anchor="middle">R₂=2Ω</text>
+    <!-- I=1A current source INTO A from below -->
+    <line x1="320" y1="119" x2="320" y2="200" stroke="#ff8080" stroke-width="2"/>
+    <line x1="320" y1="200" x2="410" y2="200" stroke="#ff8080" stroke-width="2"/>
+    <line x1="410" y1="200" x2="410" y2="260" stroke="#ff8080" stroke-width="2"/>
+    <line x1="396" y1="260" x2="424" y2="260" stroke="#555" stroke-width="2"/>
+    <circle cx="320" cy="190" r="14" fill="#2a0a0a" stroke="#ff8080" stroke-width="2"/>
+    <line x1="320" y1="177" x2="320" y2="196" stroke="#ff8080" stroke-width="1.5"/>
+    <polygon points="316,178 324,178 320,166" fill="#ff8080"/>
+    <text x="350" y="194" font-size="11" fill="#ff8080">Iₛ=1A</text>
+    <text x="350" y="207" font-size="10" fill="#aaa">↑ into A</text>
+  </svg>
+  <table>
+    <tr><th>Element</th><th>Value</th><th>Role</th></tr>
+    <tr><td>E₁</td><td>10 V</td><td>Voltage source → R₁ → Node A</td></tr>
+    <tr><td>R₁</td><td>5 Ω</td><td>Input resistor 1</td></tr>
+    <tr><td>E₂</td><td>4 V</td><td>Voltage source → R₂ → Node A</td></tr>
+    <tr><td>R₂</td><td>2 Ω</td><td>Input resistor 2</td></tr>
+    <tr><td>Iₛ</td><td>1 A (↑ into A)</td><td>Current source directly into Node A</td></tr>
+    <tr><td>Rf</td><td>6 Ω</td><td>Feedback resistor</td></tr>
+  </table>
+</div>
+</div>
+
+<div class="step-panel" id="b-1">
+<div class="card cb">
+  <h2 class="hb">② Apply Golden Rules</h2>
+  <div class="sm">
+    V₊ = 0 → Virtual Short → <strong style="color:#ffd166;">V_A = V₋ = 0 V</strong><br><br>
+    Virtual Open → 0 A into V₋ terminal.<br><br>
+    Current source Iₛ = 1A flows directly INTO Node A — treat it as +1A injection.
+  </div>
+  <div class="tip">💡 A current source connected directly to the Millman node adds its value directly to the numerator. Check the direction: INTO node = positive, OUT of node = negative.</div>
+</div>
+</div>
+
+<div class="step-panel" id="b-2">
+<div class="card cb">
+  <h2 class="hb">③ Millman Equation at Node A</h2>
+  <div class="sm">
+    <code>E₁/R₁ + E₂/R₂ + Iₛ + V_o/Rf = 0</code><br><br>
+    <code>10/5 + 4/2 + 1 + V_o/6 = 0</code><br>
+    <code>2 + 2 + 1 + V_o/6 = 0</code><br>
+    <code>5 + V_o/6 = 0</code>
+  </div>
+  <div class="tip">⚡ Current sources enter the Millman numerator directly (no 1/R factor). Voltage sources enter as E/R.</div>
+</div>
+</div>
+
+<div class="step-panel" id="b-3">
+<div class="card cb">
+  <h2 class="hb">④ Solve for V_o</h2>
+  <div class="sm">
+    <code>V_o/6 = −5</code><br>
+    <code>V_o = −30 V</code><br><br>
+    Formula check:<br>
+    <code>V_o = −Rf · (E₁/R₁ + E₂/R₂ + Iₛ) = −6 · (2 + 2 + 1) = −6 · 5 = −30 V</code> ✓
+  </div>
+</div>
+</div>
+
+<div class="step-panel" id="b-4">
+<div class="card cb">
+  <h2 class="hb">✅ Final Answer</h2>
+  <div class="result-box">
+    <div class="result-lbl">Output Voltage</div>
+    <div class="result-val">V_o = −30 V</div>
+  </div>
+  <div class="ok">✅ The current source adds directly: it's as if a third voltage branch with E=R·I had been added, but here we just add 1 A directly to the KCL sum.</div>
+  <div class="danger">❌ <strong>Sign trap:</strong> If Iₛ flows OUT of Node A, it's −Iₛ in the equation. Always draw the arrow and check the direction relative to Node A.</div>
+</div>
+</div>
+</div>
+
+<!-- ═══════════════ EXERCISE C ═══════════════ -->
+<div class="ex-panel" id="ex-c">
+<span class="badge bc">Exercise C</span><span style="color:#aaa;font-size:12px;">Hard — Two-stage cascade op-amp</span>
+<div class="step-tabs">
+  <div class="stab active" onclick="showStep('c',0)">① Circuit</div>
+  <div class="stab" onclick="showStep('c',1)">② Stage 1</div>
+  <div class="stab" onclick="showStep('c',2)">③ Stage 2</div>
+  <div class="stab" onclick="showStep('c',3)">④ Final V_o</div>
+  <div class="stab" onclick="showStep('c',4)">✅ Answer</div>
+</div>
+
+<div class="step-panel active" id="c-0">
+<div class="card cc">
+  <h2 class="hc">① Two-Stage Cascade Circuit</h2>
+  <svg viewBox="0 0 700 310" width="100%" xmlns="http://www.w3.org/2000/svg">
+    <rect width="700" height="310" fill="#1a0f2a" rx="10"/>
+    <!-- Stage 1 Op-Amp -->
+    <polygon points="230,75 230,185 340,130" fill="#1f1530" stroke="#c080ff" stroke-width="2"/>
+    <text x="278" y="135" font-size="12" fill="#c080ff" text-anchor="middle" font-weight="bold">OA1</text>
+    <text x="242" y="100" font-size="11" fill="#ff8080">V₋</text>
+    <text x="242" y="175" font-size="11" fill="#80d080">V₊</text>
+    <!-- Stage 1 V+ ground -->
+    <line x1="230" y1="170" x2="175" y2="170" stroke="#80d080" stroke-width="1.5"/>
+    <line x1="175" y1="170" x2="175" y2="215" stroke="#80d080" stroke-width="1.5"/>
+    <line x1="163" y1="215" x2="187" y2="215" stroke="#555" stroke-width="2"/>
+    <line x1="168" y1="221" x2="182" y2="221" stroke="#555" stroke-width="1.5"/>
+    <!-- Stage 1 Node A1 -->
+    <circle cx="230" cy="103" r="5" fill="#ffd166"/>
+    <text x="218" y="95" font-size="11" fill="#ffd166" font-weight="bold">A₁</text>
+    <!-- Rf1 = 8Ω -->
+    <line x1="230" y1="103" x2="230" y2="48" stroke="#c080ff" stroke-width="1.5"/>
+    <line x1="230" y1="48" x2="375" y2="48" stroke="#c080ff" stroke-width="1.5"/>
+    <rect x="268" y="36" width="52" height="22" fill="#1f1530" stroke="#c080ff" rx="4"/>
+    <text x="294" y="51" font-size="11" fill="#ffd166" text-anchor="middle">Rf₁=8Ω</text>
+    <line x1="375" y1="48" x2="375" y2="130" stroke="#c080ff" stroke-width="1.5"/>
+    <!-- Stage 1 output V_o1 -->
+    <line x1="340" y1="130" x2="400" y2="130" stroke="#c080ff" stroke-width="2"/>
+    <circle cx="400" cy="130" r="4" fill="#c080ff"/>
+    <text x="378" y="122" font-size="11" fill="#c080ff">V_o1</text>
+    <!-- E1=6V R1=3Ω to A1 -->
+    <line x1="40" y1="103" x2="185" y2="103" stroke="#ffd166" stroke-width="1.5"/>
+    <ellipse cx="68" cy="103" rx="26" ry="13" fill="#2a2000" stroke="#ffd166" stroke-width="1.5"/>
+    <text x="68" y="107" font-size="11" fill="#ffd166" text-anchor="middle">E₁=6V</text>
+    <rect x="132" y="91" width="48" height="22" fill="#1f1530" stroke="#aaa" rx="4"/>
+    <text x="156" y="106" font-size="11" fill="#ffd166" text-anchor="middle">R₁=3Ω</text>
+    <!-- E2=4V R2=4Ω to A1 -->
+    <line x1="40" y1="145" x2="230" y2="145" stroke="#ff8080" stroke-width="1.5"/>
+    <line x1="230" y1="145" x2="230" y2="108" stroke="#ff8080" stroke-width="1.5"/>
+    <ellipse cx="68" cy="145" rx="26" ry="13" fill="#2a0a0a" stroke="#ff8080" stroke-width="1.5"/>
+    <text x="68" y="149" font-size="11" fill="#ff8080" text-anchor="middle">E₂=4V</text>
+    <rect x="132" y="133" width="48" height="22" fill="#2a0a0a" stroke="#aaa" rx="4"/>
+    <text x="156" y="148" font-size="11" fill="#ffd166" text-anchor="middle">R₂=4Ω</text>
+    <!-- Stage 2 Op-Amp -->
+    <polygon points="470,75 470,185 580,130" fill="#1f1530" stroke="#80d0ff" stroke-width="2"/>
+    <text x="516" y="135" font-size="12" fill="#80d0ff" text-anchor="middle" font-weight="bold">OA2</text>
+    <text x="482" y="100" font-size="11" fill="#ff8080">V₋</text>
+    <text x="482" y="175" font-size="11" fill="#80d080">V₊</text>
+    <!-- Stage 2 V+ ground -->
+    <line x1="470" y1="170" x2="418" y2="170" stroke="#80d080" stroke-width="1.5"/>
+    <line x1="418" y1="170" x2="418" y2="215" stroke="#80d080" stroke-width="1.5"/>
+    <line x1="406" y1="215" x2="430" y2="215" stroke="#555" stroke-width="2"/>
+    <!-- Stage 2 Node A2 -->
+    <circle cx="470" cy="103" r="5" fill="#ffd166"/>
+    <text x="458" y="95" font-size="11" fill="#ffd166" font-weight="bold">A₂</text>
+    <!-- Rf2 = 4Ω -->
+    <line x1="470" y1="103" x2="470" y2="48" stroke="#80d0ff" stroke-width="1.5"/>
+    <line x1="470" y1="48" x2="615" y2="48" stroke="#80d0ff" stroke-width="1.5"/>
+    <rect x="510" y="36" width="52" height="22" fill="#1f1530" stroke="#80d0ff" rx="4"/>
+    <text x="536" y="51" font-size="11" fill="#ffd166" text-anchor="middle">Rf₂=4Ω</text>
+    <line x1="615" y1="48" x2="615" y2="130" stroke="#80d0ff" stroke-width="1.5"/>
+    <!-- V_o1 feeds Stage 2 through R3=4Ω -->
+    <line x1="400" y1="130" x2="400" y2="103" stroke="#c080ff" stroke-width="2"/>
+    <line x1="400" y1="103" x2="424" y2="103" stroke="#c080ff" stroke-width="2"/>
+    <rect x="424" y="91" width="46" height="22" fill="#1f1530" stroke="#c080ff" rx="4"/>
+    <text x="447" y="106" font-size="11" fill="#ffd166" text-anchor="middle">R₃=4Ω</text>
+    <!-- Stage 2 output -->
+    <line x1="580" y1="130" x2="650" y2="130" stroke="#80d0ff" stroke-width="2"/>
+    <circle cx="650" cy="130" r="5" fill="#80d0ff"/>
+    <text x="660" y="135" font-size="13" fill="#80d0ff" font-weight="bold">V_o</text>
+    <!-- Arrow showing cascade -->
+    <text x="400" y="248" font-size="11" fill="#ffd166" text-anchor="middle">Stage 1 → V_o1 feeds Stage 2</text>
+    <text x="400" y="264" font-size="11" fill="#aaa" text-anchor="middle">Solve left-to-right!</text>
+  </svg>
+  <table>
+    <tr><th>Stage</th><th>Inputs</th><th>Rf</th></tr>
+    <tr><td><strong>Stage 1 (OA1)</strong></td><td>E₁=6V via R₁=3Ω &nbsp;|&nbsp; E₂=4V via R₂=4Ω</td><td>Rf₁ = 8Ω</td></tr>
+    <tr><td><strong>Stage 2 (OA2)</strong></td><td>V_o1 via R₃=4Ω</td><td>Rf₂ = 4Ω</td></tr>
+  </table>
+</div>
+</div>
+
+<div class="step-panel" id="c-1">
+<div class="card cc">
+  <h2 class="hc">② Solve Stage 1 — Find V_o1</h2>
+  <div class="sm">
+    Apply golden rules to OA1:<br>
+    V₊₁ = 0 → V₋₁ = 0 → <strong>Node A₁ = 0 V (virtual ground)</strong><br><br>
+    KCL at A₁:<br>
+    <code>E₁/R₁ + E₂/R₂ + V_o1/Rf₁ = 0</code><br>
+    <code>6/3 + 4/4 + V_o1/8 = 0</code><br>
+    <code>2 + 1 + V_o1/8 = 0</code><br>
+    <code>V_o1/8 = −3</code>
+  </div>
+  <div class="formula fc">
+    <span class="big">V_o1 = −24 V</span>
+  </div>
+</div>
+</div>
+
+<div class="step-panel" id="c-2">
+<div class="card cc">
+  <h2 class="hc">③ Solve Stage 2 — V_o1 as Input</h2>
+  <div class="sm">
+    Apply golden rules to OA2:<br>
+    V₊₂ = 0 → V₋₂ = 0 → <strong>Node A₂ = 0 V (virtual ground)</strong><br><br>
+    Stage 2 has ONE input: V_o1 = −24V through R₃ = 4Ω<br><br>
+    KCL at A₂:<br>
+    <code>V_o1/R₃ + V_o/Rf₂ = 0</code><br>
+    <code>−24/4 + V_o/4 = 0</code><br>
+    <code>−6 + V_o/4 = 0</code><br>
+    <code>V_o/4 = 6</code>
+  </div>
+  <div class="formula fc">
+    <span class="big">V_o = +24 V</span>
+  </div>
+</div>
+</div>
+
+<div class="step-panel" id="c-3">
+<div class="card cc">
+  <h2 class="hc">④ Verify the Sign Logic</h2>
+  <div class="sm">
+    Stage 1 is an inverting amplifier → <strong>flips sign</strong>: V_o1 = −24V<br>
+    Stage 2 is also an inverting amplifier → <strong>flips sign again</strong>: V_o = +24V<br><br>
+    <strong>Two inversions = net non-inverting!</strong><br>
+    <code>V_o = −Rf₂/R₃ · V_o1 = −(4/4)·(−24) = −1·(−24) = +24 V</code>
+  </div>
+  <div class="tip">⚡ <strong>Key insight:</strong> Cascaded inverting stages → (−1)·(−1) = +1. If both stages have equal Rf and input R, V_o = +V_in to stage 1. This is how you build a non-inverting amplifier from inverting stages!</div>
+</div>
+</div>
+
+<div class="step-panel" id="c-4">
+<div class="card cc">
+  <h2 class="hc">✅ Final Answer</h2>
+  <div class="two">
+    <div class="result-box">
+      <div class="result-lbl">Stage 1 Output</div>
+      <div class="result-val">V_o1 = −24 V</div>
+    </div>
+    <div class="result-box">
+      <div class="result-lbl">Final Output</div>
+      <div class="result-val">V_o = +24 V</div>
+    </div>
+  </div>
+  <div class="ok">✅ <strong>Two-stage cascade strategy:</strong> Solve left stage first (virtual ground at A₁ → find V_o1). Then treat V_o1 as a regular voltage source feeding Stage 2. Apply same Millman method.</div>
+  <div class="danger">❌ <strong>Most common cascade mistake:</strong> Forgetting that V_o1 enters Stage 2 AS AN INPUT (through R₃). It's not a Rf — it's an input branch. Treat it exactly like E₁ or E₂ in Exercise A.</div>
+</div>
+</div>
+</div>
+
+<script>
+function showEx(ex){
+  document.querySelectorAll('.ex-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.etab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('ex-'+ex).classList.add('active');
+  const map={a:0,b:1,c:2};
+  document.querySelectorAll('.etab')[map[ex]].classList.add('active');
+  const ep=document.getElementById('ex-'+ex);
+  ep.querySelectorAll('.step-panel').forEach(p=>p.classList.remove('active'));
+  ep.querySelector('.step-panel').classList.add('active');
+  ep.querySelectorAll('.stab').forEach(b=>b.classList.remove('active'));
+  ep.querySelector('.stab').classList.add('active');
+}
+function showStep(ex,idx){
+  const ep=document.getElementById('ex-'+ex);
+  ep.querySelectorAll('.step-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById(ex+'-'+idx).classList.add('active');
+  const stabs=ep.querySelectorAll('.stab');
+  stabs.forEach(b=>b.classList.remove('active'));
+  if(stabs[idx])stabs[idx].classList.add('active');
+}
+</script>
+</body>
+</html>

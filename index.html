@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Device-A — Messina EE Exam Exercises</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',sans-serif;background:#1a1a2e;color:#e8e8f0;min-height:100vh;padding:30px 20px;}
+  .container{max-width:800px;margin:0 auto;}
+  h1{font-size:26px;color:#ffd166;margin-bottom:6px;text-align:center;}
+  .tagline{font-size:13px;color:#888;text-align:center;margin-bottom:10px;}
+  .uni-badge{display:inline-block;background:#0f3460;color:#80a0ff;border:1px solid #2060c0;border-radius:20px;padding:4px 14px;font-size:12px;font-weight:700;margin-bottom:28px;}
+  .center{text-align:center;}
+  .exam-structure{background:#151525;border:1px solid #333;border-radius:12px;padding:16px 20px;margin-bottom:28px;}
+  .exam-structure h2{font-size:13px;color:#ffd166;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #333;}
+  .exam-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .exam-item{background:#1e1e35;border-radius:8px;padding:10px 14px;font-size:12.5px;}
+  .exam-item .ex-num{color:#ffd166;font-weight:700;font-size:11px;margin-bottom:3px;}
+  .exam-item .ex-name{color:#e0e0f0;}
+  .exam-item .ex-pts{color:#80d080;font-size:11px;margin-top:3px;}
+  .cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px;}
+  .card{background:#151525;border-radius:14px;padding:20px;border:2px solid;text-decoration:none;display:block;transition:all .25s;position:relative;overflow:hidden;}
+  .card:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,0,0,.4);}
+  .card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+  .card-1{border-color:#1a3a7a;}.card-1::before{background:linear-gradient(90deg,#0f3460,#2060c0);}
+  .card-2{border-color:#1a5020;}.card-2::before{background:linear-gradient(90deg,#1a6b35,#30a030);}
+  .card-3{border-color:#4a1a10;}.card-3::before{background:linear-gradient(90deg,#8b2020,#c0392b);}
+  .card-4{border-color:#4a2a00;}.card-4::before{background:linear-gradient(90deg,#806000,#c09000);}
+  .card-5{border-color:#3a1560;}.card-5::before{background:linear-gradient(90deg,#6020a0,#9030c0);}
+  .card-icon{font-size:28px;margin-bottom:10px;}
+  .card-num{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;opacity:0.7;}
+  .card-1 .card-num{color:#80a0ff;}
+  .card-2 .card-num{color:#80d080;}
+  .card-3 .card-num{color:#ff8080;}
+  .card-4 .card-num{color:#ffd166;}
+  .card-5 .card-num{color:#c080ff;}
+  .card-title{font-size:15px;font-weight:700;margin-bottom:6px;color:#f0f0f0;}
+  .card-desc{font-size:12px;color:#888;line-height:1.6;margin-bottom:12px;}
+  .card-tags{display:flex;gap:6px;flex-wrap:wrap;}
+  .tag{background:#252540;border:1px solid #333;border-radius:10px;padding:2px 8px;font-size:10px;color:#aaa;}
+  .card-arrow{position:absolute;bottom:16px;right:16px;font-size:18px;opacity:0.4;}
+  .card:hover .card-arrow{opacity:1;}
+  .card-1 .card-arrow{color:#80a0ff;}
+  .card-2 .card-arrow{color:#80d080;}
+  .card-3 .card-arrow{color:#ff8080;}
+  .card-4 .card-arrow{color:#ffd166;}
+  .card-5 .card-arrow{color:#c080ff;}
+  .footer{text-align:center;font-size:11px;color:#555;margin-top:20px;padding-top:16px;border-top:1px solid #252535;}
+  .footer a{color:#80a0ff;text-decoration:none;}
+  .highlight{background:#0a1230;border:1px solid #2060c0;border-radius:8px;padding:12px 16px;font-size:12.5px;color:#80d0ff;margin-bottom:20px;text-align:center;}
+  @media(max-width:540px){.cards-grid,.exam-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>📐 Device-A — EE Exam Exercises</h1>
+  <p class="tagline">Interactive study materials for the Messina University EE Final Exam</p>
+  <div class="center"><span class="uni-badge">🇮🇹 Università di Messina · Circuit Analysis</span></div>
+
+  <div class="highlight">
+    Click any card to open the full interactive exercise with SVG circuit diagrams, step-by-step solutions, and watch-out warnings.
+  </div>
+
+  <div class="exam-structure">
+    <h2>📋 Messina Exam Structure — 20 min per exercise</h2>
+    <div class="exam-grid">
+      <div class="exam-item">
+        <div class="ex-num">EXERCISE 1</div>
+        <div class="ex-name">Node Analysis (G Matrix) or Mesh Analysis (R Matrix)</div>
+        <div class="ex-pts">~7 pts</div>
+      </div>
+      <div class="exam-item">
+        <div class="ex-num">EXERCISE 2</div>
+        <div class="ex-name">Op-Amp Circuits — Millman's Theorem</div>
+        <div class="ex-pts">~7 pts</div>
+      </div>
+      <div class="exam-item">
+        <div class="ex-num">EXERCISE 3</div>
+        <div class="ex-name">First-Order Transients — RC &amp; RL Circuits</div>
+        <div class="ex-pts">~7 pts</div>
+      </div>
+      <div class="exam-item">
+        <div class="ex-num">EXERCISE 4</div>
+        <div class="ex-name">Analog Computing — ODE → Op-Amp Circuit</div>
+        <div class="ex-pts">~6 pts</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cards-grid">
+
+    <a class="card card-1" href="Exercise1_G_R_Matrix.html">
+      <div class="card-icon">📐</div>
+      <div class="card-num">Exercise 1</div>
+      <div class="card-title">Node &amp; Mesh Analysis</div>
+      <div class="card-desc">G Matrix (KCL) and R Matrix (KVL). Supernode and supermesh techniques. 3 exercises Easy → Hard.</div>
+      <div class="card-tags">
+        <span class="tag">G Matrix</span>
+        <span class="tag">R Matrix</span>
+        <span class="tag">Supernode</span>
+        <span class="tag">Supermesh</span>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <a class="card card-2" href="Exercise2_OpAmp_Millman.html">
+      <div class="card-icon">🔌</div>
+      <div class="card-num">Exercise 2</div>
+      <div class="card-title">Op-Amp + Millman</div>
+      <div class="card-desc">Virtual short, virtual open, Millman numerator = 0. Two-stage cascade. 3 exercises with current source trap.</div>
+      <div class="card-tags">
+        <span class="tag">Virtual Ground</span>
+        <span class="tag">Millman</span>
+        <span class="tag">Two-Stage</span>
+        <span class="tag">Current Source</span>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <a class="card card-3" href="Exercise3_Transients_RC_RL.html">
+      <div class="card-icon">⚡</div>
+      <div class="card-num">Exercise 3</div>
+      <div class="card-title">First-Order Transients</div>
+      <div class="card-desc">Universal formula: x(t) = x(∞) + [x(0)−x(∞)]e^(−t/τ). RC and RL circuits. Switch-change topology.</div>
+      <div class="card-tags">
+        <span class="tag">RC Circuit</span>
+        <span class="tag">RL Circuit</span>
+        <span class="tag">τ = RC or L/R</span>
+        <span class="tag">Switch Change</span>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <a class="card card-4" href="Exercise4_Analog_Computing.html">
+      <div class="card-icon">🖥️</div>
+      <div class="card-num">Exercise 4</div>
+      <div class="card-title">Analog Computing</div>
+      <div class="card-desc">Translate a differential equation into an op-amp circuit. Integrators, inverters, summers. RC = 1s constraint.</div>
+      <div class="card-tags">
+        <span class="tag">ODE → Circuit</span>
+        <span class="tag">Integrator</span>
+        <span class="tag">Summer</span>
+        <span class="tag">RC=1s</span>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <a class="card card-5" href="Thevenin_Dependent_Source.html" style="grid-column:1/-1;">
+      <div class="card-icon">🔴</div>
+      <div class="card-num">Bonus — Thévenin / Norton</div>
+      <div class="card-title">Thévenin with Dependent Sources — V_test Method</div>
+      <div class="card-desc">Full worked example: kill independent sources only, apply V_test, express controlling variable, KCL → I_test, R_TH = V_test/I_test. Includes a practice problem.</div>
+      <div class="card-tags">
+        <span class="tag">Dependent Source</span>
+        <span class="tag">V_test Method</span>
+        <span class="tag">R_TH</span>
+        <span class="tag">Norton Conversion</span>
+        <span class="tag">CCCS / VCCS</span>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+  </div>
+
+  <div class="footer">
+    Made for the Messina University EE Final Exam &nbsp;·&nbsp;
+    Dark-theme interactive HTML &nbsp;·&nbsp;
+    All circuits drawn in SVG — no images needed &nbsp;·&nbsp;
+    <a href="https://github.com/613Kave731/Device-a-Exercises-">GitHub Repo</a>
+  </div>
+
+</div>
+</body>
+</html>

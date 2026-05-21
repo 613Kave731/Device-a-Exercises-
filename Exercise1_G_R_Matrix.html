@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Exercise 1 — Node & Mesh Analysis · Messina Exam</title>
+<style>
+  *{box-sizing:border-box;}
+  body{font-family:'Segoe UI',sans-serif;background:#1a1a2e;margin:0;padding:20px;color:#e8e8f0;}
+  h1{font-size:20px;color:#ffd166;margin:0 0 4px;}
+  .sub{font-size:12px;color:#888;margin-bottom:18px;}
+  /* Main topic tabs */
+  .topic-tabs{display:flex;gap:10px;margin-bottom:18px;}
+  .ttab{padding:10px 24px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:700;border:2px solid;transition:all .2s;}
+  .ttab.node{border-color:#2060c0;color:#80a0ff;background:transparent;}
+  .ttab.node.active,.ttab.node:hover{background:#2060c0;color:white;}
+  .ttab.mesh{border-color:#30a030;color:#80d080;background:transparent;}
+  .ttab.mesh.active,.ttab.mesh:hover{background:#30a030;color:white;}
+  .topic-panel{display:none;}.topic-panel.active{display:block;}
+  /* Exercise tabs */
+  .ex-tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+  .etab{padding:8px 18px;border-radius:22px;cursor:pointer;font-size:13px;font-weight:700;border:2px solid;transition:all .2s;}
+  .ea{border-color:#0f3460;color:#80a0ff;background:transparent;}
+  .ea.active,.ea:hover{background:#0f3460;color:white;}
+  .eb{border-color:#1a6b35;color:#80d080;background:transparent;}
+  .eb.active,.eb:hover{background:#1a6b35;color:white;}
+  .ec{border-color:#7b2d8b;color:#c080ff;background:transparent;}
+  .ec.active,.ec:hover{background:#7b2d8b;color:white;}
+  .ex-panel{display:none;}.ex-panel.active{display:block;}
+  /* Step tabs */
+  .step-tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;}
+  .stab{padding:6px 14px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;border:1.5px solid #444;color:#aaa;background:#252535;transition:all .2s;}
+  .stab.active,.stab:hover{background:#ffd166;color:#1a1a2e;border-color:#ffd166;}
+  .step-panel{display:none;}.step-panel.active{display:block;}
+  .card{border-radius:12px;padding:18px;margin-bottom:14px;border:1.5px solid;}
+  .ca{background:#10172a;border-color:#1a3a7a;}
+  .cb{background:#0f1f0f;border-color:#1a5020;}
+  .cc{background:#1a0f2a;border-color:#6020a0;}
+  h2{font-size:14px;font-weight:700;margin:0 0 12px;padding-bottom:8px;}
+  .ha{color:#80a0ff;border-bottom:1px solid #1a3a7a;}
+  .hb{color:#80d080;border-bottom:1px solid #1a5020;}
+  .hc{color:#c080ff;border-bottom:1px solid #6020a0;}
+  .formula{border-radius:8px;padding:12px 16px;text-align:center;margin:10px 0;font-weight:bold;}
+  .fa{background:#0a1230;border:1px solid #2060c0;}
+  .fb{background:#0a1a0a;border:1px solid #30a030;}
+  .fc{background:#1a0a30;border:1px solid #8030c0;}
+  .fk{background:#2a2000;border:1px solid #c09000;}
+  .big{font-size:18px;color:#ffd166;line-height:2;}
+  .med{font-size:14px;color:#ffd166;line-height:1.8;}
+  .sm{font-size:13px;color:#e0e0f0;line-height:1.8;}
+  .tip{background:#2a2000;border-left:3px solid #ffc107;padding:10px 12px;border-radius:0 8px 8px 0;font-size:12.5px;margin:8px 0;line-height:1.7;color:#ffd080;}
+  .danger{background:#2a0a0a;border-left:3px solid #e63946;padding:10px 12px;border-radius:0 8px 8px 0;font-size:12.5px;margin:8px 0;line-height:1.7;color:#ff9090;}
+  .ok{background:#0a2a0a;border-left:3px solid #28a745;padding:10px 12px;border-radius:0 8px 8px 0;font-size:12.5px;margin:8px 0;line-height:1.7;color:#80d080;}
+  .result-box{background:#0a1a0a;border:2px solid #28a745;border-radius:12px;padding:16px 20px;margin:12px 0;text-align:center;}
+  .result-val{font-size:24px;font-weight:bold;color:#ffd166;margin:6px 0;}
+  .result-lbl{font-size:12px;color:#888;margin:2px 0;}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  code{background:#2a2a3a;padding:2px 6px;border-radius:4px;font-family:'Courier New',monospace;font-size:13px;color:#80d0ff;}
+  .badge{display:inline-block;padding:3px 10px;border-radius:10px;font-size:11px;font-weight:700;margin-right:6px;}
+  .ba{background:#0f3460;color:#80a0ff;}
+  .bb{background:#1a6b35;color:#80d080;}
+  .bc{background:#7b2d8b;color:#c080ff;}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.5px;}
+  th{background:#252540;color:#ffd166;padding:8px 10px;text-align:left;border:1px solid #333;}
+  td{padding:7px 10px;border:1px solid #333;color:#d0d0e0;vertical-align:top;}
+  tr:nth-child(even) td{background:#1e1e30;}
+  svg text{font-family:'Segoe UI',sans-serif;}
+  .matrix-box{background:#0a0a1e;border:1.5px solid #2060c0;border-radius:8px;padding:14px;font-family:'Courier New',monospace;font-size:14px;color:#80d0ff;text-align:center;line-height:2;}
+  @media(max-width:600px){.two{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<h1>📐 Exercise 1 — Node & Mesh Analysis</h1>
+<p class="sub">Messina Exam Prep · G Matrix (Node) + R Matrix (Mesh) · 3 Exercises Each · Full Solutions</p>
+
+<div class="topic-tabs">
+  <div class="ttab node active" onclick="showTopic('node')">🔵 Node Analysis (G Matrix)</div>
+  <div class="ttab mesh" onclick="showTopic('mesh')">🟢 Mesh Analysis (R Matrix)</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ NODE ANALYSIS ═══ -->
+<div class="topic-panel active" id="tp-node">
+
+<div class="card ca" style="margin-bottom:16px;">
+  <h2 class="ha">⚡ The 3 Golden Rules — G Matrix (Node Analysis)</h2>
+  <div class="two">
+    <div>
+      <div class="formula fa"><span class="big">G<sub>ii</sub> = Σ G at node i</span><br><span style="font-size:12px;color:#aaa">Sum ALL conductances connected to node i (diagonal)</span></div>
+      <div class="formula fa"><span class="big">G<sub>ij</sub> = −G between i and j</span><br><span style="font-size:12px;color:#aaa">ALWAYS negative — conductance directly between nodes i and j</span></div>
+      <div class="formula fa"><span class="big">b<sub>i</sub> = +I into node, −I out</span><br><span style="font-size:12px;color:#aaa">Current sources: + if flowing INTO node i, − if OUT</span></div>
+    </div>
+    <div>
+      <div class="tip">⚡ <strong>Speed Rule:</strong> Draw the circuit, label each conductance G = 1/R. Diagonal = sum everything at the node. Off-diagonal = grab the G between those two nodes and put a minus sign. Done.</div>
+      <div class="danger">❌ <strong>Most Common Trap:</strong> Forgetting the minus sign on off-diagonal entries. G<sub>12</sub> is ALWAYS negative (unless it's zero).</div>
+      <div class="ok">✅ <strong>Voltage source from node to ground:</strong> That node's voltage is KNOWN. Remove that row from the matrix and substitute the value into remaining equations.</div>
+    </div>
+  </div>
+</div>
+
+<div class="ex-tabs">
+  <div class="etab ea active" onclick="showEx('node','a')">Exercise A — Easy 🔵</div>
+  <div class="etab eb" onclick="showEx('node','b')">Exercise B — Medium 🟢</div>
+  <div class="etab ec" onclick="showEx('node','c')">Exercise C — Hard 🟣</div>
+</div>
+
+<!-- NODE EXERCISE A -->
+<div class="ex-panel active" id="node-a">
+<span class="badge ba">Exercise A</span><span style="color:#aaa;font-size:12px;">Easy — 2 unknown nodes, pure resistors + current sources</span>
+<div class="step-tabs">
+  <div class="stab active" onclick="showStep('na',0)">① Circuit</div>
+  <div class="stab" onclick="showStep('na',1)">② Label G values</div>
+  <div class="stab" onclick="showStep('na',2)">③ Build Matrix</div>
+  <div class="stab" onclick="showStep('na',3)">④ Solve</div>
+  <div class="stab" onclick="showStep('na',4)">✅ Answer</div>
+</div>
+
+<div class="step-panel active" id="na-0">
+<div class="card ca">
+  <h2 class="ha">① The Circuit</h2>
+  <svg viewBox="0 0 580 240" width="100%" xmlns="http://www.w3.org/2000/svg">
+    <rect width="580" height="240" fill="#10172a" rx="10"/>
+    <!-- Ground bus -->
+    <line x1="40" y1="210" x2="540" y2="210" stroke="#555" stroke-width="1.5" stroke-dasharray="5,4"/>
+    <text x="290" y="228" font-size="11" fill="#555" text-anchor="middle">D — Reference Ground = 0 V</text>
+    <!-- Node A -->
+    <circle cx="180" cy="90" r="6" fill="#80a0ff"/>
+    <text x="180" y="72" font-size="14" fill="#80a0ff" text-anchor="middle" font-weight="bold">A</text>
+    <!-- Node B -->
+    <circle cx="400" cy="90" r="6" fill="#80d0ff"/>
+    <text x="400" y="72" font-size="14" fill="#80d0ff" text-anchor="middle" font-weight="bold">B</text>
+    <!-- R1 = 2Ω from A to ground -->
+    <line x1="180" y1="96" x2="180" y2="210" stroke="#80a0ff" stroke-width="2"/>
+    <rect x="158" y="130" width="44" height="22" fill="#1a2040" stroke="#80a0ff" stroke-width="1.5" rx="4"/>
+    <text x="180" y="145" font-size="12" fill="#ffd166" text-anchor="middle">R₁=2Ω</text>
+    <!-- R2 = 4Ω from A to B -->
+    <line x1="186" y1="90" x2="330" y2="90" stroke="#80a0ff" stroke-width="2"/>
+    <rect x="232" y="78" width="60" height="22" fill="#1a2040" stroke="#aaa" stroke-width="1.5" rx="4"/>
+    <text x="262" y="93" font-size="12" fill="#ffd166" text-anchor="middle">R₂=4Ω</text>
+    <line x1="390" y1="90" x2="330" y2="90" stroke="#80d0ff" stroke-width="2"/>
+    <!-- R3 = 5Ω from B to ground -->
+    <line x1="400" y1="96" x2="400" y2="210" stroke="#80d0ff" stroke-width="2"/>
+    <rect x="378" y="130" width="44" height="22" fill="#1a2040" stroke="#80d0ff" stroke-width="1.5" rx="4"/>
+    <text x="400" y="145" font-size="12" fill="#ffd166" text-anchor="middle">R₃=5Ω</text>
+    <!-- I1 = 3A into A -->
+    <line x1="80" y1="90" x2="174" y2="90" stroke="#ffd166" stroke-width="2"/>
+    <polygon points="174,86 174,94 186,90" fill="#ffd166"/>
+    <rect x="60" y="78" width="60" height="22" fill="#2a2000" stroke="#ffd166" stroke-width="1.5" rx="4"/>
+    <text x="90" y="93" font-size="12" fill="#ffd166" text-anchor="middle">I₁=3A</text>
+    <text x="90" y="68" font-size="10" fill="#aaa" text-anchor="middle">→ into A</text>
+    <!-- I2 = 2A out of B -->
+    <line x1="406" y1="90" x2="500" y2="90" stroke="#ffd166" stroke-width="2"/>
+    <polygon points="500,86 500,94 512,90" fill="#ffd166"/>
+    <rect x="460" y="78" width="60" height="22" fill="#2a2000" stroke="#ffd166" stroke-width="1.5" rx="4"/>
+    <text x="490" y="93" font-size="12" fill="#ffd166" text-anchor="middle">I₂=2A</text>
+    <text x="490" y="68" font-size="10" fill="#aaa" text-anchor="middle">→ out of B</text>
+  </svg>
+  <table>
+    <tr><th>Component</th><th>Value</th><th>Connection</th></tr>
+    <tr><td>R₁</td><td>2 Ω</td><td>Node A → Ground</td></tr>
+    <tr><td>R₂</td><td>4 Ω</td><td>Node A → Node B</td></tr>
+    <tr><td>R₃</td><td>5 Ω</td><td>Node B → Ground</td></tr>
+    <tr><td>I₁</td><td>3 A</td><td>flowing INTO Node A</td></tr>
+    <tr><td>I₂</td><td>2 A</td><td>flowing OUT of Node B</td></tr>
+  </table>
+  <div class="tip">🎯 <strong>Goal:</strong> Find node voltages V<sub>A</sub> and V<sub>B</sub>.</div>
+</div>
+</div>
+
+<div class="step-panel" id="na-1">
+<div class="card ca">
+  <h2 class="ha">② Label Conductances G = 1/R</h2>
+  <div class="formula fa">
+    <span class="med">G₁ = 1/R₁ = 1/2 S &nbsp;|&nbsp; G₂ = 1/R₂ = 1/4 S &nbsp;|&nbsp; G₃ = 1/R₃ = 1/5 S</span>
+  </div>
+  <div class="tip">💡 Convert ALL resistors to conductances first. Work only with G values in the matrix — no 1/R fractions mid-row!</div>
+</div>
+</div>
+
+<div class="step-panel" id="na-2">
+<div class="card ca">
+  <h2 class="ha">③ Build the G Matrix — Apply the 3 Rules</h2>
+  <div class="sm" style="margin-bottom:10px;">
+    <strong style="color:#80a0ff;">Node A diagonal G<sub>AA</sub>:</strong> Sum of all conductances at A = G₁ + G₂ = 1/2 + 1/4 = 3/4<br>
+    <strong style="color:#80a0ff;">Node B diagonal G<sub>BB</sub>:</strong> Sum of all conductances at B = G₂ + G₃ = 1/4 + 1/5 = 9/20<br>
+    <strong style="color:#80a0ff;">Off-diagonal G<sub>AB</sub> = G<sub>BA</sub>:</strong> −G₂ = −1/4 (ALWAYS negative)<br>
+    <strong style="color:#ffd166;">Source vector:</strong> b<sub>A</sub> = +I₁ = +3 (into A), b<sub>B</sub> = −I₂ = −2 (out of B)
+  </div>
+  <div class="matrix-box">
+    ⎡ 3/4  &nbsp; −1/4 ⎤ &nbsp; ⎡ V<sub>A</sub> ⎤ &nbsp; = &nbsp; ⎡ +3 ⎤<br>
+    ⎣ −1/4 &nbsp;  9/20 ⎦ &nbsp; ⎣ V<sub>B</sub> ⎦ &nbsp; = &nbsp; ⎣ −2 ⎦
+  </div>
+</div>
+</div>
+
+<div class="step-panel" id="na-3">
+<div class="card ca">
+  <h2 class="ha">④ Solve the System</h2>
+  <div class="sm">
+    Multiply through by 20 to clear fractions:<br><br>
+    <code>15 V<sub>A</sub> − 5 V<sub>B</sub> = 60</code> &nbsp;&nbsp; (row 1 × 20)<br>
+    <code>−5 V<sub>A</sub> + 9 V<sub>B</sub> = −40</code> &nbsp;&nbsp; (row 2 × 20)<br><br>
+    From row 1: <code>3 V<sub>A</sub> − V<sub>B</sub> = 12</code> → <code>V<sub>B</sub> = 3V<sub>A</sub> − 12</code><br><br>
+    Substitute into row 2:<br>
+    <code>−5 V<sub>A</sub> + 9(3V<sub>A</sub> − 12) = −40</code><br>
+    <code>−5 V<sub>A</sub> + 27V<sub>A</sub> − 108 = −40</code><br>
+    <code>22 V<sub>A</sub> = 68</code><br>
+    <code>V<sub>A</sub> = 68/22 = 34/11 ≈ 3.09 V</code><br><br>
+    Then: <code>V<sub>B</sub> = 3(34/11) − 12 = 102/11 − 132/11 = −30/11 ≈ −2.73 V</code>
+  </div>
+</div>
+</div>
+
+<div class="step-panel" id="na-4">
+<div class="card ca">
+  <h2 class="ha">✅ Final Answer</h2>
+  <div class="two">
+    <div class="result-box">
+      <div class="result-lbl">Node A Voltage</div>
+      <div class="result-val">V<sub>A</sub> = 34/11 ≈ 3.1 V</div>
+    </div>
+    <div class="result-box">
+      <div class="result-lbl">Node B Voltage</div>
+      <div class="result-val">V<sub>B</sub> = −30/11 ≈ −2.7 V</div>
+    </div>
+  </div>
+  <div class="tip">⚡ <strong>Key insight:</strong> Node B is NEGATIVE because the 2A current source is draining it while only G₂ feeds it from A. Negative node voltages are completely valid!</div>
+  <div class="danger">❌ <strong>Common trap:</strong> Writing b<sub>B</sub> = +2 instead of −2. Current flowing OUT of a node is NEGATIVE in the source vector.</div>
+</div>
+</div>
+</div>
+
+<!-- NODE EXERCISE B -->
+<div class="ex-panel" id="node-b">
+<span class="badge bb">Exercise B</span><span style="color:#aaa;font-size:12px;">Medium — voltage source from node to ground (known node)</span>
+<div class="step-tabs">
+  <div class="stab active" onclick="showStep('nb',0)">① Circuit</div>
+  <div class="stab" onclick="showStep('nb',1)">② Known Node</div>
+  <div class="stab" onclick="showStep('nb',2)">③ Reduced Matrix</div>
+  <div class="stab" onclick="showStep('nb',3)">④ Solve</div>
+  <div class="stab" onclick="showStep('nb',4)">✅ Answer</div>
+</div>
+
+<div class="step-panel active" id="nb-0">
+<div class="card cb">
+  <h2 class="hb">① The Circuit</h2>
+  <svg viewBox="0 0 600 260" width="100%" xmlns="http://www.w3.org/2000/svg">
+    <rect width="600" height="260" fill="#0f1f0f" rx="10"/>
+    <line x1="40" y1="220" x2="560" y2="220" stroke="#555" stroke-width="1.5" stroke-dasharray="5,4"/>
+    <text x="300" y="238" font-size="11" fill="#555" text-anchor="middle">D — Reference Ground = 0 V</text>
+    <!-- Node A (voltage source E=8V) -->
+    <circle cx="140" cy="90" r="6" fill="#ffd166"/>
+    <text x="140" y="72" font-size="14" fill="#ffd166" text-anchor="middle" font-weight="bold">A</text>
+    <!-- Voltage source E=8V from A to ground -->
+    <line x1="140" y1="96" x2="140" y2="170" stroke="#ffd166" stroke-width="2"/>
+    <ellipse cx="140" cy="185" rx="15" ry="15" fill="#2a2000" stroke="#ffd166" stroke-width="2"/>
+    <text x="140" y="190" font-size="12" fill="#ffd166" text-anchor="middle">8V</text>
+    <line x1="140" y1="200" x2="140" y2="220" stroke="#ffd166" stroke-width="2"/>
+    <text x="110" y="150" font-size="11" fill="#ffd166">E=8V</text>
+    <text x="110" y="163" font-size="10" fill="#aaa">→ V<tspan dy="3" font-size="9">A</tspan><tspan dy="-3"> = 8V</tspan></text>
+    <!-- Node B -->
+    <circle cx="320" cy="90" r="6" fill="#80d0ff"/>
+    <text x="320" y="72" font-size="14" fill="#80d0ff" text-anchor="middle" font-weight="bold">B</text>
+    <!-- Node C -->
+    <circle cx="480" cy="90" r="6" fill="#c080ff"/>
+    <text x="480" y="72" font-size="14" fill="#c080ff" text-anchor="middle" font-weight="bold">C</text>
+    <!-- R1=4Ω A to B -->
+    <line x1="146" y1="90" x2="260" y2="90" stroke="#aaa" stroke-width="2"/>
+    <rect x="192" y="78" width="56" height="22" fill="#1a2a1a" stroke="#aaa" rx="4"/>
+    <text x="220" y="93" font-size="12" fill="#ffd166" text-anchor="middle">R₁=4Ω</text>
+    <line x1="314" y1="90" x2="260" y2="90" stroke="#aaa" stroke-width="2"/>
+    <!-- R2=6Ω B to ground -->
+    <line x1="320" y1="96" x2="320" y2="220" stroke="#80d0ff" stroke-width="2"/>
+    <rect x="298" y="140" width="44" height="22" fill="#1a2a1a" stroke="#80d0ff" rx="4"/>
+    <text x="320" y="155" font-size="12" fill="#ffd166" text-anchor="middle">R₂=6Ω</text>
+    <!-- R3=3Ω B to C -->
+    <line x1="326" y1="90" x2="420" y2="90" stroke="#aaa" stroke-width="2"/>
+    <rect x="352" y="78" width="44" height="22" fill="#1a2a1a" stroke="#aaa" rx="4"/>
+    <text x="374" y="93" font-size="12" fill="#ffd166" text-anchor="middle">R₃=3Ω</text>
+    <line x1="474" y1="90" x2="420" y2="90" stroke="#aaa" stroke-width="2"/>
+    <!-- R4=5Ω C to ground -->
+    <line x1="480" y1="96" x2="480" y2="220" stroke="#c080ff" stroke-width="2"/>
+    <rect x="458" y="140" width="44" height="22" fill="#1a2a1a" stroke="#c080ff" rx="4"/>
+    <text x="480" y="155" font-size="12" fill="#ffd166" text-anchor="middle">R₄=5Ω</text>
+    <!-- I1=2A into C -->
+    <line x1="540" y1="90" x2="486" y2="90" stroke="#ffd166" stroke-width="2"/>
+    <polygon points="486,86 486,94 474,90" fill="#ffd166"/>
+    <rect x="540" y="78" width="50" height="22" fill="#2a2000" stroke="#ffd166" rx="4"/>
+    <text x="565" y="93" font-size="12" fill="#ffd166" text-anchor="middle">I=2A</text>
+    <text x="565" y="68" font-size="10" fill="#aaa" text-anchor="middle">into C</text>
+  </svg>
+  <table>
+    <tr><th>Component</th><th>Value</th><th>Connection</th></tr>
+    <tr><td>E (voltage source)</td><td>8 V</td><td>Node A to Ground → <strong>V<sub>A</sub> = 8 V (known!)</strong></td></tr>
+    <tr><td>R₁</td><td>4 Ω → G₁ = 1/4</td><td>A → B</td></tr>
+    <tr><td>R₂</td><td>6 Ω → G₂ = 1/6</td><td>B → Ground</td></tr>
+    <tr><td>R₃</td><td>3 Ω → G₃ = 1/3</td><td>B → C</td></tr>
+    <tr><td>R₄</td><td>5 Ω → G₄ = 1/5</td><td>C → Ground</td></tr>
+    <tr><td>I</td><td>2 A</td><td>flowing INTO Node C</td></tr>
+  </table>
+</div>
+</div>
+
+<div class="step-panel" id="nb-1">
+<div class="card cb">
+  <h2 class="hb">② Identify Known Node — Remove Its Row</h2>
+  <div class="sm">
+    Node A has a voltage source to ground → <strong style="color:#ffd166;">V<sub>A</sub> = 8 V (known!)</strong><br><br>
+    We only need to solve for <strong>V<sub>B</sub></strong> and <strong>V<sub>C</sub></strong>.<br><br>
+    Original 3×3 system: Remove row A, but keep V<sub>A</sub> = 8 in the source vector when it appears in other rows.
+  </div>
+  <div class="tip">⚡ <strong>Rule:</strong> When a node is connected to ground through a voltage source, that node's voltage equals the source voltage. Delete its matrix row. Any G connecting A to another node moves to the SOURCE vector (right-hand side) of that row.</div>
+</div>
+</div>
+
+<div class="step-panel" id="nb-2">
+<div class="card cb">
+  <h2 class="hb">③ Build Reduced 2×2 Matrix</h2>
+  <div class="sm" style="margin-bottom:10px;">
+    <strong>Node B diagonal G<sub>BB</sub>:</strong> G₁ + G₂ + G₃ = 1/4 + 1/6 + 1/3 = 3/12 + 2/12 + 4/12 = 9/12 = 3/4<br>
+    <strong>Node C diagonal G<sub>CC</sub>:</strong> G₃ + G₄ = 1/3 + 1/5 = 5/15 + 3/15 = 8/15<br>
+    <strong>Off-diagonal G<sub>BC</sub> = G<sub>CB</sub>:</strong> −G₃ = −1/3<br>
+    <strong>Source vector b<sub>B</sub>:</strong> G₁ × V<sub>A</sub> = (1/4)(8) = 2 (A feeds B through G₁)<br>
+    <strong>Source vector b<sub>C</sub>:</strong> +I = +2 A (into C)
+  </div>
+  <div class="matrix-box">
+    ⎡ 3/4  &nbsp; −1/3 ⎤ &nbsp; ⎡ V<sub>B</sub> ⎤ &nbsp; = &nbsp; ⎡ 2 ⎤<br>
+    ⎣ −1/3 &nbsp;  8/15 ⎦ &nbsp; ⎣ V<sub>C</sub> ⎦ &nbsp; = &nbsp; ⎣ 2 ⎦
+  </div>
+</div>
+</div>
+
+<div class="step-panel" id="nb-3">
+<div class="card cb">
+  <h2 class="hb">④ Solve</h2>
+  <div class="sm">
+    Multiply row 1 by 12: <code>9 V<sub>B</sub> − 4 V<sub>C</sub> = 24</code><br>
+    Multiply row 2 by 15: <code>−5 V<sub>B</sub> + 8 V<sub>C</sub> = 30</code><br><br>
+    From row 1: <code>V<sub>C</sub> = (9V<sub>B</sub> − 24)/4</code><br><br>
+    Sub into row 2:<br>
+    <code>−5V<sub>B</sub> + 8·(9V<sub>B</sub> − 24)/4 = 30</code><br>
+    <code>−5V<sub>B</sub> + 18V<sub>B</sub> − 48 = 30</code><br>
+    <code>13V<sub>B</sub> = 78</code> → <code>V<sub>B</sub> = 6 V</code><br><br>
+    <code>V<sub>C</sub> = (9×6 − 24)/4 = (54−24)/4 = 30/4 = 7.5 V</code>
+  </div>
+</div>
+</div>
+
+<div class="step-panel" id="nb-4">
+<div class="card cb">
+  <h2 class="hb">✅ Final Answer</h2>
+  <div class="two">
+    <div class="result-box"><div class="result-lbl">V<sub>A</sub> (known)</div><div class="result-val">8 V</div></div>
+    <div class="result-box"><div class="result-lbl">V<sub>B</sub></div><div class="result-val">6 V</div></div>
+  </div>
+  <div class="result-box"><div class="result-lbl">V<sub>C</sub></div><div class="result-val">7.5 V</div></div>
+  <div class="ok">✅ The known-node trick reduced a 3×3 to a 2×2. Always look for voltage-source-to-ground nodes first — they give you free voltages!</div>
+  <div class="danger">❌ <strong>Trap:</strong> Moving G₁·V<sub>A</sub> to the wrong sign. When V<sub>A</sub> feeds node B through G₁, it adds +G₁·V<sub>A</sub> to b<sub>B</sub> (it acts like a current injection).</div>
+</div>
+</div>
+</div>
+
+<!-- NODE EXERCISE C -->
+<div class="ex-panel" id="node-c">
+<span class="badge bc">Exercise C</span><span style="color:#aaa;font-size:12px;">Hard — Supernode: voltage source between two unknown nodes</span>
+<div class="step-tabs">
+  <div class="stab active" onclick="showStep('nc',0)">① Circuit</div>
+  <div class="stab" onclick="showStep('nc',1)">② Supernode Concept</div>
+  <div class="stab" onclick="showStep('nc',2)">③ Merged KCL + Constraint</div>
+  <div class="stab" onclick="showStep('nc',3)">④ Solve</div>
+  <div class="stab" onclick="showStep('nc',4)">✅ Answer</div>
+</div>
+
+<div class="step-panel active" id="nc-0">
+<div class="card cc">
+  <h2 class="hc">① The Circuit — Supernode</h2>
+  <svg viewBox="0 0 600 260" width="100%" xmlns="http://www.w3.org/2000/svg">
+    <rect width="600" height="260" fill="#1a0f2a" rx="10"/>
+    <line x1="40" y1="215" x2="560" y2="215" stroke="#555" stroke-width="1.5" stroke-dasharray="5,4"/>
+    <text x="300" y="233" font-size="11" fill="#555" text-anchor="middle">C — Reference Ground = 0 V</text>
+    <!-- Supernode boundary dashed -->
+    <rect x="130" y="60" width="280" height="50" fill="none" stroke="#ffd166" stroke-width="2" stroke-dasharray="8,4" rx="20"/>
+    <text x="270" y="50" font-size="11" fill="#ffd166" text-anchor="middle">⬡ SUPERNODE (A+B enclosed)</text>
+    <!-- Node A -->
+    <circle cx="180" cy="85" r="6" fill="#80a0ff"/>
+    <text x="180" y="68" font-size="14" fill="#80a0ff" text-anchor="middle" font-weight="bold">A</text>
+    <!-- Node B -->
+    <circle cx="360" cy="85" r="6" fill="#c080ff"/>
+    <text x="360" y="68" font-size="14" fill="#c080ff" text-anchor="middle" font-weight="bold">B</text>
+    <!-- E=6V between A and B -->
+    <line x1="186" y1="85" x2="295" y2="85" stroke="#ffd166" stroke-width="2"/>
+    <ellipse cx="310" cy="85" rx="15" ry="12" fill="#2a2000" stroke="#ffd166" stroke-width="2"/>
+    <text x="310" y="89" font-size="11" fill="#ffd166" text-anchor="middle">6V</text>
+    <line x1="325" y1="85" x2="354" y2="85" stroke="#ffd166" stroke-width="2"/>
+    <text x="310" y="115" font-size="10" fill="#ffd166" text-anchor="middle">E=6V → V<tspan dy="3" font-size="8">A</tspan><tspan dy="-3">−V</tspan><tspan dy="3" font-size="8">B</tspan><tspan dy="-3">=6</tspan></text>
+    <!-- R1=3Ω A to ground -->
+    <line x1="180" y1="91" x2="180" y2="215" stroke="#80a0ff" stroke-width="2"/>
+    <rect x="158" y="135" width="44" height="22" fill="#2a1540" stroke="#80a0ff" rx="4"/>
+    <text x="180" y="150" font-size="12" fill="#ffd166" text-anchor="middle">R₁=3Ω</text>
+    <!-- R2=6Ω B to ground -->
+    <line x1="360" y1="91" x2="360" y2="215" stroke="#c080ff" stroke-width="2"/>
+    <rect x="338" y="135" width="44" height="22" fill="#2a1540" stroke="#c080ff" rx="4"/>
+    <text x="360" y="150" font-size="12" fill="#ffd166" text-anchor="middle">R₂=6Ω</text>
+    <!-- R3=4Ω B to D(extra node) — simplify as B to ground through another path -->
+    <!-- I1=4A into A -->
+    <line x1="60" y1="85" x2="174" y2="85" stroke="#ffd166" stroke-width="2"/>
+    <polygon points="174,81 174,89 186,85" fill="#ffd166"/>
+    <rect x="38" y="73" width="56" height="22" fill="#2a2000" stroke="#ffd166" rx="4"/>
+    <text x="66" y="88" font-size="12" fill="#ffd166" text-anchor="middle">I₁=4A</text>
+    <text x="66" y="62" font-size="10" fill="#aaa" text-anchor="middle">→ into A</text>
+    <!-- I2=2A out of B -->
+    <line x1="366" y1="85" x2="490" y2="85" stroke="#ffd166" stroke-width="2"/>
+    <polygon points="490,81 490,89 502,85" fill="#ffd166"/>
+    <rect x="464" y="73" width="56" height="22" fill="#2a2000" stroke="#ffd166" rx="4"/>
+    <text x="492" y="88" font-size="12" fill="#ffd166" text-anchor="middle">I₂=2A</text>
+    <text x="492" y="62" font-size="10" fill="#aaa" text-anchor="middle">out of B</text>
+  </svg>
+  <table>
+    <tr><th>Component</th><th>Value</th><th>Connection</th></tr>
+    <tr><td>E (voltage source)</td><td>6 V</td><td>Between Node A and Node B → creates SUPERNODE</td></tr>
+    <tr><td>R₁</td><td>3 Ω → G₁ = 1/3</td><td>Node A → Ground</td></tr>
+    <tr><td>R₂</td><td>6 Ω → G₂ = 1/6</td><td>Node B → Ground</td></tr>
+    <tr><td>I₁</td><td>4 A</td><td>INTO Node A</td></tr>
+    <tr><td>I₂</td><td>2 A</td><td>OUT of Node B</td></tr>
+  </table>
+</div>
+</div>
+
+<div class="step-panel" id="nc-1">
+<div class="card cc">
+  <h2 class="hc">② What Is a Supernode?</h2>
+  <div class="sm">
+    A voltage source between <strong>two unknown nodes</strong> A and B creates a SUPERNODE.<br><br>
+    Problem: You can't write a normal KCL equation at A or B separately — you don't know the current through the ideal voltage source.<br><br>
+    <strong style="color:#ffd166;">Solution: Merge A and B into one "super-node". Write ONE combined KCL + ONE constraint.</strong>
+  </div>
+  <div class="formula fc">
+    <span class="med">Supernode → Merged KCL (currents leave A or B = currents entering A or B)</span><br>
+    <span class="med">+ Constraint: V<sub>A</sub> − V<sub>B</sub> = E_source</span>
+  </div>
+  <div class="tip">⚡ <strong>Speed Rule:</strong> Draw a bubble enclosing both nodes A and B. Write KCL for currents crossing the bubble boundary. Add the voltage constraint. 2 equations, 2 unknowns.</div>
+</div>
+</div>
+
+<div class="step-panel" id="nc-2">
+<div class="card cc">
+  <h2 class="hc">③ Write Merged KCL + Constraint</h2>
+  <div class="sm">
+    <strong>KCL for the Supernode (current into bubble = current out of bubble):</strong><br><br>
+    Currents IN: I₁ = 4A (into A)<br>
+    Currents OUT: G₁·V<sub>A</sub> (through R₁ to ground) + G₂·V<sub>B</sub> (through R₂ to ground) + I₂ = 2A (out of B)<br><br>
+    <code>4 = G₁·V<sub>A</sub> + G₂·V<sub>B</sub> + 2</code><br>
+    <code>4 = (1/3)V<sub>A</sub> + (1/6)V<sub>B</sub> + 2</code><br>
+    <code>(1/3)V<sub>A</sub> + (1/6)V<sub>B</sub> = 2</code> &nbsp;&nbsp; ← <strong>Equation 1</strong><br><br>
+    <strong>Constraint equation:</strong><br>
+    <code>V<sub>A</sub> − V<sub>B</sub> = 6</code> &nbsp;&nbsp; ← <strong>Equation 2</strong>
+  </div>
+</div>
+</div>
+
+<div class="step-panel" id="nc-3">
+<div class="card cc">
+  <h2 class="hc">④ Solve</h2>
+  <div class="sm">
+    From Eq 2: <code>V<sub>A</sub> = V<sub>B</sub> + 6</code><br><br>
+    Substitute into Eq 1:<br>
+    <code>(1/3)(V<sub>B</sub> + 6) + (1/6)V<sub>B</sub> = 2</code><br>
+    <code>(1/3)V<sub>B</sub> + 2 + (1/6)V<sub>B</sub> = 2</code><br>
+    <code>(2/6 + 1/6)V<sub>B</sub> = 0</code><br>
+    <code>(3/6)V<sub>B</sub> = 0</code><br>
+    <code>V<sub>B</sub> = 0 V</code><br><br>
+    Then: <code>V<sub>A</sub> = 0 + 6 = 6 V</code>
+  </div>
+</div>
+</div>
+
+<div class="step-panel" id="nc-4">
+<div class="card cc">
+  <h2 class="hc">✅ Final Answer</h2>
+  <div class="two">
+    <div class="result-box"><div class="result-lbl">Node A</div><div class="result-val">V<sub>A</sub> = 6 V</div></div>
+    <div class="result-box"><div class="result-lbl">Node B</div><div class="result-val">V<sub>B</sub> = 0 V</div></div>
+  </div>
+  <div class="ok">✅ V<sub>B</sub> = 0 V makes physical sense: the I₁ current feeding A exactly balances the drop across G₁, while I₂ draining B exactly balances what comes through G₂. The voltage source enforces the 6V difference.</div>
+  <div class="danger">❌ <strong>Supernode trap:</strong> Students sometimes forget the constraint equation and only write KCL — that gives 1 equation with 2 unknowns (unsolvable). You ALWAYS need both.</div>
+</div>
+</div>
+</div>
+</div><!-- end tp-node -->
+
+<!-- ═══════════════════════════════════════════════════════ MESH ANALYSIS ═══ -->
+<div class="topic-panel" id="tp-mesh">
+
+<div class="card cb" style="margin-bottom:16px;">
+  <h2 class="hb">⚡ The 3 Golden Rules — R Matrix (Mesh Analysis)</h2>
+  <div class="two">
+    <div>
+      <div class="formula fb"><span class="big">R<sub>ii</sub> = Σ R in mesh i</span><br><span style="font-size:12px;color:#aaa">Sum ALL resistors in mesh i (diagonal)</span></div>
+      <div class="formula fb"><span class="big">R<sub>ij</sub> = −R shared between i and j</span><br><span style="font-size:12px;color:#aaa">ALWAYS negative — resistor shared between mesh i and j</span></div>
+      <div class="formula fb"><span class="big">b<sub>i</sub>: +E clockwise, −E counterclockwise</span><br><span style="font-size:12px;color:#aaa">Walk clockwise around mesh i; + if source pushes you forward</span></div>
+    </div>
+    <div>
+      <div class="tip">⚡ <strong>Speed Rule:</strong> Draw ALL mesh currents clockwise. Diagonal = total R in that loop. Off-diagonal = grab the shared R and negate. Check source polarity walking clockwise.</div>
+      <div class="danger">❌ <strong>Most Common Trap:</strong> Off-diagonal sign error — R<sub>12</sub> is ALWAYS negative.</div>
+      <div class="ok">✅ <strong>Supermesh:</strong> Current source between two meshes → merge the outer KVL loop + constraint (i<sub>j</sub> − i<sub>i</sub> = I<sub>source</sub>). Exactly like supernode but for meshes.</div>
+    </div>
+  </div>
+</div>
+
+<div class="ex-tabs">
+  <div class="etab ea active" onclick="showEx('mesh','a')">Exercise A — Easy 🔵</div>
+  <div class="etab eb" onclick="showEx('mesh','b')">Exercise B — Medium 🟢</div>
+  <div class="etab ec" onclick="showEx('mesh','c')">Exercise C — Hard 🟣</div>
+</div>
+
+<!-- MESH EXERCISE A -->
+<div class="ex-panel active" id="mesh-a">
+<span class="badge ba">Exercise A</span><span style="color:#aaa;font-size:12px;">Easy — 2 meshes, pure resistors + voltage sources</span>
+<div class="step-tabs">
+  <div class="stab active" onclick="showStep('ma',0)">① Circuit</div>
+  <div class="stab" onclick="showStep('ma',1)">② Label Meshes</div>
+  <div class="stab" onclick="showStep('ma',2)">③ Build R Matrix</div>
+  <div class="stab" onclick="showStep('ma',3)">④ Solve</div>
+  <div class="stab" onclick="showStep('ma',4)">✅ Answer</div>
+</div>
+
+<div class="step-panel active" id="ma-0">
+<div class="card ca">
+  <h2 class="ha">① The Circuit</h2>
+  <svg viewBox="0 0 560 260" width="100%" xmlns="http://www.w3.org/2000/svg">
+    <rect width="560" height="260" fill="#10172a" rx="10"/>
+    <!-- Outer rectangle -->
+    <line x1="60" y1="60" x2="500" y2="60" stroke="#aaa" stroke-width="2"/>
+    <line x1="60" y1="200" x2="500" y2="200" stroke="#aaa" stroke-width="2"/>
+    <line x1="60" y1="60" x2="60" y2="200" stroke="#ffd166" stroke-width="2"/>
+    <line x1="500" y1="60" x2="500" y2="200" stroke="#aaa" stroke-width="2"/>
+    <!-- Middle divider -->
+    <line x1="280" y1="60" x2="280" y2="200" stroke="#aaa" stroke-width="2"/>
+    <!-- E1 = 10V left branch -->
+    <ellipse cx="60" cy="130" rx="16" ry="16" fill="#2a2000" stroke="#ffd166" stroke-width="2"/>
+    <text x="60" y="134" font-size="11" fill="#ffd166" text-anchor="middle">10V</text>
+    <text x="30" y="115" font-size="11" fill="#ffd166">E₁</text>
+    <text x="30" y="128" font-size="9" fill="#aaa">(+top)</text>
+    <!-- R1 top -->
+    <rect x="130" y="48" width="60" height="22" fill="#1a2040" stroke="#aaa" rx="4"/>
+    <text x="160" y="63" font-size="12" fill="#ffd166" text-anchor="middle">R₁=4Ω</text>
+    <!-- R2 middle -->
+    <rect x="258" y="115" width="44" height="22" fill="#1a2040" stroke="#aaa" rx="4"/>
+    <text x="280" y="130" font-size="12" fill="#ffd166" text-anchor="middle">R₂=2Ω</text>
+    <!-- R3 top-right -->
+    <rect x="340" y="48" width="60" height="22" fill="#1a2040" stroke="#aaa" rx="4"/>
+    <text x="370" y="63" font-size="12" fill="#ffd166" text-anchor="middle">R₃=6Ω</text>
+    <!-- R4 bottom-right -->
+    <rect x="340" y="188" width="60" height="22" fill="#1a2040" stroke="#aaa" rx="4"/>
+    <text x="370" y="203" font-size="12" fill="#ffd166" text-anchor="middle">R₄=3Ω</text>
+    <!-- E2 right branch -->
+    <ellipse cx="500" cy="130" rx="16" ry="16" fill="#2a2000" stroke="#c080ff" stroke-width="2"/>
+    <text x="500" y="134" font-size="11" fill="#c080ff" text-anchor="middle">6V</text>
+    <text x="520" y="115" font-size="11" fill="#c080ff">E₂</text>
+    <text x="520" y="128" font-size="9" fill="#aaa">(+top)</text>
+    <!-- Mesh current arrows -->
+    <path d="M 160 90 Q 220 90 220 130 Q 220 170 160 170 Q 100 170 100 130 Q 100 90 160 90" fill="none" stroke="#80a0ff" stroke-width="1.5" stroke-dasharray="6,3"/>
+    <polygon points="160,90 155,98 165,98" fill="#80a0ff"/>
+    <text x="160" y="148" font-size="13" fill="#80a0ff" text-anchor="middle" font-weight="bold">i₁</text>
+    <path d="M 380 90 Q 440 90 440 130 Q 440 170 380 170 Q 320 170 320 130 Q 320 90 380 90" fill="none" stroke="#c080ff" stroke-width="1.5" stroke-dasharray="6,3"/>
+    <polygon points="380,90 375,98 385,98" fill="#c080ff"/>
+    <text x="380" y="148" font-size="13" fill="#c080ff" text-anchor="middle" font-weight="bold">i₂</text>
+  </svg>
+  <table>
+    <tr><th>Component</th><th>Value</th><th>Location</th></tr>
+    <tr><td>E₁</td><td>10 V (+ at top)</td><td>Left branch</td></tr>
+    <tr><td>R₁</td><td>4 Ω</td><td>Top-left branch</td></tr>
+    <tr><td>R₂</td><td>2 Ω</td><td>Middle branch (shared!)</td></tr>
+    <tr><td>R₃</td><td>6 Ω</td><td>Top-right branch</td></tr>
+    <tr><td>R₄</td><td>3 Ω</td><td>Bottom-right branch</td></tr>
+    <tr><td>E₂</td><td>6 V (+ at top)</td><td>Right branch</td></tr>
+  </table>
+</div>
+</div>
+
+<div class="step-panel" id="ma-1">
+<div class="card ca">
+  <h2 class="ha">② Draw Clockwise Mesh Currents</h2>
+  <div class="sm">
+    <strong>Mesh 1 (left loop):</strong> i₁ clockwise<br>
+    Contains: E₁, R₁, R₂<br><br>
+    <strong>Mesh 2 (right loop):</strong> i₂ clockwise<br>
+    Contains: R₂, R₃, R₄, E₂<br><br>
+    <strong>Shared element:</strong> R₂ is in BOTH meshes → becomes the off-diagonal term.
+  </div>
+  <div class="tip">⚡ Always draw ALL mesh currents in the SAME direction (clockwise). This makes the off-diagonal always negative.</div>
+</div>
+</div>
+
+<div class="step-panel" id="ma-2">
+<div class="card ca">
+  <h2 class="ha">③ Build R Matrix</h2>
+  <div class="sm" style="margin-bottom:10px;">
+    <strong>R₁₁</strong> = R₁ + R₂ = 4 + 2 = <strong>6 Ω</strong><br>
+    <strong>R₂₂</strong> = R₂ + R₃ + R₄ = 2 + 6 + 3 = <strong>11 Ω</strong><br>
+    <strong>R₁₂ = R₂₁</strong> = −R₂ = <strong>−2 Ω</strong><br><br>
+    <strong>Source b₁:</strong> Walk clockwise in mesh 1: E₁ = +10V (pushes i₁ forward) → b₁ = +10<br>
+    <strong>Source b₂:</strong> Walk clockwise in mesh 2: E₂ at right branch, + terminal at top, walking up = against i₂ → b₂ = −6<br>
+    <em style="color:#aaa;font-size:11px;">(E₂ pushes current upward on right side, but i₂ flows downward there — so it opposes → negative)</em>
+  </div>
+  <div class="matrix-box">
+    ⎡  6 &nbsp; −2 ⎤ &nbsp; ⎡ i₁ ⎤ &nbsp; = &nbsp; ⎡ +10 ⎤<br>
+    ⎣ −2 &nbsp; 11 ⎦ &nbsp; ⎣ i₂ ⎦ &nbsp; = &nbsp; ⎣ −6  ⎦
+  </div>
+</div>
+</div>
+
+<div class="step-panel" id="ma-3">
+<div class="card ca">
+  <h2 class="ha">④ Solve</h2>
+  <div class="sm">
+    From row 1: <code>6i₁ − 2i₂ = 10</code> → <code>3i₁ − i₂ = 5</code> → <code>i₂ = 3i₁ − 5</code><br><br>
+    Substitute into row 2:<br>
+    <code>−2i₁ + 11(3i₁ − 5) = −6</code><br>
+    <code>−2i₁ + 33i₁ − 55 = −6</code><br>
+    <code>31i₁ = 49</code><br>
+    <code>i₁ = 49/31 ≈ 1.58 A</code><br><br>
+    <code>i₂ = 3(49/31) − 5 = 147/31 − 155/31 = −8/31 ≈ −0.26 A</code>
+  </div>
+</div>
+</div>
+
+<div class="step-panel" id="ma-4">
+<div class="card ca">
+  <h2 class="ha">✅ Final Answer</h2>
+  <div class="two">
+    <div class="result-box"><div class="result-lbl">Mesh 1</div><div class="result-val">i₁ = 49/31 ≈ 1.58 A</div></div>
+    <div class="result-box"><div class="result-lbl">Mesh 2</div><div class="result-val">i₂ = −8/31 ≈ −0.26 A</div></div>
+  </div>
+  <div class="tip">⚡ Negative i₂ just means the actual current flows counterclockwise in mesh 2. That's fine — the sign is part of the answer!</div>
+  <div class="danger">❌ <strong>Trap:</strong> Getting b₂ sign wrong. Always walk clockwise and use + if the source helps you, − if it fights you.</div>
+</div>
+</div>
+</div>
+
+<!-- MESH EXERCISE B -->
+<div class="ex-panel" id="mesh-b">
+<span class="badge bb">Exercise B</span><span style="color:#aaa;font-size:12px;">Medium — 3 meshes, mixed sources, sign traps</span>
+<div class="step-tabs">
+  <div class="stab active" onclick="showStep('mb',0)">① Circuit</div>
+  <div class="stab" onclick="showStep('mb',1)">② 3×3 Matrix Setup</div>
+  <div class="stab" onclick="showStep('mb',2)">③ Build R Matrix</div>
+  <div class="stab" onclick="showStep('mb',3)">④ Solve</div>
+  <div class="stab" onclick="showStep('mb',4)">✅ Answer</div>
+</div>
+<div class="step-panel active" id="mb-0">
+<div class="card cb">
+  <h2 class="hb">① The Circuit — 3 Meshes</h2>
+  <svg viewBox="0 0 580 260" width="100%" xmlns="http://www.w3.org/2000/svg">
+    <rect width="580" height="260" fill="#0f1f0f" rx="10"/>
+    <line x1="50" y1="50" x2="530" y2="50" stroke="#aaa" stroke-width="2"/>
+    <line x1="50" y1="210" x2="530" y2="210" stroke="#aaa" stroke-width="2"/>
+    <line x1="50" y1="50" x2="50" y2="210" stroke="#ffd166" stroke-width="2"/>
+    <line x1="530" y1="50" x2="530" y2="210" stroke="#c080ff" stroke-width="2"/>
+    <line x1="240" y1="50" x2="240" y2="210" stroke="#aaa" stroke-width="2"/>
+    <line x1="390" y1="50" x2="390" y2="210" stroke="#aaa" stroke-width="2"/>
+    <!-- Sources and resistors -->
+    <ellipse cx="50" cy="130" rx="15" ry="15" fill="#2a2000" stroke="#ffd166" stroke-width="2"/>
+    <text x="50" y="134" font-size="10" fill="#ffd166" text-anchor="middle">12V</text>
+    <text x="22" y="118" font-size="10" fill="#ffd166">E₁</text>
+    <rect x="100" y="38" width="60" height="22" fill="#1a2a1a" stroke="#aaa" rx="4"/>
+    <text x="130" y="53" font-size="12" fill="#ffd166" text-anchor="middle">R₁=3Ω</text>
+    <rect x="258" y="38" width="60" height="22" fill="#1a2a1a" stroke="#aaa" rx="4"/>
+    <text x="288" y="53" font-size="12" fill="#ffd166" text-anchor="middle">R₃=5Ω</text>
+    <rect x="218" y="118" width="44" height="22" fill="#1a2a1a" stroke="#aaa" rx="4"/>
+    <text x="240" y="133" font-size="12" fill="#ffd166" text-anchor="middle">R₂=4Ω</text>
+    <rect x="368" y="118" width="44" height="22" fill="#1a2a1a" stroke="#aaa" rx="4"/>
+    <text x="390" y="133" font-size="12" fill="#ffd166" text-anchor="middle">R₄=2Ω</text>
+    <rect x="100" y="198" width="60" height="22" fill="#1a2a1a" stroke="#aaa" rx="4"/>
+    <text x="130" y="213" font-size="12" fill="#ffd166" text-anchor="middle">R₅=6Ω</text>
+    <ellipse cx="530" cy="130" rx="15" ry="15" fill="#1a0f2a" stroke="#c080ff" stroke-width="2"/>
+    <text x="530" y="134" font-size="10" fill="#c080ff" text-anchor="middle">8V</text>
+    <text x="548" y="118" font-size="10" fill="#c080ff">E₂</text>
+    <!-- Mesh labels -->
+    <text x="130" y="145" font-size="14" fill="#80a0ff" text-anchor="middle" font-weight="bold">i₁ ↻</text>
+    <text x="310" y="145" font-size="14" fill="#80d080" text-anchor="middle" font-weight="bold">i₂ ↻</text>
+    <text x="460" y="145" font-size="14" fill="#c080ff" text-anchor="middle" font-weight="bold">i₃ ↻</text>
+  </svg>
+  <table>
+    <tr><th>Element</th><th>Value</th><th>Position</th></tr>
+    <tr><td>E₁</td><td>12 V (+top)</td><td>Left branch</td></tr>
+    <tr><td>R₁</td><td>3 Ω</td><td>Top-left (mesh 1 only)</td></tr>
+    <tr><td>R₂</td><td>4 Ω</td><td>Middle-left (shared mesh 1+2)</td></tr>
+    <tr><td>R₃</td><td>5 Ω</td><td>Top-right (mesh 2+3 top)</td></tr>
+    <tr><td>R₄</td><td>2 Ω</td><td>Middle-right (shared mesh 2+3)</td></tr>
+    <tr><td>R₅</td><td>6 Ω</td><td>Bottom-left (mesh 1 only)</td></tr>
+    <tr><td>E₂</td><td>8 V (+top)</td><td>Right branch</td></tr>
+  </table>
+</div>
+</div>
+<div class="step-panel" id="mb-1">
+<div class="card cb">
+  <h2 class="hb">② Identify Each Mesh's Components</h2>
+  <div class="sm">
+    <strong style="color:#80a0ff;">Mesh 1:</strong> E₁, R₁, R₂, R₅ — shared R₂ with mesh 2<br>
+    <strong style="color:#80d080;">Mesh 2:</strong> R₂, R₃, R₄ — shared R₂ with mesh 1, shared R₄ with mesh 3<br>
+    <strong style="color:#c080ff;">Mesh 3:</strong> R₃, R₄, E₂ — shared R₄ with mesh 2<br><br>
+    No element is shared between mesh 1 and mesh 3 → R₁₃ = R₃₁ = 0
+  </div>
+</div>
+</div>
+<div class="step-panel" id="mb-2">
+<div class="card cb">
+  <h2 class="hb">③ Build the 3×3 R Matrix</h2>
+  <div class="sm" style="margin-bottom:10px;">
+    R₁₁ = R₁+R₂+R₅ = 3+4+6 = <strong>13 Ω</strong><br>
+    R₂₂ = R₂+R₃+R₄ = 4+5+2 = <strong>11 Ω</strong><br>
+    R₃₃ = R₃+R₄ = 5+2 = <strong>7 Ω</strong> (note: R₃ not shared, I'll correct — R₃ appears in mesh 2 top and mesh 3 top; R₄ shared 2&3)<br>
+    R₁₂ = R₂₁ = −R₂ = <strong>−4</strong> &nbsp;&nbsp; R₁₃ = R₃₁ = <strong>0</strong> &nbsp;&nbsp; R₂₃ = R₃₂ = −R₄ = <strong>−2</strong><br><br>
+    b₁ = +12V (E₁ aids i₁ clockwise) | b₂ = 0 | b₃ = −8V (E₂ opposes i₃ clockwise)
+  </div>
+  <div class="matrix-box">
+    ⎡ 13 &nbsp; −4 &nbsp;  0 ⎤ &nbsp; ⎡ i₁ ⎤ &nbsp; = &nbsp; ⎡ +12 ⎤<br>
+    ⎢ −4 &nbsp; 11 &nbsp; −2 ⎥ &nbsp; ⎢ i₂ ⎥ &nbsp; = &nbsp; ⎢  0  ⎥<br>
+    ⎣  0 &nbsp; −2 &nbsp;  7 ⎦ &nbsp; ⎣ i₃ ⎦ &nbsp; = &nbsp; ⎣ −8  ⎦
+  </div>
+</div>
+</div>
+<div class="step-panel" id="mb-3">
+<div class="card cb">
+  <h2 class="hb">④ Solve by Substitution</h2>
+  <div class="sm">
+    From row 3: <code>−2i₂ + 7i₃ = −8</code> → <code>i₂ = (7i₃ + 8)/2</code><br><br>
+    From row 2: <code>−4i₁ + 11i₂ − 2i₃ = 0</code> → <code>i₁ = (11i₂ − 2i₃)/4</code><br><br>
+    Substitute into row 1 with i₂ = (7i₃+8)/2:<br>
+    i₁ = (11(7i₃+8)/2 − 2i₃)/4 = (77i₃+88−4i₃)/(8) = (73i₃+88)/8<br><br>
+    Row 1: 13·(73i₃+88)/8 − 4·(7i₃+8)/2 = 12<br>
+    (949i₃+1144)/8 − (28i₃+32)/2 = 12<br>
+    (949i₃+1144 − 112i₃ − 128)/8 = 12<br>
+    837i₃ + 1016 = 96<br>
+    837i₃ = −920<br>
+    <code>i₃ ≈ −1.099 A</code><br><br>
+    i₂ = (7(−1.099)+8)/2 = (−7.693+8)/2 ≈ 0.154 A<br>
+    i₁ = (11(0.154)−2(−1.099))/4 = (1.694+2.198)/4 ≈ 0.973 A
+  </div>
+</div>
+</div>
+<div class="step-panel" id="mb-4">
+<div class="card cb">
+  <h2 class="hb">✅ Final Answer</h2>
+  <div class="two">
+    <div class="result-box"><div class="result-lbl">Mesh 1</div><div class="result-val">i₁ ≈ 0.97 A</div></div>
+    <div class="result-box"><div class="result-lbl">Mesh 2</div><div class="result-val">i₂ ≈ 0.15 A</div></div>
+  </div>
+  <div class="result-box"><div class="result-lbl">Mesh 3</div><div class="result-val">i₃ ≈ −1.10 A (flows counterclockwise)</div></div>
+  <div class="ok">✅ 3×3 matrix follows the same rules as 2×2 — diagonal positive, off-diagonal negative, zero if no shared element.</div>
+</div>
+</div>
+</div>
+
+<!-- MESH EXERCISE C -->
+<div class="ex-panel" id="mesh-c">
+<span class="badge bc">Exercise C</span><span style="color:#aaa;font-size:12px;">Hard — Supermesh: current source between two meshes</span>
+<div class="step-tabs">
+  <div class="stab active" onclick="showStep('mc',0)">① Circuit</div>
+  <div class="stab" onclick="showStep('mc',1)">② Supermesh Concept</div>
+  <div class="stab" onclick="showStep('mc',2)">③ Merged KVL + Constraint</div>
+  <div class="stab" onclick="showStep('mc',3)">④ Solve</div>
+  <div class="stab" onclick="showStep('mc',4)">✅ Answer</div>
+</div>
+<div class="step-panel active" id="mc-0">
+<div class="card cc">
+  <h2 class="hc">① The Circuit — Supermesh</h2>
+  <svg viewBox="0 0 560 270" width="100%" xmlns="http://www.w3.org/2000/svg">
+    <rect width="560" height="270" fill="#1a0f2a" rx="10"/>
+    <line x1="50" y1="55" x2="510" y2="55" stroke="#aaa" stroke-width="2"/>
+    <line x1="50" y1="210" x2="510" y2="210" stroke="#aaa" stroke-width="2"/>
+    <line x1="50" y1="55" x2="50" y2="210" stroke="#ffd166" stroke-width="2"/>
+    <line x1="510" y1="55" x2="510" y2="210" stroke="#aaa" stroke-width="2"/>
+    <line x1="280" y1="55" x2="280" y2="210" stroke="#ffd166" stroke-width="2.5" stroke-dasharray="6,3"/>
+    <!-- Supermesh boundary -->
+    <rect x="55" y="60" width="450" height="50" fill="none" stroke="#ffd166" stroke-width="2" stroke-dasharray="8,4" rx="20"/>
+    <text x="280" y="48" font-size="11" fill="#ffd166" text-anchor="middle">⬡ SUPERMESH (i₁ + i₂ outer loop)</text>
+    <!-- E1 left -->
+    <ellipse cx="50" cy="132" rx="15" ry="15" fill="#2a2000" stroke="#ffd166" stroke-width="2"/>
+    <text x="50" y="136" font-size="10" fill="#ffd166" text-anchor="middle">10V</text>
+    <text x="22" y="118" font-size="10" fill="#ffd166">E₁</text>
+    <!-- R1 top left -->
+    <rect x="90" y="43" width="60" height="22" fill="#2a1540" stroke="#aaa" rx="4"/>
+    <text x="120" y="58" font-size="12" fill="#ffd166" text-anchor="middle">R₁=4Ω</text>
+    <!-- IS=3A middle (between meshes, dashed) -->
+    <line x1="280" y1="80" x2="280" y2="130" stroke="#ff8080" stroke-width="2.5"/>
+    <polygon points="276,130 284,130 280,145" fill="#ff8080"/>
+    <rect x="288" y="95" width="70" height="22" fill="#2a0a0a" stroke="#e63946" rx="4"/>
+    <text x="323" y="110" font-size="11" fill="#ff8080" text-anchor="middle">Iₛ=3A↓</text>
+    <!-- R2 top right -->
+    <rect x="350" y="43" width="60" height="22" fill="#2a1540" stroke="#aaa" rx="4"/>
+    <text x="380" y="58" font-size="12" fill="#ffd166" text-anchor="middle">R₂=6Ω</text>
+    <!-- R3 bottom left -->
+    <rect x="90" y="198" width="60" height="22" fill="#2a1540" stroke="#aaa" rx="4"/>
+    <text x="120" y="213" font-size="12" fill="#ffd166" text-anchor="middle">R₃=5Ω</text>
+    <!-- R4 right side -->
+    <rect x="488" y="118" width="44" height="22" fill="#2a1540" stroke="#aaa" rx="4"/>
+    <text x="510" y="133" font-size="12" fill="#ffd166" text-anchor="middle">R₄=3Ω</text>
+    <!-- Mesh labels -->
+    <text x="155" y="165" font-size="14" fill="#80a0ff" text-anchor="middle" font-weight="bold">i₁ ↻</text>
+    <text x="400" y="165" font-size="14" fill="#c080ff" text-anchor="middle" font-weight="bold">i₂ ↻</text>
+  </svg>
+  <table>
+    <tr><th>Element</th><th>Value</th><th>Notes</th></tr>
+    <tr><td>E₁</td><td>10 V</td><td>Left branch, + at top</td></tr>
+    <tr><td>R₁</td><td>4 Ω</td><td>Top-left (mesh 1)</td></tr>
+    <tr><td>Iₛ</td><td>3 A ↓</td><td>Middle branch, BETWEEN mesh 1 and mesh 2 → SUPERMESH!</td></tr>
+    <tr><td>R₂</td><td>6 Ω</td><td>Top-right (mesh 2)</td></tr>
+    <tr><td>R₃</td><td>5 Ω</td><td>Bottom-left (mesh 1)</td></tr>
+    <tr><td>R₄</td><td>3 Ω</td><td>Right branch (mesh 2)</td></tr>
+  </table>
+</div>
+</div>
+<div class="step-panel" id="mc-1">
+<div class="card cc">
+  <h2 class="hc">② What Is a Supermesh?</h2>
+  <div class="sm">
+    When a current source sits between two meshes (i₁ and i₂), you <strong>cannot write KVL for each mesh separately</strong> — you don't know the voltage across the current source.<br><br>
+    <strong style="color:#ffd166;">Solution: Merge i₁ and i₂ into a supermesh. Write ONE outer KVL loop skipping the current source + ONE constraint equation.</strong>
+  </div>
+  <div class="formula fc">
+    <span class="med">Supermesh: Outer KVL (skip current source branch)</span><br>
+    <span class="med">+ Constraint: i₂ − i₁ = Iₛ (if Iₛ flows from mesh 1 to mesh 2)</span>
+  </div>
+  <div class="tip">⚡ <strong>Supermesh = Supernode of Mesh Analysis.</strong> Same concept: merge + constraint. If the current source flows from i₁ toward i₂: i₂ − i₁ = Iₛ.</div>
+</div>
+</div>
+<div class="step-panel" id="mc-2">
+<div class="card cc">
+  <h2 class="hc">③ Write Outer KVL + Constraint</h2>
+  <div class="sm">
+    <strong>Outer KVL (clockwise, skip Iₛ branch):</strong><br>
+    Start at bottom-left, go clockwise: E₁ rises → +10V, R₁ drops → −R₁·i₁ = −4i₁, R₂ drops → −R₂·i₂ = −6i₂, R₄ drops → −R₄·i₂ = −3i₂, R₃ drops → −R₃·i₁ = −5i₁<br><br>
+    <code>10 − 4i₁ − 6i₂ − 3i₂ − 5i₁ = 0</code><br>
+    <code>10 − 9i₁ − 9i₂ = 0</code><br>
+    <code>9i₁ + 9i₂ = 10</code> &nbsp;&nbsp; ← <strong>Equation 1</strong><br><br>
+    <strong>Constraint (Iₛ flows downward = from mesh 2 side to mesh 1 side):</strong><br>
+    Current source = i₂ − i₁ = 3 &nbsp;&nbsp; ← <strong>Equation 2</strong>
+  </div>
+</div>
+</div>
+<div class="step-panel" id="mc-3">
+<div class="card cc">
+  <h2 class="hc">④ Solve</h2>
+  <div class="sm">
+    Eq 2: <code>i₂ = i₁ + 3</code><br><br>
+    Sub into Eq 1:<br>
+    <code>9i₁ + 9(i₁ + 3) = 10</code><br>
+    <code>9i₁ + 9i₁ + 27 = 10</code><br>
+    <code>18i₁ = −17</code><br>
+    <code>i₁ = −17/18 ≈ −0.94 A</code><br><br>
+    <code>i₂ = −17/18 + 3 = −17/18 + 54/18 = 37/18 ≈ 2.06 A</code>
+  </div>
+</div>
+</div>
+<div class="step-panel" id="mc-4">
+<div class="card cc">
+  <h2 class="hc">✅ Final Answer</h2>
+  <div class="two">
+    <div class="result-box"><div class="result-lbl">Mesh 1</div><div class="result-val">i₁ = −17/18 ≈ −0.94 A</div></div>
+    <div class="result-box"><div class="result-lbl">Mesh 2</div><div class="result-val">i₂ = 37/18 ≈ 2.06 A</div></div>
+  </div>
+  <div class="ok">✅ Check constraint: i₂ − i₁ = 37/18 − (−17/18) = 54/18 = 3 ✓ Correct!</div>
+  <div class="danger">❌ <strong>Supermesh trap:</strong> Getting constraint direction wrong. Iₛ flows FROM mesh 1 side TO mesh 2 side → i₂ − i₁ = Iₛ. If it flows the other way: i₁ − i₂ = Iₛ. Draw it carefully!</div>
+  <div class="tip">⚡ <strong>Always verify:</strong> Substitute back into constraint equation to confirm. Takes 5 seconds and catches sign errors.</div>
+</div>
+</div>
+</div>
+
+</div><!-- end tp-mesh -->
+
+<script>
+function showTopic(t){
+  document.querySelectorAll('.topic-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.ttab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tp-'+t).classList.add('active');
+  document.querySelector('.ttab.'+t).classList.add('active');
+  // reset to exercise A
+  ['node','mesh'].forEach(topic=>{
+    if(topic===t){
+      document.querySelectorAll('#tp-'+t+' .ex-panel').forEach(p=>p.classList.remove('active'));
+      const first=document.querySelector('#tp-'+t+' .ex-panel');
+      if(first)first.classList.add('active');
+      document.querySelectorAll('#tp-'+t+' .etab').forEach(b=>b.classList.remove('active'));
+      const fb=document.querySelector('#tp-'+t+' .etab');
+      if(fb)fb.classList.add('active');
+    }
+  });
+}
+function showEx(topic,ex){
+  const tp=document.getElementById('tp-'+topic);
+  tp.querySelectorAll('.ex-panel').forEach(p=>p.classList.remove('active'));
+  tp.querySelectorAll('.etab').forEach(b=>b.classList.remove('active'));
+  document.getElementById(topic+'-'+ex).classList.add('active');
+  const tabs=tp.querySelectorAll('.etab');
+  const map={a:0,b:1,c:2};
+  if(tabs[map[ex]])tabs[map[ex]].classList.add('active');
+  // reset steps
+  const ep=document.getElementById(topic+'-'+ex);
+  ep.querySelectorAll('.step-panel').forEach(p=>p.classList.remove('active'));
+  const fs=ep.querySelector('.step-panel');
+  if(fs)fs.classList.add('active');
+  ep.querySelectorAll('.stab').forEach(b=>b.classList.remove('active'));
+  const fb=ep.querySelector('.stab');
+  if(fb)fb.classList.add('active');
+}
+function showStep(prefix,idx){
+  const ep=document.getElementById(prefix+'-'+idx).closest('.ex-panel,.topic-panel');
+  ep.querySelectorAll('.step-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById(prefix+'-'+idx).classList.add('active');
+  const stabs=ep.querySelectorAll('.stab');
+  stabs.forEach(b=>b.classList.remove('active'));
+  if(stabs[idx])stabs[idx].classList.add('active');
+}
+</script>
+</body>
+</html>

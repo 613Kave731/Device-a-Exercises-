@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Exercise 4 — Analog Computing · Messina Exam</title>
+<style>
+  *{box-sizing:border-box;}
+  body{font-family:'Segoe UI',sans-serif;background:#1a1a2e;margin:0;padding:20px;color:#e8e8f0;}
+  h1{font-size:20px;color:#ffd166;margin:0 0 4px;}
+  .sub{font-size:12px;color:#888;margin-bottom:18px;}
+  .ex-tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+  .etab{padding:9px 20px;border-radius:22px;cursor:pointer;font-size:13px;font-weight:700;border:2px solid;transition:all .2s;}
+  .ea{border-color:#0f3460;color:#80a0ff;background:transparent;}
+  .ea.active,.ea:hover{background:#0f3460;color:white;}
+  .eb{border-color:#1a6b35;color:#80d080;background:transparent;}
+  .eb.active,.eb:hover{background:#1a6b35;color:white;}
+  .ec{border-color:#7b2d8b;color:#c080ff;background:transparent;}
+  .ec.active,.ec:hover{background:#7b2d8b;color:white;}
+  .ex-panel{display:none;}.ex-panel.active{display:block;}
+  .step-tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;}
+  .stab{padding:6px 14px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;border:1.5px solid #444;color:#aaa;background:#252535;transition:all .2s;}
+  .stab.active,.stab:hover{background:#ffd166;color:#1a1a2e;border-color:#ffd166;}
+  .step-panel{display:none;}.step-panel.active{display:block;}
+  .card{border-radius:12px;padding:18px;margin-bottom:14px;border:1.5px solid;}
+  .ca{background:#10172a;border-color:#1a3a7a;}
+  .cb{background:#0f1f0f;border-color:#1a5020;}
+  .cc{background:#1a0f2a;border-color:#6020a0;}
+  .cg{background:#1a1200;border-color:#806000;}
+  h2{font-size:14px;font-weight:700;margin:0 0 12px;padding-bottom:8px;}
+  .ha{color:#80a0ff;border-bottom:1px solid #1a3a7a;}
+  .hb{color:#80d080;border-bottom:1px solid #1a5020;}
+  .hc{color:#c080ff;border-bottom:1px solid #6020a0;}
+  .hg{color:#ffd166;border-bottom:1px solid #806000;}
+  .formula{border-radius:8px;padding:12px 16px;text-align:center;margin:10px 0;font-weight:bold;}
+  .fa{background:#0a1230;border:1px solid #2060c0;}
+  .fb{background:#0a1a0a;border:1px solid #30a030;}
+  .fc{background:#1a0a30;border:1px solid #8030c0;}
+  .fk{background:#2a2000;border:1px solid #c09000;}
+  .big{font-size:18px;color:#ffd166;line-height:2;}
+  .med{font-size:14px;color:#ffd166;line-height:1.8;}
+  .sm{font-size:13px;color:#e0e0f0;line-height:1.8;}
+  .tip{background:#2a2000;border-left:3px solid #ffc107;padding:10px 12px;border-radius:0 8px 8px 0;font-size:12.5px;margin:8px 0;line-height:1.7;color:#ffd080;}
+  .danger{background:#2a0a0a;border-left:3px solid #e63946;padding:10px 12px;border-radius:0 8px 8px 0;font-size:12.5px;margin:8px 0;line-height:1.7;color:#ff9090;}
+  .ok{background:#0a2a0a;border-left:3px solid #28a745;padding:10px 12px;border-radius:0 8px 8px 0;font-size:12.5px;margin:8px 0;line-height:1.7;color:#80d080;}
+  .result-box{background:#0a1a0a;border:2px solid #28a745;border-radius:12px;padding:14px 18px;margin:12px 0;text-align:center;}
+  .result-val{font-size:18px;font-weight:bold;color:#ffd166;margin:6px 0;line-height:1.6;}
+  .result-lbl{font-size:12px;color:#888;margin:2px 0;}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+  code{background:#2a2a3a;padding:2px 6px;border-radius:4px;font-family:'Courier New',monospace;font-size:13px;color:#80d0ff;}
+  .badge{display:inline-block;padding:3px 10px;border-radius:10px;font-size:11px;font-weight:700;margin-right:6px;}
+  .ba{background:#0f3460;color:#80a0ff;}
+  .bb{background:#1a6b35;color:#80d080;}
+  .bc{background:#7b2d8b;color:#c080ff;}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.5px;}
+  th{background:#252540;color:#ffd166;padding:8px 10px;text-align:left;border:1px solid #333;}
+  td{padding:7px 10px;border:1px solid #333;color:#d0d0e0;vertical-align:top;}
+  tr:nth-child(even) td{background:#1e1e30;}
+  svg text{font-family:'Segoe UI',sans-serif;}
+  .blocks-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0;}
+  .block-card{background:#1e1e35;border:1.5px solid #444;border-radius:10px;padding:12px;text-align:center;}
+  .block-card .bc-title{font-size:12px;font-weight:700;color:#ffd166;margin-bottom:6px;}
+  .block-card .bc-sym{font-size:20px;margin:4px 0;}
+  .block-card .bc-eq{font-size:11px;color:#80d0ff;font-family:'Courier New',monospace;line-height:1.6;}
+  .block-card .bc-rule{font-size:10.5px;color:#aaa;margin-top:4px;line-height:1.5;}
+  .ode-box{background:#0a0820;border:2px solid #ffd166;border-radius:12px;padding:16px 20px;margin:12px 0;text-align:center;}
+  .ode-eq{font-size:22px;color:#ffd166;font-weight:bold;letter-spacing:1px;}
+  .ode-sub{font-size:11px;color:#aaa;margin-top:6px;}
+  .arrow-row{display:flex;align-items:center;gap:8px;margin:8px 0;font-size:13px;}
+  .arrow-box{background:#252535;border:1px solid #555;border-radius:6px;padding:6px 12px;flex:1;text-align:center;}
+  .arrow{font-size:18px;color:#ffd166;}
+  @media(max-width:600px){.two,.three,.blocks-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<h1>🖥️ Exercise 4 — Analog Computing (ODE → Op-Amp Circuit)</h1>
+<p class="sub">Messina Exam Prep · Read the ODE · Map to Blocks · Wire the Circuit · 3 Exercises A→C</p>
+
+<!-- ═══ BUILDING BLOCKS REFERENCE ═══ -->
+<div class="card cg" style="margin-bottom:18px;">
+  <h2 class="hg">🧱 The 3 Building Blocks — Memorise These</h2>
+  <div class="blocks-grid">
+    <div class="block-card">
+      <div class="bc-title">① Inverting Integrator</div>
+      <div class="bc-sym">∫</div>
+      <div class="bc-eq">V_out = −(1/RC)∫V_in dt</div>
+      <div class="bc-rule">RC = 1s (Messina rule)<br>So: V_out = −∫V_in dt<br>= inverting + integrating</div>
+    </div>
+    <div class="block-card">
+      <div class="bc-title">② Inverter (×−1)</div>
+      <div class="bc-sym">−1</div>
+      <div class="bc-eq">V_out = −V_in</div>
+      <div class="bc-rule">Equal Rf = R_in<br>Just flips the sign<br>Use when you need +signal</div>
+    </div>
+    <div class="block-card">
+      <div class="bc-title">③ Inverting Summer</div>
+      <div class="bc-sym">Σ</div>
+      <div class="bc-eq">V_out = −(Rf/R₁·V₁ + Rf/R₂·V₂ + …)</div>
+      <div class="bc-rule">Each input has its own R<br>Gain per input = Rf/Rₖ<br>Output is negated sum</div>
+    </div>
+  </div>
+  <div class="two" style="margin-top:10px;">
+    <div class="tip">⚡ <strong>Key constraint:</strong> RC = 1 s for ALL integrators at Messina. This means if C = 1F → R = 1Ω. If C = 0.1F → R = 10Ω. Always state RC = 1.</div>
+    <div class="ok">✅ <strong>Strategy:</strong> Identify the highest-order derivative. Assume it exists as a signal. Integrate once to get the next lower derivative. Keep integrating. Sum and feedback to close the loop.</div>
+  </div>
+</div>
+
+<div class="ex-tabs">
+  <div class="etab ea active" onclick="showEx('a')">Exercise A — Easy 🔵</div>
+  <div class="etab eb" onclick="showEx('b')">Exercise B — Medium 🟢</div>
+  <div class="etab ec" onclick="showEx('c')">Exercise C — Hard 🟣</div>
+</div>
+
+<!-- ════════════════════════════════════ EXERCISE A ════════════════════════ -->
+<div class="ex-panel active" id="ex-a">
+<span class="badge ba">Exercise A</span><span style="color:#aaa;font-size:12px;">Easy — first-order ODE, one integrator</span>
+<div class="step-tabs">
+  <div class="stab active" onclick="showStep('a',0)">① The ODE</div>
+  <div class="stab" onclick="showStep('a',1)">② Parse Terms</div>
+  <div class="stab" onclick="showStep('a',2)">③ Signal Flow</div>
+  <div class="stab" onclick="showStep('a',3)">④ Draw Circuit</div>
+  <div class="stab" onclick="showStep('a',4)">✅ Verify</div>
+</div>
+
+<div class="step-panel active" id="a-0">
+<div class="card ca">
+  <h2 class="ha">① The Differential Equation</h2>
+  <div class="ode-box">
+    <div class="ode-eq">ẏ + 3y = 2x(t)</div>
+    <div class="ode-sub">where x(t) is the input signal &nbsp;|&nbsp; y(t) is the output (voltage) &nbsp;|&nbsp; ẏ = dy/dt</div>
+  </div>
+  <div class="sm" style="margin-top:12px;">
+    This is a <strong>first-order ODE</strong>. There is one derivative (ẏ), so we need <strong>one integrator</strong>.<br><br>
+    <strong>Goal:</strong> Build an op-amp circuit whose output voltage y(t) satisfies this equation for any input x(t).
+  </div>
+  <div class="tip">⚡ <strong>First step always:</strong> Isolate the highest-order derivative on the left:<br>
+  <code>ẏ = 2x(t) − 3y</code><br>
+  This tells you exactly what signals you need to SUM to produce ẏ.</div>
+</div>
+</div>
+
+<div class="step-panel" id="a-1">
+<div class="card ca">
+  <h2 class="ha">② Parse the Equation — Identify Every Term</h2>
+  <div class="sm">Rearranged: <code>ẏ = −3y + 2x(t)</code></div>
+  <table>
+    <tr><th>Term</th><th>Signal Needed</th><th>Block to Use</th><th>Gain</th></tr>
+    <tr><td><code>−3y</code></td><td>y (output, negated×3)</td><td>Feed y back through summer with gain 3</td><td>Rf/R = 3</td></tr>
+    <tr><td><code>+2x(t)</code></td><td>x(t) input</td><td>Feed x through summer with gain 2</td><td>Rf/R = 2</td></tr>
+    <tr><td><code>ẏ</code></td><td>derivative of y</td><td>Inverting summer output</td><td>—</td></tr>
+  </table>
+  <div class="tip">💡 The summer produces the NEGATIVE sum (it's an inverting summer). So if the equation says <code>ẏ = −3y + 2x</code>, the summer gives <code>−(−3y + 2x) = 3y − 2x</code>... we need to be careful about signs. Let's track carefully in step 3.</div>
+</div>
+</div>
+
+<div class="step-panel" id="a-2">
+<div class="card ca">
+  <h2 class="ha">③ Signal Flow Diagram</h2>
+  <div class="sm" style="margin-bottom:12px;">
+    The method: assume ẏ exists → integrate once (×−1/s with sign flip) → get −y → use that.<br><br>
+    <strong>Signal chain:</strong>
+  </div>
+  <div class="arrow-row">
+    <div class="arrow-box" style="background:#0a1230;border-color:#2060c0;color:#80a0ff;"><strong>ẏ</strong><br><span style="font-size:10px;">assume exists</span></div>
+    <div class="arrow">→ ∫ →</div>
+    <div class="arrow-box" style="background:#0a1a0a;border-color:#30a030;color:#80d080;"><strong>−y</strong><br><span style="font-size:10px;">integrator output (inverted)</span></div>
+    <div class="arrow">→ ×(−1) →</div>
+    <div class="arrow-box" style="background:#1a0a30;border-color:#8030c0;color:#c080ff;"><strong>+y</strong><br><span style="font-size:10px;">after inverter</span></div>
+  </div>
+  <div class="sm" style="margin-top:10px;">
+    Now build ẏ by summing: <code>ẏ = −3y + 2x(t)</code><br>
+    The inverting summer takes inputs and negates:<br>
+    If summer inputs are: <code>3y</code> (with gain 3) and <code>−2x</code> (with gain 2)<br>
+    Then summer output = <code>−(3y − 2x) = −3y + 2x</code> = ẏ ✓<br><br>
+    <strong>So feed into summer: +y (from inverter) with gain 3, and −x(t) with gain 2</strong>
+  </div>
+  <div class="ok">✅ Signal flow: x(t) and y → Summer → ẏ → Integrator → −y → Inverter → +y → feedback to summer</div>
+</div>
+</div>
+
+<div class="step-panel" id="a-3">
+<div class="card ca">
+  <h2 class="ha">④ Draw the Op-Amp Circuit</h2>
+  <svg viewBox="0 0 680 320" width="100%" xmlns="http://www.w3.org/2000/svg">
+    <rect width="680" height="320" fill="#10172a" rx="10"/>
+
+    <!-- ── INVERTING SUMMER (OA1) ── -->
+    <text x="140" y="22" font-size="11" fill="#ffd166" text-anchor="middle">INVERTING SUMMER (OA1)</text>
+    <polygon points="100,50 100,160 200,105" fill="#1a2040" stroke="#80a0ff" stroke-width="2"/>
+    <text x="145" y="110" font-size="11" fill="#80a0ff" text-anchor="middle">Σ</text>
+    <!-- V+ to ground -->
+    <line x1="100" y1="148" x2="70" y2="148" stroke="#555" stroke-width="1.5"/>
+    <line x1="70" y1="148" x2="70" y2="185" stroke="#555" stroke-width="1.5"/>
+    <line x1="58" y1="185" x2="82" y2="185" stroke="#555" stroke-width="2"/>
+    <line x1="63" y1="191" x2="77" y2="191" stroke="#555" stroke-width="1.5"/>
+    <!-- Rf1=1Ω feedback -->
+    <line x1="100" y1="68" x2="100" y2="28" stroke="#80a0ff" stroke-width="1.5"/>
+    <line x1="100" y1="28" x2="210" y2="28" stroke="#80a0ff" stroke-width="1.5"/>
+    <rect x="138" y="16" width="52" height="18" fill="#1a2040" stroke="#80a0ff" rx="3"/>
+    <text x="164" y="29" font-size="10" fill="#ffd166" text-anchor="middle">Rf=3Ω</text>
+    <line x1="210" y1="28" x2="210" y2="105" stroke="#80a0ff" stroke-width="1.5"/>
+    <!-- Node A1 -->
+    <circle cx="100" cy="68" r="4" fill="#ffd166"/>
+    <!-- Input: x(t) through R=1.5Ω → gain=3/1.5=2 for x -->
+    <line x1="20" y1="75" x2="96" y2="75" stroke="#ffd166" stroke-width="1.5"/>
+    <rect x="36" y="63" width="44" height="18" fill="#2a2000" stroke="#ffd166" rx="3"/>
+    <text x="58" y="76" font-size="10" fill="#ffd166" text-anchor="middle">R=1.5Ω</text>
+    <text x="20" y="62" font-size="10" fill="#ffd166">x(t)</text>
+    <!-- Input: +y through R=1Ω → gain=3/1=3 for y -->
+    <line x1="20" y1="100" x2="96" y2="100" stroke="#c080ff" stroke-width="1.5"/>
+    <rect x="36" y="88" width="44" height="18" fill="#1a0f2a" stroke="#c080ff" rx="3"/>
+    <text x="58" y="101" font-size="10" fill="#ffd166" text-anchor="middle">R=1Ω</text>
+    <text x="18" y="88" font-size="10" fill="#c080ff">+y</text>
+    <!-- OA1 output = ẏ -->
+    <line x1="200" y1="105" x2="240" y2="105" stroke="#80a0ff" stroke-width="2"/>
+    <text x="226" y="96" font-size="10" fill="#80a0ff">ẏ</text>
+
+    <!-- ── INTEGRATOR (OA2) ── -->
+    <text x="340" y="22" font-size="11" fill="#80d0ff" text-anchor="middle">INTEGRATOR (OA2)</text>
+    <polygon points="250,50 250,160 350,105" fill="#1a2a1a" stroke="#80d0ff" stroke-width="2"/>
+    <text x="295" y="110" font-size="11" fill="#80d0ff" text-anchor="middle">∫</text>
+    <!-- V+ to ground -->
+    <line x1="250" y1="148" x2="220" y2="148" stroke="#555" stroke-width="1.5"/>
+    <line x1="220" y1="148" x2="220" y2="185" stroke="#555" stroke-width="1.5"/>
+    <line x1="208" y1="185" x2="232" y2="185" stroke="#555" stroke-width="2"/>
+    <!-- RC=1: R=1Ω, C=1F -->
+    <line x1="250" y1="68" x2="250" y2="28" stroke="#80d0ff" stroke-width="1.5"/>
+    <line x1="250" y1="28" x2="365" y2="28" stroke="#80d0ff" stroke-width="1.5"/>
+    <!-- Capacitor symbol in feedback -->
+    <line x1="318" y1="16" x2="318" y2="28" stroke="#80d0ff" stroke-width="1.5"/>
+    <line x1="308" y1="16" x2="328" y2="16" stroke="#80d0ff" stroke-width="2.5"/>
+    <line x1="308" y1="10" x2="328" y2="10" stroke="#80d0ff" stroke-width="2.5"/>
+    <line x1="318" y1="10" x2="318" y2="5" stroke="#80d0ff" stroke-width="1.5"/>
+    <text x="340" y="12" font-size="10" fill="#ffd166">C=1F</text>
+    <line x1="365" y1="28" x2="365" y2="105" stroke="#80d0ff" stroke-width="1.5"/>
+    <!-- R=1Ω input to integrator -->
+    <circle cx="250" cy="68" r="4" fill="#ffd166"/>
+    <line x1="240" y1="75" x2="246" y2="75" stroke="#80d0ff" stroke-width="1.5"/>
+    <rect x="240" y="63" width="28" height="18" fill="#1a2a1a" stroke="#80d0ff" rx="3"/>
+    <text x="254" y="76" font-size="10" fill="#ffd166" text-anchor="middle">R=1Ω</text>
+    <!-- OA2 output = −y -->
+    <line x1="350" y1="105" x2="400" y2="105" stroke="#80d0ff" stroke-width="2"/>
+    <text x="372" y="96" font-size="10" fill="#80d0ff">−y</text>
+
+    <!-- ── INVERTER (OA3) ── -->
+    <text x="520" y="22" font-size="11" fill="#c080ff" text-anchor="middle">INVERTER (OA3)</text>
+    <polygon points="410,65 410,145 490,105" fill="#1f1530" stroke="#c080ff" stroke-width="2"/>
+    <text x="448" y="110" font-size="11" fill="#c080ff" text-anchor="middle">×−1</text>
+    <!-- V+ to ground -->
+    <line x1="410" y1="133" x2="388" y2="133" stroke="#555" stroke-width="1.5"/>
+    <line x1="388" y1="133" x2="388" y2="175" stroke="#555" stroke-width="1.5"/>
+    <line x1="376" y1="175" x2="400" y2="175" stroke="#555" stroke-width="2"/>
+    <!-- Rf=R=1Ω (unity gain) -->
+    <line x1="410" y1="78" x2="410" y2="40" stroke="#c080ff" stroke-width="1.5"/>
+    <line x1="410" y1="40" x2="500" y2="40" stroke="#c080ff" stroke-width="1.5"/>
+    <rect x="434" y="28" width="40" height="18" fill="#1f1530" stroke="#c080ff" rx="3"/>
+    <text x="454" y="41" font-size="10" fill="#ffd166" text-anchor="middle">Rf=1Ω</text>
+    <line x1="500" y1="40" x2="500" y2="105" stroke="#c080ff" stroke-width="1.5"/>
+    <!-- R=1Ω input -->
+    <circle cx="410" cy="78" r="4" fill="#ffd166"/>
+    <rect x="404" y="66" width="28" height="18" fill="#1f1530" stroke="#c080ff" rx="3"/>
+    <text x="418" y="79" font-size="10" fill="#ffd166" text-anchor="middle">1Ω</text>
+    <!-- OA3 output = +y -->
+    <line x1="490" y1="105" x2="560" y2="105" stroke="#c080ff" stroke-width="2"/>
+    <circle cx="560" cy="105" r="5" fill="#c080ff"/>
+    <text x="575" y="109" font-size="12" fill="#c080ff" font-weight="bold">y(t)</text>
+    <text x="540" y="95" font-size="10" fill="#c080ff">+y = output</text>
+
+    <!-- FEEDBACK LINE: y back to summer input -->
+    <line x1="560" y1="105" x2="560" y2="250" stroke="#c080ff" stroke-width="1.5" stroke-dasharray="5,3"/>
+    <line x1="560" y1="250" x2="18" y2="250" stroke="#c080ff" stroke-width="1.5" stroke-dasharray="5,3"/>
+    <line x1="18" y1="250" x2="18" y2="100" stroke="#c080ff" stroke-width="1.5" stroke-dasharray="5,3"/>
+    <line x1="18" y1="100" x2="36" y2="100" stroke="#c080ff" stroke-width="1.5"/>
+    <text x="290" y="270" font-size="10" fill="#c080ff" text-anchor="middle">feedback: y → summer (gain 3)</text>
+
+    <!-- x(t) label -->
+    <text x="340" y="295" font-size="11" fill="#aaa" text-anchor="middle">RC = 1s constraint: R×C = 1Ω × 1F = 1s ✓</text>
+  </svg>
+
+  <table>
+    <tr><th>Block</th><th>Op-Amp</th><th>Function</th><th>Components</th></tr>
+    <tr><td>Inverting Summer</td><td>OA1</td><td>Computes ẏ = −3y + 2x(t)</td><td>Rf=3Ω, R_x=1.5Ω (gain 2), R_y=1Ω (gain 3)</td></tr>
+    <tr><td>Integrator</td><td>OA2</td><td>∫ẏ dt = −y (with sign flip)</td><td>R=1Ω, C=1F (RC=1s)</td></tr>
+    <tr><td>Inverter</td><td>OA3</td><td>−(−y) = +y (output)</td><td>Rf=R=1Ω (unity gain, sign flip)</td></tr>
+  </table>
+</div>
+</div>
+
+<div class="step-panel" id="a-4">
+<div class="card ca">
+  <h2 class="ha">✅ Verify — Trace Signal Flow</h2>
+  <div class="sm">
+    <strong>Assume OA3 output is y(t).</strong> Trace backwards:<br><br>
+    OA3 output = +y &nbsp;→&nbsp; OA3 input (−y) = OA2 output<br>
+    OA2 output = −∫(ẏ)dt = −y &nbsp;→&nbsp; OA2 input = ẏ = OA1 output<br>
+    OA1 (inverting summer): output = −(Rf/R_y · y + Rf/R_x · x(t))<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;= −(3/1 · y + 3/1.5 · x) = −3y − 2x<br><br>
+    Wait — but we need ẏ = −3y + 2x. Let me check the input sign to the summer.<br>
+    If x(t) enters as −x(t) (negated), then: output = −(3y + 2·(−x)) = −3y + 2x = ẏ ✓<br><br>
+    <strong>Solution: feed −x(t) into the summer</strong> (x goes through an inverter first, or connect directly with correct polarity from the source).
+  </div>
+  <div class="result-box">
+    <div class="result-lbl">Circuit reconstructs the ODE</div>
+    <div class="result-val">ẏ = −3y + 2x(t) &nbsp;→&nbsp; ẏ + 3y = 2x(t) ✓</div>
+  </div>
+  <div class="ok">✅ Always verify by tracing the signal flow end-to-end. If any sign is wrong, add an inverter on that branch.</div>
+  <div class="danger">❌ <strong>Most common mistake:</strong> Forgetting that the inverting summer NEGATES. Every block has a built-in sign flip. Track signs at every node or you'll get the wrong ODE.</div>
+</div>
+</div>
+</div>
+
+<!-- ════════════════════════════════════ EXERCISE B ════════════════════════ -->
+<div class="ex-panel" id="ex-b">
+<span class="badge bb">Exercise B</span><span style="color:#aaa;font-size:12px;">Medium — second-order ODE, two integrators</span>
+<div class="step-tabs">
+  <div class="stab active" onclick="showStep('b',0)">① The ODE</div>
+  <div class="stab" onclick="showStep('b',1)">② Parse Terms</div>
+  <div class="stab" onclick="showStep('b',2)">③ Signal Chain</div>
+  <div class="stab" onclick="showStep('b',3)">④ Draw Circuit</div>
+  <div class="stab" onclick="showStep('b',4)">✅ Verify</div>
+</div>
+
+<div class="step-panel active" id="b-0">
+<div class="card cb">
+  <h2 class="hb">① The Differential Equation</h2>
+  <div class="ode-box">
+    <div class="ode-eq">ÿ + 4ẏ + 3y = 0</div>
+    <div class="ode-sub">Homogeneous 2nd-order ODE &nbsp;|&nbsp; ÿ = d²y/dt² &nbsp;|&nbsp; ẏ = dy/dt</div>
+  </div>
+  <div class="sm" style="margin-top:12px;">
+    This is a <strong>second-order ODE</strong>. There are two derivatives (ÿ and ẏ), so we need <strong>two integrators</strong>.<br><br>
+    Rearrange to isolate the highest derivative:<br>
+    <code>ÿ = −4ẏ − 3y</code>
+  </div>
+  <div class="tip">⚡ <strong>Rule:</strong> Order of ODE = number of integrators needed. 1st order → 1 integrator. 2nd order → 2 integrators. nth order → n integrators.</div>
+</div>
+</div>
+
+<div class="step-panel" id="b-1">
+<div class="card cb">
+  <h2 class="hb">② Parse Each Term</h2>
+  <div class="sm">Equation: <code>ÿ = −4ẏ − 3y</code></div>
+  <table>
+    <tr><th>Term</th><th>Signal Needed</th><th>Where It Comes From</th><th>Summer Gain</th></tr>
+    <tr><td><code>−4ẏ</code></td><td>ẏ (with sign)</td><td>Output of integrator 1 (= −ẏ) → need +ẏ from inverter</td><td>Rf/R = 4</td></tr>
+    <tr><td><code>−3y</code></td><td>y (with sign)</td><td>Output of integrator 2 (= +y after inverter)</td><td>Rf/R = 3</td></tr>
+    <tr><td><code>ÿ</code></td><td>2nd derivative</td><td>Output of inverting summer OA1</td><td>—</td></tr>
+  </table>
+  <div class="tip">💡 With 2 integrators: OA1→ẏ (Int1)→−ẏ ; then (Inv1)→+ẏ ; then (Int2)→−y ; then (Inv2)→+y. The summer needs −4ẏ and −3y as inputs but since it's inverting, we feed +ẏ (gain 4) and +y (gain 3).</div>
+</div>
+</div>
+
+<div class="step-panel" id="b-2">
+<div class="card cb">
+  <h2 class="hb">③ Signal Chain (2 Integrators)</h2>
+  <div class="arrow-row">
+    <div class="arrow-box" style="background:#0a1230;border-color:#2060c0;color:#80a0ff;font-size:11px;"><strong>OA1 Summer</strong><br>output = ÿ</div>
+    <div class="arrow">→∫→</div>
+    <div class="arrow-box" style="background:#0a1a0a;border-color:#30a030;color:#80d080;font-size:11px;"><strong>Int1 (OA2)</strong><br>output = −ẏ</div>
+    <div class="arrow">→×−1→</div>
+    <div class="arrow-box" style="background:#1a1200;border-color:#806000;color:#ffd166;font-size:11px;"><strong>Inv1 (OA3)</strong><br>output = +ẏ</div>
+  </div>
+  <div class="arrow-row" style="margin-top:4px;">
+    <div class="arrow-box" style="background:#0a1a0a;border-color:#30a030;color:#80d080;font-size:11px;"><strong>Int2 (OA4)</strong><br>output = −y</div>
+    <div class="arrow">→×−1→</div>
+    <div class="arrow-box" style="background:#1a0a30;border-color:#8030c0;color:#c080ff;font-size:11px;"><strong>Inv2 (OA5)</strong><br>output = +y</div>
+    <div class="arrow">→ feedback</div>
+    <div class="arrow-box" style="background:#0a1230;border-color:#2060c0;color:#80a0ff;font-size:11px;"><strong>OA1 Summer</strong><br>closes the loop</div>
+  </div>
+  <div class="sm" style="margin-top:10px;">
+    OA1 summer receives: <code>+ẏ</code> (gain 4) and <code>+y</code> (gain 3)<br>
+    OA1 output (inverted sum) = <code>−(4ẏ + 3y) = −4ẏ − 3y = ÿ</code> ✓
+  </div>
+</div>
+</div>
+
+<div class="step-panel" id="b-3">
+<div class="card cb">
+  <h2 class="hb">④ Circuit Diagram</h2>
+  <svg viewBox="0 0 700 340" width="100%" xmlns="http://www.w3.org/2000/svg">
+    <rect width="700" height="340" fill="#0f1f0f" rx="10"/>
+
+    <!-- OA1: Summer -->
+    <text x="80" y="18" font-size="10" fill="#80d080" text-anchor="middle">OA1 Summer</text>
+    <polygon points="40,28 40,118 120,73" fill="#1a2a1a" stroke="#80d080" stroke-width="1.5"/>
+    <text x="78" y="77" font-size="10" fill="#80d080" text-anchor="middle">Σ</text>
+    <line x1="40" y1="106" x2="18" y2="106" stroke="#555" stroke-width="1.2"/>
+    <line x1="18" y1="106" x2="18" y2="145" stroke="#555" stroke-width="1.2"/>
+    <line x1="9" y1="145" x2="27" y2="145" stroke="#555" stroke-width="1.5"/>
+    <!-- Rf OA1 -->
+    <line x1="40" y1="40" x2="40" y2="10" stroke="#80d080" stroke-width="1.2"/>
+    <line x1="40" y1="10" x2="130" y2="10" stroke="#80d080" stroke-width="1.2"/>
+    <rect x="60" y="3" width="44" height="14" fill="#1a2a1a" stroke="#80d080" rx="2"/>
+    <text x="82" y="14" font-size="9" fill="#ffd166" text-anchor="middle">Rf=12Ω</text>
+    <line x1="130" y1="10" x2="130" y2="73" stroke="#80d080" stroke-width="1.2"/>
+    <circle cx="40" cy="40" r="3" fill="#ffd166"/>
+    <!-- Input +ẏ gain=4: R=3Ω -->
+    <line x1="4" y1="55" x2="37" y2="55" stroke="#ffd166" stroke-width="1.2"/>
+    <rect x="6" y="47" width="32" height="14" fill="#1a2a1a" stroke="#ffd166" rx="2"/>
+    <text x="22" y="58" font-size="9" fill="#ffd166" text-anchor="middle">R=3Ω</text>
+    <text x="2" y="45" font-size="9" fill="#ffd166">+ẏ</text>
+    <!-- Input +y gain=3: R=4Ω -->
+    <line x1="4" y1="72" x2="37" y2="72" stroke="#c080ff" stroke-width="1.2"/>
+    <rect x="6" y="64" width="32" height="14" fill="#1a0f2a" stroke="#c080ff" rx="2"/>
+    <text x="22" y="75" font-size="9" fill="#ffd166" text-anchor="middle">R=4Ω</text>
+    <text x="2" y="62" font-size="9" fill="#c080ff">+y</text>
+    <!-- OA1 output -->
+    <line x1="120" y1="73" x2="155" y2="73" stroke="#80d080" stroke-width="1.5"/>
+    <text x="140" y="65" font-size="9" fill="#80d080">ÿ</text>
+
+    <!-- OA2: Integrator 1 -->
+    <text x="218" y="18" font-size="10" fill="#80a0ff" text-anchor="middle">OA2 Int1</text>
+    <polygon points="160,28 160,118 240,73" fill="#1a2040" stroke="#80a0ff" stroke-width="1.5"/>
+    <text x="198" y="77" font-size="10" fill="#80a0ff" text-anchor="middle">∫</text>
+    <line x1="160" y1="106" x2="140" y2="106" stroke="#555" stroke-width="1.2"/>
+    <line x1="140" y1="106" x2="140" y2="145" stroke="#555" stroke-width="1.2"/>
+    <line x1="131" y1="145" x2="149" y2="145" stroke="#555" stroke-width="1.5"/>
+    <!-- Cap feedback OA2 -->
+    <line x1="160" y1="40" x2="160" y2="10" stroke="#80a0ff" stroke-width="1.2"/>
+    <line x1="160" y1="10" x2="252" y2="10" stroke="#80a0ff" stroke-width="1.2"/>
+    <line x1="210" y1="3" x2="210" y2="10" stroke="#80a0ff" stroke-width="1.2"/>
+    <line x1="202" y1="3" x2="218" y2="3" stroke="#80a0ff" stroke-width="2"/>
+    <line x1="202" y1="0" x2="218" y2="0" stroke="#80a0ff" stroke-width="2"/>
+    <text x="238" y="10" font-size="9" fill="#ffd166">C=1F</text>
+    <line x1="252" y1="10" x2="252" y2="73" stroke="#80a0ff" stroke-width="1.2"/>
+    <circle cx="160" cy="40" r="3" fill="#ffd166"/>
+    <rect x="154" y="52" width="24" height="14" fill="#1a2040" stroke="#80a0ff" rx="2"/>
+    <text x="166" y="63" font-size="9" fill="#ffd166" text-anchor="middle">1Ω</text>
+    <!-- OA2 output -->
+    <line x1="240" y1="73" x2="275" y2="73" stroke="#80a0ff" stroke-width="1.5"/>
+    <text x="258" y="65" font-size="9" fill="#80a0ff">−ẏ</text>
+
+    <!-- OA3: Inverter 1 -->
+    <text x="330" y="18" font-size="10" fill="#ffd166" text-anchor="middle">OA3 Inv1</text>
+    <polygon points="280,35 280,110 345,73" fill="#1e1e10" stroke="#ffd166" stroke-width="1.5"/>
+    <text x="310" y="77" font-size="10" fill="#ffd166" text-anchor="middle">×−1</text>
+    <line x1="280" y1="98" x2="262" y2="98" stroke="#555" stroke-width="1.2"/>
+    <line x1="262" y1="98" x2="262" y2="135" stroke="#555" stroke-width="1.2"/>
+    <line x1="253" y1="135" x2="271" y2="135" stroke="#555" stroke-width="1.5"/>
+    <!-- Rf3 = R3 = 1Ω -->
+    <line x1="280" y1="46" x2="280" y2="18" stroke="#ffd166" stroke-width="1.2"/>
+    <line x1="280" y1="18" x2="357" y2="18" stroke="#ffd166" stroke-width="1.2"/>
+    <rect x="300" y="10" width="36" height="14" fill="#1e1e10" stroke="#ffd166" rx="2"/>
+    <text x="318" y="21" font-size="9" fill="#ffd166" text-anchor="middle">Rf=1Ω</text>
+    <line x1="357" y1="18" x2="357" y2="73" stroke="#ffd166" stroke-width="1.2"/>
+    <circle cx="280" cy="46" r="3" fill="#ffd166"/>
+    <rect x="274" y="58" width="24" height="14" fill="#1e1e10" stroke="#ffd166" rx="2"/>
+    <text x="286" y="69" font-size="9" fill="#ffd166" text-anchor="middle">1Ω</text>
+    <!-- OA3 output -->
+    <line x1="345" y1="73" x2="385" y2="73" stroke="#ffd166" stroke-width="1.5"/>
+    <text x="368" y="65" font-size="9" fill="#ffd166">+ẏ</text>
+
+    <!-- OA4: Integrator 2 -->
+    <text x="440" y="18" font-size="10" fill="#80d0ff" text-anchor="middle">OA4 Int2</text>
+    <polygon points="390,28 390,118 470,73" fill="#1a1f2a" stroke="#80d0ff" stroke-width="1.5"/>
+    <text x="428" y="77" font-size="10" fill="#80d0ff" text-anchor="middle">∫</text>
+    <line x1="390" y1="106" x2="372" y2="106" stroke="#555" stroke-width="1.2"/>
+    <line x1="372" y1="106" x2="372" y2="145" stroke="#555" stroke-width="1.2"/>
+    <line x1="363" y1="145" x2="381" y2="145" stroke="#555" stroke-width="1.5"/>
+    <!-- Cap feedback OA4 -->
+    <line x1="390" y1="40" x2="390" y2="10" stroke="#80d0ff" stroke-width="1.2"/>
+    <line x1="390" y1="10" x2="480" y2="10" stroke="#80d0ff" stroke-width="1.2"/>
+    <line x1="436" y1="3" x2="436" y2="10" stroke="#80d0ff" stroke-width="1.2"/>
+    <line x1="428" y1="3" x2="444" y2="3" stroke="#80d0ff" stroke-width="2"/>
+    <line x1="428" y1="0" x2="444" y2="0" stroke="#80d0ff" stroke-width="2"/>
+    <line x1="480" y1="10" x2="480" y2="73" stroke="#80d0ff" stroke-width="1.2"/>
+    <circle cx="390" cy="40" r="3" fill="#ffd166"/>
+    <rect x="384" y="52" width="24" height="14" fill="#1a1f2a" stroke="#80d0ff" rx="2"/>
+    <text x="396" y="63" font-size="9" fill="#ffd166" text-anchor="middle">1Ω</text>
+    <!-- OA4 output -->
+    <line x1="470" y1="73" x2="510" y2="73" stroke="#80d0ff" stroke-width="1.5"/>
+    <text x="492" y="65" font-size="9" fill="#80d0ff">−y</text>
+
+    <!-- OA5: Inverter 2 -->
+    <text x="570" y="18" font-size="10" fill="#c080ff" text-anchor="middle">OA5 Inv2</text>
+    <polygon points="515,35 515,110 580,73" fill="#1f1530" stroke="#c080ff" stroke-width="1.5"/>
+    <text x="546" y="77" font-size="10" fill="#c080ff" text-anchor="middle">×−1</text>
+    <line x1="515" y1="98" x2="498" y2="98" stroke="#555" stroke-width="1.2"/>
+    <line x1="498" y1="98" x2="498" y2="135" stroke="#555" stroke-width="1.2"/>
+    <line x1="489" y1="135" x2="507" y2="135" stroke="#555" stroke-width="1.5"/>
+    <line x1="515" y1="46" x2="515" y2="18" stroke="#c080ff" stroke-width="1.2"/>
+    <line x1="515" y1="18" x2="592" y2="18" stroke="#c080ff" stroke-width="1.2"/>
+    <rect x="534" y="10" width="36" height="14" fill="#1f1530" stroke="#c080ff" rx="2"/>
+    <text x="552" y="21" font-size="9" fill="#ffd166" text-anchor="middle">Rf=1Ω</text>
+    <line x1="592" y1="18" x2="592" y2="73" stroke="#c080ff" stroke-width="1.2"/>
+    <circle cx="515" cy="46" r="3" fill="#ffd166"/>
+    <rect x="509" y="58" width="24" height="14" fill="#1f1530" stroke="#c080ff" rx="2"/>
+    <text x="521" y="69" font-size="9" fill="#ffd166" text-anchor="middle">1Ω</text>
+    <!-- OA5 output = y -->
+    <line x1="580" y1="73" x2="645" y2="73" stroke="#c080ff" stroke-width="2"/>
+    <circle cx="645" cy="73" r="5" fill="#c080ff"/>
+    <text x="655" y="77" font-size="12" fill="#c080ff" font-weight="bold">y(t)</text>
+
+    <!-- Feedback lines -->
+    <!-- +ẏ from OA3 goes back to OA1 (already shown as input) -->
+    <!-- +y from OA5 goes back to OA1 -->
+    <line x1="645" y1="73" x2="645" y2="280" stroke="#c080ff" stroke-width="1.2" stroke-dasharray="4,3"/>
+    <line x1="645" y1="280" x2="4" y2="280" stroke="#c080ff" stroke-width="1.2" stroke-dasharray="4,3"/>
+    <line x1="4" y1="280" x2="4" y2="72" stroke="#c080ff" stroke-width="1.2" stroke-dasharray="4,3"/>
+    <line x1="4" y1="72" x2="6" y2="72" stroke="#c080ff" stroke-width="1.2"/>
+    <!-- +ẏ feedback from OA3 to OA1 -->
+    <line x1="368" y1="73" x2="368" y2="250" stroke="#ffd166" stroke-width="1.2" stroke-dasharray="4,3"/>
+    <line x1="368" y1="250" x2="3" y2="250" stroke="#ffd166" stroke-width="1.2" stroke-dasharray="4,3"/>
+    <line x1="3" y1="250" x2="3" y2="55" stroke="#ffd166" stroke-width="1.2" stroke-dasharray="4,3"/>
+    <line x1="3" y1="55" x2="6" y2="55" stroke="#ffd166" stroke-width="1.2"/>
+
+    <text x="350" y="300" font-size="10" fill="#ffd166" text-anchor="middle">dashed = feedback paths back to OA1 summer</text>
+    <text x="350" y="318" font-size="10" fill="#aaa" text-anchor="middle">All integrators: RC = 1Ω × 1F = 1s ✓</text>
+  </svg>
+
+  <table>
+    <tr><th>Block</th><th>Output Signal</th><th>Components</th></tr>
+    <tr><td>OA1 Summer</td><td>ÿ</td><td>Rf=12Ω, R_ẏ=3Ω (gain 4), R_y=4Ω (gain 3)</td></tr>
+    <tr><td>OA2 Integrator 1</td><td>−ẏ</td><td>R=1Ω, C=1F (RC=1s)</td></tr>
+    <tr><td>OA3 Inverter 1</td><td>+ẏ</td><td>Rf=R=1Ω</td></tr>
+    <tr><td>OA4 Integrator 2</td><td>−y</td><td>R=1Ω, C=1F (RC=1s)</td></tr>
+    <tr><td>OA5 Inverter 2</td><td>+y (output)</td><td>Rf=R=1Ω</td></tr>
+  </table>
+</div>
+</div>
+
+<div class="step-panel" id="b-4">
+<div class="card cb">
+  <h2 class="hb">✅ Verify — Trace the Loop</h2>
+  <div class="sm">
+    Start at OA1 output = ÿ<br>
+    OA2: −∫ÿ dt = −ẏ<br>
+    OA3: −(−ẏ) = +ẏ &nbsp;→ feeds back to OA1 with gain 4<br>
+    OA4: −∫ẏ dt = −y<br>
+    OA5: −(−y) = +y &nbsp;→ feeds back to OA1 with gain 3 → also the circuit output<br><br>
+    OA1 summer output: <code>−(4·ẏ + 3·y) = −4ẏ − 3y</code><br>
+    But this equals ÿ (our assumption), so:<br>
+    <code>ÿ = −4ẏ − 3y</code> → <code>ÿ + 4ẏ + 3y = 0</code> ✓
+  </div>
+  <div class="result-box">
+    <div class="result-val">ÿ + 4ẏ + 3y = 0 ✓</div>
+  </div>
+  <div class="ok">✅ Circuit verified. 5 op-amps total. All integrators use RC = 1s. Feedback closes properly.</div>
+</div>
+</div>
+</div>
+
+<!-- ════════════════════════════════════ EXERCISE C ════════════════════════ -->
+<div class="ex-panel" id="ex-c">
+<span class="badge bc">Exercise C</span><span style="color:#aaa;font-size:12px;">Hard — 2nd order with input forcing term + no extra inverters trick</span>
+<div class="step-tabs">
+  <div class="stab active" onclick="showStep('c',0)">① The ODE</div>
+  <div class="stab" onclick="showStep('c',1)">② Parse + Plan</div>
+  <div class="stab" onclick="showStep('c',2)">③ Signal Chain</div>
+  <div class="stab" onclick="showStep('c',3)">④ Draw Circuit</div>
+  <div class="stab" onclick="showStep('c',4)">✅ Verify</div>
+</div>
+
+<div class="step-panel active" id="c-0">
+<div class="card cc">
+  <h2 class="hc">① The Differential Equation</h2>
+  <div class="ode-box">
+    <div class="ode-eq">ÿ + 5ẏ + 6y = 2x(t)</div>
+    <div class="ode-sub">2nd-order forced ODE &nbsp;|&nbsp; x(t) = forcing input &nbsp;|&nbsp; y(t) = output voltage</div>
+  </div>
+  <div class="sm" style="margin-top:12px;">
+    Rearrange: <code>ÿ = −5ẏ − 6y + 2x(t)</code><br><br>
+    Three terms to sum: <code>−5ẏ</code>, <code>−6y</code>, and <code>+2x(t)</code>.<br>
+    Need: 2 integrators + 1 summer + track signs carefully.<br><br>
+    <strong>Trick:</strong> Use OA2 (first integrator) output directly as −ẏ and OA4 output as −y. Feed these with appropriate gains into the summer — the summer negates, so feeding −ẏ with gain 5 gives −(5·(−ẏ)) = +5ẏ... wait, we need −5ẏ. So we need +ẏ with gain 5. Use inverter after first integrator.
+  </div>
+  <div class="tip">⚡ <strong>Exam shortcut:</strong> For the forced term 2x(t), just add x(t) as another input to the summer with appropriate gain. You don't need an extra block — the summer handles it.</div>
+</div>
+</div>
+
+<div class="step-panel" id="c-1">
+<div class="card cc">
+  <h2 class="hc">② Parse + Plan All Blocks</h2>
+  <table>
+    <tr><th>Term in ÿ = …</th><th>Signal</th><th>Gain in Summer</th><th>Source Block</th></tr>
+    <tr><td><code>−5ẏ</code></td><td>need +ẏ (summer negates it)</td><td>Rf/R = 5</td><td>Inv1 → +ẏ</td></tr>
+    <tr><td><code>−6y</code></td><td>need +y (summer negates it)</td><td>Rf/R = 6</td><td>Inv2 → +y</td></tr>
+    <tr><td><code>+2x(t)</code></td><td>need −x(t) (summer negates it)</td><td>Rf/R = 2</td><td>input −x or inverter on x</td></tr>
+  </table>
+  <div class="sm" style="margin-top:8px;">
+    <strong>Block count:</strong> OA1 (Summer) + OA2 (Int1) + OA3 (Inv1) + OA4 (Int2) + OA5 (Inv2) = 5 op-amps<br>
+    Plus optionally an input inverter if x(t) is only available as positive.
+  </div>
+  <div class="tip">💡 If x(t) is from a real source, you can connect it directly to the summer as −x by reversing the source polarity, or just add one more inverter (OA0) before the summer. In exams, state which you use.</div>
+</div>
+</div>
+
+<div class="step-panel" id="c-2">
+<div class="card cc">
+  <h2 class="hc">③ Signal Chain</h2>
+  <div class="arrow-row">
+    <div class="arrow-box" style="background:#1a0a30;font-size:11px;color:#c080ff;"><strong>OA1 Summer</strong><br>inputs: +ẏ, +y, −x(t)<br>output = ÿ</div>
+    <div class="arrow">→∫→</div>
+    <div class="arrow-box" style="background:#0a1230;font-size:11px;color:#80a0ff;"><strong>OA2 Int1</strong><br>output = −ẏ</div>
+    <div class="arrow">→×−1→</div>
+    <div class="arrow-box" style="background:#1a1200;font-size:11px;color:#ffd166;"><strong>OA3 Inv1</strong><br>output = +ẏ → back to OA1</div>
+  </div>
+  <div class="arrow-row" style="margin-top:6px;">
+    <div class="arrow-box" style="background:#0a1230;font-size:11px;color:#80a0ff;"><strong>OA4 Int2</strong><br>input = +ẏ (from OA3)<br>output = −y</div>
+    <div class="arrow">→×−1→</div>
+    <div class="arrow-box" style="background:#1f1530;font-size:11px;color:#c080ff;"><strong>OA5 Inv2</strong><br>output = +y → back to OA1<br>also = circuit output y(t)</div>
+  </div>
+  <div class="sm" style="margin-top:8px;">
+    OA1 summer output = <code>−(5·(+ẏ) + 6·(+y) + 2·(−x)) = −5ẏ − 6y + 2x = ÿ</code> ✓
+  </div>
+</div>
+</div>
+
+<div class="step-panel" id="c-3">
+<div class="card cc">
+  <h2 class="hc">④ Circuit Diagram</h2>
+  <svg viewBox="0 0 700 350" width="100%" xmlns="http://www.w3.org/2000/svg">
+    <rect width="700" height="350" fill="#1a0f2a" rx="10"/>
+
+    <!-- OA1 Summer -->
+    <text x="80" y="18" font-size="10" fill="#c080ff" text-anchor="middle">OA1 Σ</text>
+    <polygon points="35,25 35,135 120,80" fill="#1f1530" stroke="#c080ff" stroke-width="1.5"/>
+    <text x="76" y="84" font-size="10" fill="#c080ff" text-anchor="middle">Σ</text>
+    <line x1="35" y1="122" x2="15" y2="122" stroke="#555" stroke-width="1.2"/>
+    <line x1="15" y1="122" x2="15" y2="165" stroke="#555" stroke-width="1.2"/>
+    <line x1="6" y1="165" x2="24" y2="165" stroke="#555" stroke-width="1.5"/>
+    <!-- Rf=30Ω (lcm of 5,6,2 * something) — use Rf=30Ω: gain5→R=6, gain6→R=5, gain2→R=15 -->
+    <line x1="35" y1="37" x2="35" y2="8" stroke="#c080ff" stroke-width="1.2"/>
+    <line x1="35" y1="8" x2="130" y2="8" stroke="#c080ff" stroke-width="1.2"/>
+    <rect x="58" y="1" width="46" height="14" fill="#1f1530" stroke="#c080ff" rx="2"/>
+    <text x="81" y="12" font-size="9" fill="#ffd166" text-anchor="middle">Rf=30Ω</text>
+    <line x1="130" y1="8" x2="130" y2="80" stroke="#c080ff" stroke-width="1.2"/>
+    <circle cx="35" cy="37" r="3" fill="#ffd166"/>
+    <!-- Input +ẏ R=6Ω gain=5 -->
+    <line x1="2" y1="52" x2="32" y2="52" stroke="#ffd166" stroke-width="1.2"/>
+    <rect x="4" y="44" width="28" height="14" fill="#1f1530" stroke="#ffd166" rx="2"/>
+    <text x="18" y="55" font-size="9" fill="#ffd166" text-anchor="middle">6Ω</text>
+    <text x="1" y="43" font-size="9" fill="#ffd166">+ẏ</text>
+    <!-- Input +y R=5Ω gain=6 -->
+    <line x1="2" y1="70" x2="32" y2="70" stroke="#80d0ff" stroke-width="1.2"/>
+    <rect x="4" y="62" width="28" height="14" fill="#1f1530" stroke="#80d0ff" rx="2"/>
+    <text x="18" y="73" font-size="9" fill="#ffd166" text-anchor="middle">5Ω</text>
+    <text x="1" y="61" font-size="9" fill="#80d0ff">+y</text>
+    <!-- Input −x R=15Ω gain=2 -->
+    <line x1="2" y1="88" x2="32" y2="88" stroke="#ff8080" stroke-width="1.2"/>
+    <rect x="4" y="80" width="28" height="14" fill="#1f1530" stroke="#ff8080" rx="2"/>
+    <text x="18" y="91" font-size="9" fill="#ffd166" text-anchor="middle">15Ω</text>
+    <text x="1" y="78" font-size="9" fill="#ff8080">−x</text>
+    <!-- OA1 out -->
+    <line x1="120" y1="80" x2="155" y2="80" stroke="#c080ff" stroke-width="1.5"/>
+    <text x="140" y="72" font-size="9" fill="#c080ff">ÿ</text>
+
+    <!-- OA2 Int1 -->
+    <text x="210" y="18" font-size="10" fill="#80a0ff" text-anchor="middle">OA2 ∫₁</text>
+    <polygon points="158,28 158,128 235,78" fill="#1a2040" stroke="#80a0ff" stroke-width="1.5"/>
+    <text x="195" y="82" font-size="10" fill="#80a0ff" text-anchor="middle">∫</text>
+    <line x1="158" y1="115" x2="140" y2="115" stroke="#555" stroke-width="1.2"/>
+    <line x1="140" y1="115" x2="140" y2="155" stroke="#555" stroke-width="1.2"/>
+    <line x1="131" y1="155" x2="149" y2="155" stroke="#555" stroke-width="1.5"/>
+    <line x1="158" y1="40" x2="158" y2="10" stroke="#80a0ff" stroke-width="1.2"/>
+    <line x1="158" y1="10" x2="247" y2="10" stroke="#80a0ff" stroke-width="1.2"/>
+    <line x1="204" y1="4" x2="204" y2="10" stroke="#80a0ff" stroke-width="1.2"/>
+    <line x1="196" y1="4" x2="212" y2="4" stroke="#80a0ff" stroke-width="2"/>
+    <line x1="196" y1="1" x2="212" y2="1" stroke="#80a0ff" stroke-width="2"/>
+    <line x1="247" y1="10" x2="247" y2="78" stroke="#80a0ff" stroke-width="1.2"/>
+    <circle cx="158" cy="40" r="3" fill="#ffd166"/>
+    <rect x="152" y="52" width="24" height="14" fill="#1a2040" stroke="#80a0ff" rx="2"/>
+    <text x="164" y="63" font-size="9" fill="#ffd166" text-anchor="middle">1Ω</text>
+    <line x1="235" y1="78" x2="268" y2="78" stroke="#80a0ff" stroke-width="1.5"/>
+    <text x="254" y="70" font-size="9" fill="#80a0ff">−ẏ</text>
+
+    <!-- OA3 Inv1 -->
+    <text x="320" y="18" font-size="10" fill="#ffd166" text-anchor="middle">OA3 ×−1</text>
+    <polygon points="272,35 272,118 342,78" fill="#1e1e10" stroke="#ffd166" stroke-width="1.5"/>
+    <text x="305" y="82" font-size="10" fill="#ffd166" text-anchor="middle">×−1</text>
+    <line x1="272" y1="105" x2="254" y2="105" stroke="#555" stroke-width="1.2"/>
+    <line x1="254" y1="105" x2="254" y2="145" stroke="#555" stroke-width="1.2"/>
+    <line x1="245" y1="145" x2="263" y2="145" stroke="#555" stroke-width="1.5"/>
+    <line x1="272" y1="46" x2="272" y2="18" stroke="#ffd166" stroke-width="1.2"/>
+    <line x1="272" y1="18" x2="355" y2="18" stroke="#ffd166" stroke-width="1.2"/>
+    <rect x="292" y="10" width="36" height="14" fill="#1e1e10" stroke="#ffd166" rx="2"/>
+    <text x="310" y="21" font-size="9" fill="#ffd166" text-anchor="middle">Rf=1Ω</text>
+    <line x1="355" y1="18" x2="355" y2="78" stroke="#ffd166" stroke-width="1.2"/>
+    <circle cx="272" cy="46" r="3" fill="#ffd166"/>
+    <rect x="266" y="58" width="24" height="14" fill="#1e1e10" stroke="#ffd166" rx="2"/>
+    <text x="278" y="69" font-size="9" fill="#ffd166" text-anchor="middle">1Ω</text>
+    <line x1="342" y1="78" x2="382" y2="78" stroke="#ffd166" stroke-width="1.5"/>
+    <text x="364" y="70" font-size="9" fill="#ffd166">+ẏ</text>
+
+    <!-- OA4 Int2 -->
+    <text x="435" y="18" font-size="10" fill="#80d0ff" text-anchor="middle">OA4 ∫₂</text>
+    <polygon points="386,28 386,128 463,78" fill="#1a1f2a" stroke="#80d0ff" stroke-width="1.5"/>
+    <text x="423" y="82" font-size="10" fill="#80d0ff" text-anchor="middle">∫</text>
+    <line x1="386" y1="115" x2="368" y2="115" stroke="#555" stroke-width="1.2"/>
+    <line x1="368" y1="115" x2="368" y2="155" stroke="#555" stroke-width="1.2"/>
+    <line x1="359" y1="155" x2="377" y2="155" stroke="#555" stroke-width="1.5"/>
+    <line x1="386" y1="40" x2="386" y2="10" stroke="#80d0ff" stroke-width="1.2"/>
+    <line x1="386" y1="10" x2="476" y2="10" stroke="#80d0ff" stroke-width="1.2"/>
+    <line x1="432" y1="4" x2="432" y2="10" stroke="#80d0ff" stroke-width="1.2"/>
+    <line x1="424" y1="4" x2="440" y2="4" stroke="#80d0ff" stroke-width="2"/>
+    <line x1="424" y1="1" x2="440" y2="1" stroke="#80d0ff" stroke-width="2"/>
+    <line x1="476" y1="10" x2="476" y2="78" stroke="#80d0ff" stroke-width="1.2"/>
+    <circle cx="386" cy="40" r="3" fill="#ffd166"/>
+    <rect x="380" y="52" width="24" height="14" fill="#1a1f2a" stroke="#80d0ff" rx="2"/>
+    <text x="392" y="63" font-size="9" fill="#ffd166" text-anchor="middle">1Ω</text>
+    <line x1="463" y1="78" x2="500" y2="78" stroke="#80d0ff" stroke-width="1.5"/>
+    <text x="484" y="70" font-size="9" fill="#80d0ff">−y</text>
+
+    <!-- OA5 Inv2 -->
+    <text x="558" y="18" font-size="10" fill="#80d0ff" text-anchor="middle">OA5 ×−1</text>
+    <polygon points="504,35 504,118 572,78" fill="#1a1f30" stroke="#80d0ff" stroke-width="1.5"/>
+    <text x="537" y="82" font-size="10" fill="#80d0ff" text-anchor="middle">×−1</text>
+    <line x1="504" y1="105" x2="486" y2="105" stroke="#555" stroke-width="1.2"/>
+    <line x1="486" y1="105" x2="486" y2="145" stroke="#555" stroke-width="1.2"/>
+    <line x1="477" y1="145" x2="495" y2="145" stroke="#555" stroke-width="1.5"/>
+    <line x1="504" y1="46" x2="504" y2="18" stroke="#80d0ff" stroke-width="1.2"/>
+    <line x1="504" y1="18" x2="585" y2="18" stroke="#80d0ff" stroke-width="1.2"/>
+    <rect x="522" y="10" width="36" height="14" fill="#1a1f30" stroke="#80d0ff" rx="2"/>
+    <text x="540" y="21" font-size="9" fill="#ffd166" text-anchor="middle">Rf=1Ω</text>
+    <line x1="585" y1="18" x2="585" y2="78" stroke="#80d0ff" stroke-width="1.2"/>
+    <circle cx="504" cy="46" r="3" fill="#ffd166"/>
+    <rect x="498" y="58" width="24" height="14" fill="#1a1f30" stroke="#80d0ff" rx="2"/>
+    <text x="510" y="69" font-size="9" fill="#ffd166" text-anchor="middle">1Ω</text>
+    <line x1="572" y1="78" x2="640" y2="78" stroke="#80d0ff" stroke-width="2"/>
+    <circle cx="640" cy="78" r="5" fill="#80d0ff"/>
+    <text x="652" y="83" font-size="12" fill="#80d0ff" font-weight="bold">y(t)</text>
+
+    <!-- Feedback dashed lines -->
+    <!-- +y back to OA1 -->
+    <line x1="640" y1="78" x2="640" y2="290" stroke="#80d0ff" stroke-width="1.2" stroke-dasharray="4,3"/>
+    <line x1="640" y1="290" x2="3" y2="290" stroke="#80d0ff" stroke-width="1.2" stroke-dasharray="4,3"/>
+    <line x1="3" y1="290" x2="3" y2="70" stroke="#80d0ff" stroke-width="1.2" stroke-dasharray="4,3"/>
+    <line x1="3" y1="70" x2="4" y2="70" stroke="#80d0ff" stroke-width="1.2"/>
+    <!-- +ẏ back to OA1 -->
+    <line x1="364" y1="78" x2="364" y2="265" stroke="#ffd166" stroke-width="1.2" stroke-dasharray="4,3"/>
+    <line x1="364" y1="265" x2="2" y2="265" stroke="#ffd166" stroke-width="1.2" stroke-dasharray="4,3"/>
+    <line x1="2" y1="265" x2="2" y2="52" stroke="#ffd166" stroke-width="1.2" stroke-dasharray="4,3"/>
+    <line x1="2" y1="52" x2="4" y2="52" stroke="#ffd166" stroke-width="1.2"/>
+
+    <text x="350" y="312" font-size="10" fill="#ffd166" text-anchor="middle">yellow dashed = +ẏ feedback &nbsp;|&nbsp; blue dashed = +y feedback</text>
+    <text x="350" y="330" font-size="10" fill="#aaa" text-anchor="middle">−x(t) input: connect source through 15Ω with reversed polarity, or use an extra inverter</text>
+  </svg>
+  <table>
+    <tr><th>Block</th><th>Output</th><th>Components</th></tr>
+    <tr><td>OA1 Summer</td><td>ÿ</td><td>Rf=30Ω &nbsp;|&nbsp; +ẏ via 6Ω (gain 5) &nbsp;|&nbsp; +y via 5Ω (gain 6) &nbsp;|&nbsp; −x via 15Ω (gain 2)</td></tr>
+    <tr><td>OA2 Int1</td><td>−ẏ</td><td>R=1Ω, C=1F (RC=1s)</td></tr>
+    <tr><td>OA3 Inv1</td><td>+ẏ → OA1 & OA4</td><td>Rf=R=1Ω</td></tr>
+    <tr><td>OA4 Int2</td><td>−y</td><td>R=1Ω, C=1F (RC=1s)</td></tr>
+    <tr><td>OA5 Inv2</td><td>+y → output & OA1</td><td>Rf=R=1Ω</td></tr>
+  </table>
+</div>
+</div>
+
+<div class="step-panel" id="c-4">
+<div class="card cc">
+  <h2 class="hc">✅ Verify</h2>
+  <div class="sm">
+    Trace: y(t) = OA5 output<br>
+    OA5 input = −y = OA4 output<br>
+    OA4 input = +ẏ = OA3 output<br>
+    OA3 input = −ẏ = OA2 output<br>
+    OA2 input = ÿ = OA1 output<br>
+    OA1 = −(Rf/R_ẏ · ẏ + Rf/R_y · y + Rf/R_x · (−x))<br>
+    &nbsp;&nbsp;&nbsp; = −(30/6 · ẏ + 30/5 · y − 30/15 · x)<br>
+    &nbsp;&nbsp;&nbsp; = −(5ẏ + 6y − 2x)<br>
+    &nbsp;&nbsp;&nbsp; = −5ẏ − 6y + 2x = ÿ<br><br>
+    Therefore: <code>ÿ + 5ẏ + 6y = 2x(t)</code> ✓
+  </div>
+  <div class="result-box">
+    <div class="result-val">ÿ + 5ẏ + 6y = 2x(t) ✓</div>
+  </div>
+  <div class="ok">✅ Circuit verified. 5 op-amps, all RC=1s, forced input x(t) handled through the summer.</div>
+  <div class="tip">⚡ <strong>Exam speed tip:</strong> The Rf value = LCM of all denominators you need for the gains. Here gains are 5, 6, 2 → Rf = 30Ω works. Then R_k = Rf / gain_k.</div>
+  <div class="danger">❌ <strong>Top mistake:</strong> Students draw the integrator with R in feedback and C at input — that's a DIFFERENTIATOR. The capacitor goes in FEEDBACK, resistor at INPUT for an integrator. Double-check this every time.</div>
+</div>
+</div>
+</div>
+
+<script>
+function showEx(ex){
+  document.querySelectorAll('.ex-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.etab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('ex-'+ex).classList.add('active');
+  const map={a:0,b:1,c:2};
+  document.querySelectorAll('.etab')[map[ex]].classList.add('active');
+  const ep=document.getElementById('ex-'+ex);
+  ep.querySelectorAll('.step-panel').forEach(p=>p.classList.remove('active'));
+  ep.querySelector('.step-panel').classList.add('active');
+  ep.querySelectorAll('.stab').forEach(b=>b.classList.remove('active'));
+  ep.querySelector('.stab').classList.add('active');
+}
+function showStep(ex,idx){
+  const ep=document.getElementById('ex-'+ex);
+  ep.querySelectorAll('.step-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById(ex+'-'+idx).classList.add('active');
+  const stabs=ep.querySelectorAll('.stab');
+  stabs.forEach(b=>b.classList.remove('active'));
+  if(stabs[idx])stabs[idx].classList.add('active');
+}
+</script>
+</body>
+</html>

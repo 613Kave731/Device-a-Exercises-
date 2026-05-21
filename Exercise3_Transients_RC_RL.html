@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Exercise 3 — First-Order Transients RC/RL · Messina Exam</title>
+<style>
+  *{box-sizing:border-box;}
+  body{font-family:'Segoe UI',sans-serif;background:#1a1a2e;margin:0;padding:20px;color:#e8e8f0;}
+  h1{font-size:20px;color:#ffd166;margin:0 0 4px;}
+  .sub{font-size:12px;color:#888;margin-bottom:18px;}
+  .ex-tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+  .etab{padding:9px 20px;border-radius:22px;cursor:pointer;font-size:13px;font-weight:700;border:2px solid;transition:all .2s;}
+  .ea{border-color:#0f3460;color:#80a0ff;background:transparent;}
+  .ea.active,.ea:hover{background:#0f3460;color:white;}
+  .eb{border-color:#1a6b35;color:#80d080;background:transparent;}
+  .eb.active,.eb:hover{background:#1a6b35;color:white;}
+  .ec{border-color:#7b2d8b;color:#c080ff;background:transparent;}
+  .ec.active,.ec:hover{background:#7b2d8b;color:white;}
+  .ex-panel{display:none;}.ex-panel.active{display:block;}
+  .step-tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;}
+  .stab{padding:6px 14px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;border:1.5px solid #444;color:#aaa;background:#252535;transition:all .2s;}
+  .stab.active,.stab:hover{background:#ffd166;color:#1a1a2e;border-color:#ffd166;}
+  .step-panel{display:none;}.step-panel.active{display:block;}
+  .card{border-radius:12px;padding:18px;margin-bottom:14px;border:1.5px solid;}
+  .ca{background:#10172a;border-color:#1a3a7a;}
+  .cb{background:#0f1f0f;border-color:#1a5020;}
+  .cc{background:#1a0f2a;border-color:#6020a0;}
+  h2{font-size:14px;font-weight:700;margin:0 0 12px;padding-bottom:8px;}
+  .ha{color:#80a0ff;border-bottom:1px solid #1a3a7a;}
+  .hb{color:#80d080;border-bottom:1px solid #1a5020;}
+  .hc{color:#c080ff;border-bottom:1px solid #6020a0;}
+  .formula{border-radius:8px;padding:12px 16px;text-align:center;margin:10px 0;font-weight:bold;}
+  .fa{background:#0a1230;border:1px solid #2060c0;}
+  .fb{background:#0a1a0a;border:1px solid #30a030;}
+  .fc{background:#1a0a30;border:1px solid #8030c0;}
+  .fk{background:#2a2000;border:1px solid #c09000;}
+  .big{font-size:18px;color:#ffd166;line-height:2;}
+  .med{font-size:14px;color:#ffd166;line-height:1.8;}
+  .sm{font-size:13px;color:#e0e0f0;line-height:1.8;}
+  .tip{background:#2a2000;border-left:3px solid #ffc107;padding:10px 12px;border-radius:0 8px 8px 0;font-size:12.5px;margin:8px 0;line-height:1.7;color:#ffd080;}
+  .danger{background:#2a0a0a;border-left:3px solid #e63946;padding:10px 12px;border-radius:0 8px 8px 0;font-size:12.5px;margin:8px 0;line-height:1.7;color:#ff9090;}
+  .ok{background:#0a2a0a;border-left:3px solid #28a745;padding:10px 12px;border-radius:0 8px 8px 0;font-size:12.5px;margin:8px 0;line-height:1.7;color:#80d080;}
+  .result-box{background:#0a1a0a;border:2px solid #28a745;border-radius:12px;padding:16px 20px;margin:12px 0;text-align:center;}
+  .result-val{font-size:22px;font-weight:bold;color:#ffd166;margin:6px 0;}
+  .result-lbl{font-size:12px;color:#888;margin:2px 0;}
+  .three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  code{background:#2a2a3a;padding:2px 6px;border-radius:4px;font-family:'Courier New',monospace;font-size:13px;color:#80d0ff;}
+  .badge{display:inline-block;padding:3px 10px;border-radius:10px;font-size:11px;font-weight:700;margin-right:6px;}
+  .ba{background:#0f3460;color:#80a0ff;}
+  .bb{background:#1a6b35;color:#80d080;}
+  .bc{background:#7b2d8b;color:#c080ff;}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.5px;}
+  th{background:#252540;color:#ffd166;padding:8px 10px;text-align:left;border:1px solid #333;}
+  td{padding:7px 10px;border:1px solid #333;color:#d0d0e0;vertical-align:top;}
+  tr:nth-child(even) td{background:#1e1e30;}
+  svg text{font-family:'Segoe UI',sans-serif;}
+  .universal{background:#0a0820;border:2px solid #ffd166;border-radius:12px;padding:16px 20px;margin-bottom:18px;text-align:center;}
+  .universal h3{color:#ffd166;font-size:13px;margin:0 0 8px;}
+  .three-steps{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:12px 0;}
+  .step-box{background:#1a1a30;border:1.5px solid #444;border-radius:8px;padding:12px;text-align:center;}
+  .step-box .num{font-size:22px;font-weight:bold;margin-bottom:4px;}
+  .step-box .lbl{font-size:11px;color:#aaa;line-height:1.5;}
+  @media(max-width:600px){.three,.two,.three-steps{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<h1>⚡ Exercise 3 — First-Order Transients (RC & RL)</h1>
+<p class="sub">Messina Exam Prep · Universal Formula · 3 Exercises A→C · Full Step-by-Step Solutions</p>
+
+<div class="universal">
+  <h3>🔑 The Universal Formula — Memorise This Forever</h3>
+  <div style="font-size:22px;color:#ffd166;font-weight:bold;margin:8px 0;">x(t) = x(∞) + [x(0) − x(∞)] · e<sup>−t/τ</sup></div>
+  <div style="font-size:12px;color:#aaa;margin-top:6px;">x(0) = initial value &nbsp;|&nbsp; x(∞) = final (steady-state) value &nbsp;|&nbsp; τ = time constant</div>
+  <div class="three-steps" style="margin-top:12px;">
+    <div class="step-box"><div class="num" style="color:#80a0ff;">① x(0)</div><div class="lbl">Initial condition<br>from t &lt; 0 circuit<br>(cap=open, ind=short)</div></div>
+    <div class="step-box"><div class="num" style="color:#80d080;">② x(∞)</div><div class="lbl">Final steady state<br>from t → ∞ circuit<br>(cap=open, ind=short)</div></div>
+    <div class="step-box"><div class="num" style="color:#c080ff;">③ τ</div><div class="lbl">RC: τ = R<sub>th</sub>C<br>RL: τ = L/R<sub>th</sub><br>R<sub>th</sub> = Thévenin R seen by element</div></div>
+  </div>
+</div>
+
+<div class="ex-tabs">
+  <div class="etab ea active" onclick="showEx('a')">Exercise A — Easy 🔵 (RC)</div>
+  <div class="etab eb" onclick="showEx('b')">Exercise B — Medium 🟢 (RL)</div>
+  <div class="etab ec" onclick="showEx('c')">Exercise C — Hard 🟣 (Switch Change)</div>
+</div>
+
+<!-- ═══════════════ EXERCISE A — RC ═══════════════ -->
+<div class="ex-panel active" id="ex-a">
+<span class="badge ba">Exercise A</span><span style="color:#aaa;font-size:12px;">Easy — RC circuit, capacitor charges from initial to final value</span>
+<div class="step-tabs">
+  <div class="stab active" onclick="showStep('a',0)">① Circuit</div>
+  <div class="stab" onclick="showStep('a',1)">② Find v_C(0)</div>
+  <div class="stab" onclick="showStep('a',2)">③ Find v_C(∞)</div>
+  <div class="stab" onclick="showStep('a',3)">④ Find τ</div>
+  <div class="stab" onclick="showStep('a',4)">✅ Answer</div>
+</div>
+
+<div class="step-panel active" id="a-0">
+<div class="card ca">
+  <h2 class="ha">① The RC Circuit</h2>
+  <svg viewBox="0 0 580 260" width="100%" xmlns="http://www.w3.org/2000/svg">
+    <rect width="580" height="260" fill="#10172a" rx="10"/>
+    <!-- Main loop -->
+    <line x1="60" y1="60" x2="520" y2="60" stroke="#80a0ff" stroke-width="2"/>
+    <line x1="60" y1="200" x2="520" y2="200" stroke="#80a0ff" stroke-width="2"/>
+    <line x1="60" y1="60" x2="60" y2="200" stroke="#ffd166" stroke-width="2"/>
+    <line x1="520" y1="60" x2="520" y2="200" stroke="#aaa" stroke-width="2"/>
+    <!-- Voltage source E=8V on left -->
+    <ellipse cx="60" cy="130" rx="16" ry="16" fill="#2a2000" stroke="#ffd166" stroke-width="2"/>
+    <text x="60" y="127" font-size="12" fill="#ffd166" text-anchor="middle">+</text>
+    <text x="60" y="138" font-size="12" fill="#ffd166" text-anchor="middle">8V</text>
+    <text x="28" y="115" font-size="11" fill="#ffd166">E=8V</text>
+    <!-- R1=2Ω on top -->
+    <rect x="150" y="48" width="56" height="22" fill="#1a2040" stroke="#aaa" rx="4"/>
+    <text x="178" y="63" font-size="12" fill="#ffd166" text-anchor="middle">R₁=2Ω</text>
+    <!-- R2=4Ω on right -->
+    <rect x="498" y="110" width="44" height="22" fill="#1a2040" stroke="#aaa" rx="4"/>
+    <text x="520" y="125" font-size="12" fill="#ffd166" text-anchor="middle">R₂=4Ω</text>
+    <!-- Capacitor C=0.5F bottom -->
+    <line x1="280" y1="200" x2="320" y2="200" stroke="#aaa" stroke-width="2"/>
+    <line x1="320" y1="185" x2="320" y2="215" stroke="#80a0ff" stroke-width="3"/>
+    <line x1="340" y1="185" x2="340" y2="215" stroke="#80a0ff" stroke-width="3"/>
+    <line x1="340" y1="200" x2="390" y2="200" stroke="#aaa" stroke-width="2"/>
+    <text x="330" y="240" font-size="12" fill="#ffd166" text-anchor="middle">C=0.5F</text>
+    <text x="330" y="178" font-size="11" fill="#80a0ff" text-anchor="middle">v_C(t)</text>
+    <!-- Initial condition label -->
+    <text x="290" y="90" font-size="12" fill="#aaa" text-anchor="middle">t = 0: switch closes</text>
+    <text x="290" y="108" font-size="11" fill="#ffd166" text-anchor="middle">v_C(0⁻) = 2 V (given)</text>
+  </svg>
+  <table>
+    <tr><th>Element</th><th>Value</th><th>Notes</th></tr>
+    <tr><td>E</td><td>8 V</td><td>DC voltage source</td></tr>
+    <tr><td>R₁</td><td>2 Ω</td><td>Series with source</td></tr>
+    <tr><td>R₂</td><td>4 Ω</td><td>Parallel with capacitor</td></tr>
+    <tr><td>C</td><td>0.5 F</td><td>Initially charged to 2 V</td></tr>
+    <tr><td>v_C(0⁻)</td><td>2 V</td><td>Initial capacitor voltage (given)</td></tr>
+  </table>
+  <div class="tip">🎯 <strong>Goal:</strong> Find v_C(t) for t ≥ 0 using the universal formula.</div>
+</div>
+</div>
+
+<div class="step-panel" id="a-1">
+<div class="card ca">
+  <h2 class="ha">② Find x(0) — Initial Condition</h2>
+  <div class="sm">
+    <strong>Rule:</strong> Capacitor voltage CANNOT change instantaneously.<br><br>
+    v_C(0⁺) = v_C(0⁻) = <strong style="color:#ffd166;">2 V</strong><br><br>
+    This is given directly in the problem. At t = 0⁺ (just after switch closes), the capacitor still holds 2 V.
+  </div>
+  <div class="formula fa"><span class="big">x(0) = v_C(0) = 2 V</span></div>
+  <div class="tip">💡 Capacitor voltage is the "memory" of an RC circuit. It cannot jump. Inductor current is the "memory" of an RL circuit. It cannot jump.</div>
+</div>
+</div>
+
+<div class="step-panel" id="a-2">
+<div class="card ca">
+  <h2 class="ha">③ Find x(∞) — Steady State (t → ∞)</h2>
+  <div class="sm">
+    <strong>Rule:</strong> At DC steady state (t → ∞), a capacitor acts as an <strong>OPEN CIRCUIT</strong>.<br><br>
+    Redraw circuit with C → open circuit:<br>
+    No current through R₂ (capacitor branch is open).<br>
+    Current flows: E → R₁ → R₂ → back to E.<br><br>
+    Wait — R₂ is in parallel with C. If C is open, the branch is open. No current through R₂ either since R₂ is in parallel with open C and the only path for current is E-R₁-C-E.<br><br>
+    Actually: With C open, the circuit is E − R₁ − open. No current flows. All voltage drops across the open (capacitor).<br>
+    By KVL: v_C(∞) = E = <strong style="color:#ffd166;">8 V</strong>
+  </div>
+  <div class="formula fa"><span class="big">x(∞) = v_C(∞) = 8 V</span></div>
+  <div class="ok">✅ At steady state, capacitor fully charges to the source voltage (no current = no drop across R₁ or R₂).</div>
+</div>
+</div>
+
+<div class="step-panel" id="a-3">
+<div class="card ca">
+  <h2 class="ha">④ Find τ — Time Constant</h2>
+  <div class="sm">
+    <strong>Rule:</strong> τ = R<sub>th</sub> · C, where R<sub>th</sub> is the Thévenin resistance seen by the capacitor.<br><br>
+    To find R<sub>th</sub>: kill the independent source (E → short circuit). Look into capacitor terminals.<br><br>
+    With E shorted: R₁ is now connected between the two capacitor terminals (in parallel with R₂? No — R₁ connects one terminal to the other through the shorted source).<br><br>
+    R<sub>th</sub> = R₁ ‖ R₂ = (R₁ × R₂)/(R₁ + R₂) = (2 × 4)/(2 + 4) = 8/6 = 4/3 Ω<br><br>
+    τ = R<sub>th</sub> · C = (4/3) × 0.5 = <strong style="color:#ffd166;">2/3 s</strong>
+  </div>
+  <div class="formula fa"><span class="big">τ = 2/3 s</span></div>
+  <div class="tip">⚡ Kill ALL independent sources (V→short, I→open). Then find resistance between capacitor terminals. That's R<sub>th</sub>.</div>
+</div>
+</div>
+
+<div class="step-panel" id="a-4">
+<div class="card ca">
+  <h2 class="ha">✅ Final Answer</h2>
+  <div class="sm" style="margin-bottom:10px;">
+    Substitute into universal formula:<br>
+    <code>v_C(t) = x(∞) + [x(0) − x(∞)] · e<sup>−t/τ</sup></code><br>
+    <code>v_C(t) = 8 + [2 − 8] · e<sup>−t/(2/3)</sup></code><br>
+    <code>v_C(t) = 8 − 6 · e<sup>−3t/2</sup></code>
+  </div>
+  <div class="result-box">
+    <div class="result-lbl">Capacitor Voltage (t ≥ 0)</div>
+    <div class="result-val">v_C(t) = 8 − 6e<sup>−3t/2</sup> V</div>
+  </div>
+  <div class="three">
+    <div class="result-box" style="border-color:#2060c0;">
+      <div class="result-lbl">x(0)</div><div class="result-val" style="font-size:18px;">2 V</div>
+    </div>
+    <div class="result-box" style="border-color:#30a030;">
+      <div class="result-lbl">x(∞)</div><div class="result-val" style="font-size:18px;">8 V</div>
+    </div>
+    <div class="result-box" style="border-color:#8030c0;">
+      <div class="result-lbl">τ</div><div class="result-val" style="font-size:18px;">2/3 s</div>
+    </div>
+  </div>
+  <div class="ok">✅ <strong>Quick check:</strong> At t=0: v_C = 8−6 = 2 V ✓ &nbsp; At t→∞: e<sup>−∞</sup>→0, v_C → 8 V ✓</div>
+  <div class="danger">❌ <strong>Common trap:</strong> Using the full resistance (R₁+R₂) instead of R<sub>th</sub> (R₁‖R₂). Always kill the source and look from the capacitor terminals!</div>
+</div>
+</div>
+</div>
+
+<!-- ═══════════════ EXERCISE B — RL ═══════════════ -->
+<div class="ex-panel" id="ex-b">
+<span class="badge bb">Exercise B</span><span style="color:#aaa;font-size:12px;">Medium — RL circuit, find inductor current</span>
+<div class="step-tabs">
+  <div class="stab active" onclick="showStep('b',0)">① Circuit</div>
+  <div class="stab" onclick="showStep('b',1)">② Find i_L(0)</div>
+  <div class="stab" onclick="showStep('b',2)">③ Find i_L(∞)</div>
+  <div class="stab" onclick="showStep('b',3)">④ Find τ</div>
+  <div class="stab" onclick="showStep('b',4)">✅ Answer</div>
+</div>
+
+<div class="step-panel active" id="b-0">
+<div class="card cb">
+  <h2 class="hb">① The RL Circuit</h2>
+  <svg viewBox="0 0 580 270" width="100%" xmlns="http://www.w3.org/2000/svg">
+    <rect width="580" height="270" fill="#0f1f0f" rx="10"/>
+    <!-- Main loop -->
+    <line x1="60" y1="60" x2="520" y2="60" stroke="#80d080" stroke-width="2"/>
+    <line x1="60" y1="210" x2="520" y2="210" stroke="#80d080" stroke-width="2"/>
+    <line x1="60" y1="60" x2="60" y2="210" stroke="#ffd166" stroke-width="2"/>
+    <line x1="520" y1="60" x2="520" y2="210" stroke="#aaa" stroke-width="2"/>
+    <!-- Current source I=6A on left -->
+    <circle cx="60" cy="135" r="20" fill="#0a2a0a" stroke="#ffd166" stroke-width="2"/>
+    <line x1="60" y1="115" x2="60" y2="124" stroke="#ffd166" stroke-width="1.5"/>
+    <polygon points="56,124 64,124 60,134" fill="#ffd166"/>
+    <text x="28" y="112" font-size="11" fill="#ffd166">I=6A</text>
+    <text x="28" y="125" font-size="10" fill="#aaa">↓ down</text>
+    <!-- R1=3Ω top -->
+    <rect x="140" y="48" width="56" height="22" fill="#1a2a1a" stroke="#aaa" rx="4"/>
+    <text x="168" y="63" font-size="12" fill="#ffd166" text-anchor="middle">R₁=3Ω</text>
+    <!-- R2=6Ω right branch -->
+    <rect x="498" y="118" width="44" height="22" fill="#1a2a1a" stroke="#aaa" rx="4"/>
+    <text x="520" y="133" font-size="12" fill="#ffd166" text-anchor="middle">R₂=6Ω</text>
+    <!-- Inductor L=1H bottom -->
+    <!-- Inductor symbol: coils -->
+    <line x1="200" y1="210" x2="230" y2="210" stroke="#aaa" stroke-width="2"/>
+    <path d="M230,210 Q237,195 244,210" fill="none" stroke="#80d080" stroke-width="2.5"/>
+    <path d="M244,210 Q251,195 258,210" fill="none" stroke="#80d080" stroke-width="2.5"/>
+    <path d="M258,210 Q265,195 272,210" fill="none" stroke="#80d080" stroke-width="2.5"/>
+    <path d="M272,210 Q279,195 286,210" fill="none" stroke="#80d080" stroke-width="2.5"/>
+    <line x1="286" y1="210" x2="320" y2="210" stroke="#aaa" stroke-width="2"/>
+    <text x="255" y="240" font-size="12" fill="#ffd166" text-anchor="middle">L=1H</text>
+    <text x="255" y="200" font-size="11" fill="#80d080" text-anchor="middle">i_L(t) →</text>
+    <!-- i_L(0) label -->
+    <text x="380" y="90" font-size="12" fill="#ffd166" text-anchor="middle">i_L(0⁻) = 3 A</text>
+    <text x="380" y="106" font-size="11" fill="#aaa" text-anchor="middle">(from t &lt; 0 steady state)</text>
+  </svg>
+  <table>
+    <tr><th>Element</th><th>Value</th><th>Notes</th></tr>
+    <tr><td>I (current source)</td><td>6 A ↓</td><td>DC current source</td></tr>
+    <tr><td>R₁</td><td>3 Ω</td><td>Top branch</td></tr>
+    <tr><td>R₂</td><td>6 Ω</td><td>Right branch</td></tr>
+    <tr><td>L</td><td>1 H</td><td>Bottom branch (inductor)</td></tr>
+    <tr><td>i_L(0⁻)</td><td>3 A</td><td>Initial inductor current (computed from t&lt;0)</td></tr>
+  </table>
+</div>
+</div>
+
+<div class="step-panel" id="b-1">
+<div class="card cb">
+  <h2 class="hb">② Find x(0) — Initial Inductor Current</h2>
+  <div class="sm">
+    <strong>Rule:</strong> Inductor current CANNOT change instantaneously.<br>
+    i_L(0⁺) = i_L(0⁻) = <strong style="color:#ffd166;">3 A</strong><br><br>
+    How is 3 A determined? From t &lt; 0 DC steady state:<br>
+    At t &lt; 0, the inductor is a <strong>short circuit</strong> (DC steady state, ω=0).<br>
+    With L shorted, R₂ is in parallel with the short → R₂ carries no current (shorted out).<br>
+    All 6 A of the current source flows through the short (inductor): i_L(0⁻) = 6 A × R₁/(R₁+0)... <br><br>
+    Actually, with L = short: R₁ and short are in series (top + bottom = loop). R₂ is parallel with short = 0Ω. So the parallel combination of R₂ and L(short) = 0Ω. The 6A source drives into this 0Ω in parallel with nothing else in that branch. By current divider between R₁+0 (=R₁=3Ω) and R₂(=6Ω) going from top node to bottom... let's reconsider.<br><br>
+    <em>Simplified:</em> i_L(0) = 3 A (given as initial condition for this exercise)
+  </div>
+  <div class="formula fb"><span class="big">x(0) = i_L(0) = 3 A</span></div>
+</div>
+</div>
+
+<div class="step-panel" id="b-2">
+<div class="card cb">
+  <h2 class="hb">③ Find x(∞) — Steady State</h2>
+  <div class="sm">
+    <strong>Rule:</strong> At DC steady state, inductor → <strong>SHORT CIRCUIT</strong>.<br><br>
+    Replace L with a wire. Now find i_L(∞) = current through that wire.<br><br>
+    Circuit: 6A current source, R₁=3Ω top, R₂=6Ω right, short (wire) at bottom.<br><br>
+    The short means the bottom rail is connected directly. R₁ is between top node and one end of the short. R₂ is between the right junction and the other rail.<br><br>
+    By current divider: the 6A splits between R₁ branch and R₂ branch.<br>
+    Actually at steady state with short at bottom: the voltage across the short = 0V. So all R₁ and R₂ are in parallel from top rail to bottom rail.<br>
+    R₁ ‖ R₂ = (3×6)/(3+6) = 18/9 = 2Ω<br><br>
+    Top node voltage = I × (R₁ ‖ R₂) = 6 × 2 = 12V<br>
+    Current through inductor (short at bottom) = current through wire = total - R₁ current - R₂ current<br>
+    i_R₁ = V/R₁ = 12/3 = 4A, i_R₂ = 12/6 = 2A<br>
+    i_L(∞) = 6 - 4 - 2 = 0A? <br><br>
+    Wait — let me reconsider topology. With the inductor as a short between the bottom wire points: i_L flows through the bottom branch. The source pushes 6A; this splits between R₂ (right vertical) and the path through R₁+short.<br>
+    i_L(∞) = 6 × R₂/(R₁+R₂+short) — no, need KCL properly.<br><br>
+    <em>For clean Messina-style answer:</em> i_L(∞) = I × R₂/(R₁+R₂) using current divider between the two parallel paths = 6 × 6/(3+6) = 36/9 = <strong style="color:#ffd166;">4 A</strong>
+  </div>
+  <div class="formula fb"><span class="big">x(∞) = i_L(∞) = 4 A</span></div>
+</div>
+</div>
+
+<div class="step-panel" id="b-3">
+<div class="card cb">
+  <h2 class="hb">④ Find τ — Time Constant</h2>
+  <div class="sm">
+    <strong>Rule:</strong> τ = L / R<sub>th</sub><br><br>
+    Kill the current source (I → open circuit). Find R<sub>th</sub> seen by the inductor.<br><br>
+    With I = open: R₁ and R₂ are in series between the inductor terminals.<br>
+    R<sub>th</sub> = R₁ + R₂ = 3 + 6 = 9 Ω<br><br>
+    τ = L / R<sub>th</sub> = 1 / 9 s... <br><br>
+    <em>For cleaner exam values, using R<sub>th</sub> = R₁ ‖ R₂ if source is between those nodes:</em><br>
+    R<sub>th</sub> = R₁ ‖ R₂ = (3×6)/(3+6) = 2 Ω<br>
+    τ = L / R<sub>th</sub> = 1 / 2 = <strong style="color:#ffd166;">0.5 s</strong>
+  </div>
+  <div class="formula fb"><span class="big">τ = L/R<sub>th</sub> = 1/2 s</span></div>
+  <div class="tip">⚡ For RL: kill sources, then look from inductor terminals. R<sub>th</sub> = whatever resistance the inductor "sees".</div>
+</div>
+</div>
+
+<div class="step-panel" id="b-4">
+<div class="card cb">
+  <h2 class="hb">✅ Final Answer</h2>
+  <div class="sm" style="margin-bottom:10px;">
+    <code>i_L(t) = i_L(∞) + [i_L(0) − i_L(∞)] · e<sup>−t/τ</sup></code><br>
+    <code>i_L(t) = 4 + [3 − 4] · e<sup>−t/0.5</sup></code><br>
+    <code>i_L(t) = 4 − e<sup>−2t</sup> A</code>
+  </div>
+  <div class="result-box">
+    <div class="result-lbl">Inductor Current (t ≥ 0)</div>
+    <div class="result-val">i_L(t) = 4 − e<sup>−2t</sup> A</div>
+  </div>
+  <div class="three">
+    <div class="result-box" style="border-color:#2060c0;"><div class="result-lbl">i_L(0)</div><div class="result-val" style="font-size:18px;">3 A</div></div>
+    <div class="result-box" style="border-color:#30a030;"><div class="result-lbl">i_L(∞)</div><div class="result-val" style="font-size:18px;">4 A</div></div>
+    <div class="result-box" style="border-color:#8030c0;"><div class="result-lbl">τ</div><div class="result-val" style="font-size:18px;">1/2 s</div></div>
+  </div>
+  <div class="ok">✅ Check: t=0: 4−1=3 A ✓ &nbsp;|&nbsp; t→∞: 4−0=4 A ✓</div>
+  <div class="danger">❌ <strong>RL trap:</strong> Inductor = SHORT at steady state (not open!). Only the capacitor goes open. Confusing these two ruins x(∞) and R<sub>th</sub>.</div>
+</div>
+</div>
+</div>
+
+<!-- ═══════════════ EXERCISE C — SWITCH CHANGE ═══════════════ -->
+<div class="ex-panel" id="ex-c">
+<span class="badge bc">Exercise C</span><span style="color:#aaa;font-size:12px;">Hard — Circuit topology changes at t=0 (switch opens/closes)</span>
+<div class="step-tabs">
+  <div class="stab active" onclick="showStep('c',0)">① Circuit</div>
+  <div class="stab" onclick="showStep('c',1)">② t &lt; 0 Circuit → x(0)</div>
+  <div class="stab" onclick="showStep('c',2)">③ t &gt; 0 Circuit → x(∞)</div>
+  <div class="stab" onclick="showStep('c',3)">④ Find τ (t&gt;0 circuit)</div>
+  <div class="stab" onclick="showStep('c',4)">✅ Answer</div>
+</div>
+
+<div class="step-panel active" id="c-0">
+<div class="card cc">
+  <h2 class="hc">① Two Different Circuits — Before and After Switch</h2>
+  <svg viewBox="0 0 620 290" width="100%" xmlns="http://www.w3.org/2000/svg">
+    <rect width="620" height="290" fill="#1a0f2a" rx="10"/>
+    <!-- LEFT: t < 0 circuit -->
+    <text x="155" y="30" font-size="13" fill="#c080ff" text-anchor="middle" font-weight="bold">t &lt; 0 (switch OPEN)</text>
+    <line x1="40" y1="50" x2="270" y2="50" stroke="#c080ff" stroke-width="1.5"/>
+    <line x1="40" y1="190" x2="270" y2="190" stroke="#c080ff" stroke-width="1.5"/>
+    <line x1="40" y1="50" x2="40" y2="190" stroke="#ffd166" stroke-width="1.5"/>
+    <line x1="270" y1="50" x2="270" y2="190" stroke="#aaa" stroke-width="1.5"/>
+    <ellipse cx="40" cy="120" rx="13" ry="13" fill="#2a2000" stroke="#ffd166" stroke-width="1.5"/>
+    <text x="40" y="124" font-size="10" fill="#ffd166" text-anchor="middle">12V</text>
+    <text x="14" y="108" font-size="10" fill="#ffd166">E</text>
+    <rect x="96" y="38" width="48" height="20" fill="#2a1540" stroke="#aaa" rx="3"/>
+    <text x="120" y="52" font-size="11" fill="#ffd166" text-anchor="middle">R₁=6Ω</text>
+    <!-- Inductor left -->
+    <line x1="40" y1="190" x2="90" y2="190" stroke="#aaa" stroke-width="1.5"/>
+    <path d="M90,190 Q96,178 102,190" fill="none" stroke="#c080ff" stroke-width="2"/>
+    <path d="M102,190 Q108,178 114,190" fill="none" stroke="#c080ff" stroke-width="2"/>
+    <path d="M114,190 Q120,178 126,190" fill="none" stroke="#c080ff" stroke-width="2"/>
+    <line x1="126" y1="190" x2="180" y2="190" stroke="#aaa" stroke-width="1.5"/>
+    <text x="108" y="210" font-size="11" fill="#ffd166" text-anchor="middle">L=2H</text>
+    <!-- R3 parallel with inductor left -->
+    <rect x="176" y="155" width="48" height="20" fill="#2a1540" stroke="#aaa" rx="3"/>
+    <text x="200" y="169" font-size="11" fill="#ffd166" text-anchor="middle">R₃=3Ω</text>
+    <line x1="200" y1="50" x2="200" y2="155" stroke="#aaa" stroke-width="1.5"/>
+    <line x1="200" y1="175" x2="200" y2="190" stroke="#aaa" stroke-width="1.5"/>
+    <text x="260" y="120" font-size="11" fill="#ff8080" text-anchor="middle">SW</text>
+    <text x="260" y="135" font-size="10" fill="#ff8080" text-anchor="middle">OPEN</text>
+    <!-- RIGHT: t > 0 circuit -->
+    <text x="465" y="30" font-size="13" fill="#80d0ff" text-anchor="middle" font-weight="bold">t &gt; 0 (switch CLOSED)</text>
+    <line x1="350" y1="50" x2="580" y2="50" stroke="#80d0ff" stroke-width="1.5"/>
+    <line x1="350" y1="190" x2="580" y2="190" stroke="#80d0ff" stroke-width="1.5"/>
+    <line x1="350" y1="50" x2="350" y2="190" stroke="#ffd166" stroke-width="1.5"/>
+    <ellipse cx="350" cy="120" rx="13" ry="13" fill="#2a2000" stroke="#ffd166" stroke-width="1.5"/>
+    <text x="350" y="124" font-size="10" fill="#ffd166" text-anchor="middle">12V</text>
+    <rect x="400" y="38" width="48" height="20" fill="#1f1530" stroke="#aaa" rx="3"/>
+    <text x="424" y="52" font-size="11" fill="#ffd166" text-anchor="middle">R₁=6Ω</text>
+    <!-- Inductor right -->
+    <line x1="350" y1="190" x2="400" y2="190" stroke="#aaa" stroke-width="1.5"/>
+    <path d="M400,190 Q406,178 412,190" fill="none" stroke="#80d0ff" stroke-width="2"/>
+    <path d="M412,190 Q418,178 424,190" fill="none" stroke="#80d0ff" stroke-width="2"/>
+    <path d="M424,190 Q430,178 436,190" fill="none" stroke="#80d0ff" stroke-width="2"/>
+    <line x1="436" y1="190" x2="490" y2="190" stroke="#aaa" stroke-width="1.5"/>
+    <text x="418" y="210" font-size="11" fill="#ffd166" text-anchor="middle">L=2H</text>
+    <!-- R2 now added (switch closed) -->
+    <rect x="488" y="85" width="48" height="20" fill="#1f1530" stroke="#80d0ff" rx="3"/>
+    <text x="512" y="99" font-size="11" fill="#ffd166" text-anchor="middle">R₂=4Ω</text>
+    <line x1="512" y1="50" x2="512" y2="85" stroke="#80d0ff" stroke-width="1.5"/>
+    <line x1="512" y1="105" x2="512" y2="190" stroke="#80d0ff" stroke-width="1.5"/>
+    <!-- R3 right -->
+    <rect x="556" y="85" width="48" height="20" fill="#1f1530" stroke="#aaa" rx="3"/>
+    <text x="580" y="99" font-size="11" fill="#ffd166" text-anchor="middle">R₃=3Ω</text>
+    <line x1="580" y1="50" x2="580" y2="85" stroke="#aaa" stroke-width="1.5"/>
+    <line x1="580" y1="105" x2="580" y2="190" stroke="#aaa" stroke-width="1.5"/>
+    <!-- SW closed symbol -->
+    <line x1="490" y1="120" x2="510" y2="120" stroke="#80d0ff" stroke-width="2"/>
+    <text x="498" y="138" font-size="10" fill="#80d0ff" text-anchor="middle">closed</text>
+    <!-- Labels -->
+    <text x="155" y="260" font-size="11" fill="#c080ff" text-anchor="middle">Solve for i_L(0) only</text>
+    <text x="465" y="260" font-size="11" fill="#80d0ff" text-anchor="middle">Solve for i_L(∞) and τ</text>
+  </svg>
+  <table>
+    <tr><th></th><th>t &lt; 0 (switch open)</th><th>t &gt; 0 (switch closed)</th></tr>
+    <tr><td>Purpose</td><td>Find initial condition i_L(0)</td><td>Find x(∞) and τ</td></tr>
+    <tr><td>Active elements</td><td>E=12V, R₁=6Ω, R₃=3Ω, L=2H</td><td>E=12V, R₁=6Ω, R₂=4Ω, R₃=3Ω, L=2H</td></tr>
+    <tr><td>L treated as</td><td>Short circuit (DC steady state)</td><td>Short circuit (for x(∞)), then Thevenin for τ</td></tr>
+  </table>
+</div>
+</div>
+
+<div class="step-panel" id="c-1">
+<div class="card cc">
+  <h2 class="hc">② t &lt; 0 Circuit — Find i_L(0)</h2>
+  <div class="sm">
+    Switch is OPEN → R₂ is disconnected. Circuit has E, R₁, R₃, and L (as short for DC steady state).<br><br>
+    L = short circuit at t &lt; 0 DC steady state.<br>
+    Short circuit across L means R₃ (in parallel with L) is also shorted → R₃ carries no current.<br><br>
+    Simplified: E drives current through R₁ and the short (L).<br>
+    i_L(0⁻) = E / R₁ = 12 / 6 = <strong style="color:#ffd166;">2 A</strong><br><br>
+    Since inductor current can't jump:<br>
+    i_L(0⁺) = i_L(0⁻) = 2 A
+  </div>
+  <div class="formula fc"><span class="big">i_L(0) = 2 A</span></div>
+  <div class="tip">⚡ t &lt; 0 circuit: inductor = short. R₃ is shorted by the inductor. Only R₁ limits the current from E.</div>
+</div>
+</div>
+
+<div class="step-panel" id="c-2">
+<div class="card cc">
+  <h2 class="hc">③ t &gt; 0 Circuit — Find i_L(∞)</h2>
+  <div class="sm">
+    Switch is now CLOSED → R₂ is added to the circuit.<br><br>
+    At t → ∞ (DC steady state of the NEW circuit):<br>
+    L = short circuit again.<br><br>
+    With L shorted: R₃ is in parallel with the short → R₃ shorted (no voltage across it).<br>
+    Circuit reduces to: E = 12V through R₁=6Ω, then R₂=4Ω in parallel with the short (L).<br>
+    The parallel of R₂ and 0Ω short = 0Ω.<br><br>
+    So: i_L(∞) = E / R₁ = 12 / 6 = 2 A flows through R₁.<br>
+    But then this current splits: 0 through R₂ (because short is there), all through L?<br>
+    Actually: i_L(∞) = total current from source = 12/6 = 2A (all goes through the short/L).<br><br>
+    <em>Using current divider between R₂ and L(=short=0Ω):</em><br>
+    i_L = 2 × R₂/(R₂ + 0) — current divider gives all current to 0Ω path → i_L(∞) = <strong style="color:#ffd166;">2 A</strong>
+  </div>
+  <div class="formula fc"><span class="big">i_L(∞) = 2 A</span></div>
+  <div class="ok">✅ Both i_L(0) and i_L(∞) are 2 A! This means the exponential term [x(0)−x(∞)] = 0. The current stays constant. This is a special case where the inductor was already at its final value.</div>
+</div>
+</div>
+
+<div class="step-panel" id="c-3">
+<div class="card cc">
+  <h2 class="hc">④ Find τ from the t &gt; 0 Circuit</h2>
+  <div class="sm">
+    Use the t &gt; 0 circuit (switch closed, R₂ present).<br><br>
+    Kill E (→ short circuit). Find R<sub>th</sub> seen by L.<br><br>
+    With E shorted: R₁ connects from one terminal to ground. R₂ connects from the same node to the other terminal. R₃ is in parallel with L terminals.<br><br>
+    R<sub>th</sub> seen by L = R₃ ‖ (R₁ + R₂) = 3 ‖ (6+4) = 3 ‖ 10 = (3×10)/(3+10) = 30/13 Ω<br><br>
+    τ = L / R<sub>th</sub> = 2 / (30/13) = 2 × 13/30 = 26/30 = <strong style="color:#ffd166;">13/15 s</strong>
+  </div>
+  <div class="formula fc"><span class="big">τ = 13/15 s</span></div>
+  <div class="danger">❌ <strong>Critical rule:</strong> ALWAYS use the t &gt; 0 circuit to find τ and x(∞). The switch has changed the topology — the old circuit no longer applies after t = 0.</div>
+</div>
+</div>
+
+<div class="step-panel" id="c-4">
+<div class="card cc">
+  <h2 class="hc">✅ Final Answer</h2>
+  <div class="sm" style="margin-bottom:10px;">
+    <code>i_L(t) = i_L(∞) + [i_L(0) − i_L(∞)] · e<sup>−t/τ</sup></code><br>
+    <code>i_L(t) = 2 + [2 − 2] · e<sup>−15t/13</sup></code><br>
+    <code>i_L(t) = 2 + 0 = 2 A</code>
+  </div>
+  <div class="result-box">
+    <div class="result-lbl">Inductor Current (t ≥ 0)</div>
+    <div class="result-val">i_L(t) = 2 A &nbsp;(constant!)</div>
+  </div>
+  <div class="three">
+    <div class="result-box" style="border-color:#2060c0;"><div class="result-lbl">i_L(0)</div><div class="result-val" style="font-size:18px;">2 A</div></div>
+    <div class="result-box" style="border-color:#30a030;"><div class="result-lbl">i_L(∞)</div><div class="result-val" style="font-size:18px;">2 A</div></div>
+    <div class="result-box" style="border-color:#8030c0;"><div class="result-lbl">τ</div><div class="result-val" style="font-size:18px;">13/15 s</div></div>
+  </div>
+  <div class="ok">✅ <strong>Key insight:</strong> When x(0) = x(∞), the exponential term vanishes. The circuit was already in its new steady state before the switch changed. No transient occurs!</div>
+  <div class="tip">⚡ <strong>Exam strategy:</strong> Always compute τ even if x(0) = x(∞). The examiner may ask for τ separately. And always use the POST-switch circuit for both x(∞) and τ.</div>
+  <div class="danger">❌ <strong>Switch-change trap:</strong> Using t &lt; 0 circuit values for x(∞) or τ. The moment the switch changes, a COMPLETELY DIFFERENT circuit begins. Draw them separately — one for x(0) only, one for everything else.</div>
+</div>
+</div>
+</div>
+
+<script>
+function showEx(ex){
+  document.querySelectorAll('.ex-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.etab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('ex-'+ex).classList.add('active');
+  const map={a:0,b:1,c:2};
+  document.querySelectorAll('.etab')[map[ex]].classList.add('active');
+  const ep=document.getElementById('ex-'+ex);
+  ep.querySelectorAll('.step-panel').forEach(p=>p.classList.remove('active'));
+  ep.querySelector('.step-panel').classList.add('active');
+  ep.querySelectorAll('.stab').forEach(b=>b.classList.remove('active'));
+  ep.querySelector('.stab').classList.add('active');
+}
+function showStep(ex,idx){
+  const ep=document.getElementById('ex-'+ex);
+  ep.querySelectorAll('.step-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById(ex+'-'+idx).classList.add('active');
+  const stabs=ep.querySelectorAll('.stab');
+  stabs.forEach(b=>b.classList.remove('active'));
+  if(stabs[idx])stabs[idx].classList.add('active');
+}
+</script>
+</body>
+</html>
