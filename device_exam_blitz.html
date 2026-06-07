@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚡ Device-A Exam Blitz — Real Past Exams</title>
+<style>
+:root {
+  --bg:#0f1117; --bg2:#1a1d27; --bg3:#22263a; --border:#2e3248;
+  --text:#e8eaf6; --muted:#8892b0;
+  --accent:#64ffda;
+  --accent2:#7c83fd;
+  --accent3:#f7c948;
+  --accent4:#ff6b6b;
+  --accent5:#c084fc;
+  --green:#69db7c; --orange:#ffa94d;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;line-height:1.6;padding:0 0 60px;}
+
+/* ── NAV ── */
+.nav{background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.nav-back{color:var(--accent);text-decoration:none;font-size:13px;font-weight:600;}
+.nav-back:hover{text-decoration:underline;}
+.nav-title{font-size:14px;font-weight:700;color:var(--text);}
+.nav-badge{background:rgba(255,107,107,.15);border:1px solid rgba(255,107,107,.4);color:var(--accent4);border-radius:20px;padding:3px 12px;font-size:12px;font-weight:700;}
+
+/* ── HERO ── */
+.hero{padding:36px 24px 24px;text-align:center;background:linear-gradient(180deg,rgba(255,107,107,.06) 0%,transparent 100%);border-bottom:1px solid var(--border);}
+.hero h1{font-size:28px;font-weight:800;background:linear-gradient(135deg,var(--accent4),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;}
+.hero p{color:var(--muted);font-size:13px;max-width:600px;margin:0 auto 14px;}
+.badge-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
+.badge{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:4px 14px;font-size:11px;font-weight:600;color:var(--muted);}
+.badge.hot{border-color:rgba(255,107,107,.5);color:var(--accent4);background:rgba(255,107,107,.08);}
+.badge.warn{border-color:rgba(247,201,72,.5);color:var(--accent3);background:rgba(247,201,72,.08);}
+
+/* ── PROGRESS ── */
+.progress-wrap{padding:16px 24px;background:var(--bg2);border-bottom:1px solid var(--border);}
+.prog-label{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px;}
+.prog-bar{height:6px;background:var(--bg3);border-radius:3px;overflow:hidden;}
+.prog-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--accent4),var(--accent3));transition:width .4s ease;border-radius:3px;}
+
+/* ── CHEAT SHEET ── */
+.section{max-width:900px;margin:0 auto;padding:28px 24px 0;}
+.section-title{font-size:16px;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.section-title .pill{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:2px 10px;font-size:11px;font-weight:600;color:var(--muted);}
+.cheat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-bottom:8px;}
+.cheat-item{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px;border-left:3px solid var(--accent3);}
+.cheat-item.red{border-left-color:var(--accent4);}
+.cheat-item.blue{border-left-color:var(--accent2);}
+.cheat-item.green{border-left-color:var(--green);}
+.cheat-item.teal{border-left-color:var(--accent);}
+.cheat-item.purple{border-left-color:var(--accent5);}
+.cheat-q{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.cheat-a{font-size:13px;color:var(--accent3);font-family:'Courier New',monospace;font-weight:600;line-height:1.5;margin-bottom:5px;}
+.cheat-tip{font-size:11.5px;color:var(--muted);line-height:1.5;}
+
+/* ── TOPIC BLOCK ── */
+.topic-block{margin-bottom:32px;}
+.topic-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding:10px 14px;background:var(--bg2);border-radius:10px;border:1px solid var(--border);}
+.topic-icon{font-size:20px;}
+.topic-name{font-size:15px;font-weight:700;}
+.topic-freq{font-size:11px;padding:2px 10px;border-radius:20px;font-weight:700;}
+.freq-hot{background:rgba(255,107,107,.15);color:var(--accent4);border:1px solid rgba(255,107,107,.4);}
+.freq-warm{background:rgba(247,201,72,.12);color:var(--accent3);border:1px solid rgba(247,201,72,.4);}
+.freq-cool{background:rgba(124,131,253,.12);color:var(--accent2);border:1px solid rgba(124,131,253,.4);}
+
+/* ── QUIZ BLOCK ── */
+.quiz-block{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:14px;transition:border-color .2s;}
+.quiz-block:hover{border-color:rgba(255,107,107,.3);}
+.q-meta{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:11px;}
+.q-label{color:var(--muted);font-weight:700;}
+.q-freq{padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700;background:rgba(255,107,107,.1);color:var(--accent4);border:1px solid rgba(255,107,107,.3);}
+.q-freq.high{background:rgba(255,107,107,.22);border-color:var(--accent4);}
+.q-freq.warm{background:rgba(247,201,72,.1);color:var(--accent3);border:1px solid rgba(247,201,72,.3);}
+.q-text{font-size:14px;font-weight:600;color:var(--text);margin-bottom:12px;line-height:1.6;}
+.q-sub{font-size:12.5px;color:var(--muted);margin-bottom:12px;line-height:1.6;}
+.formula-display{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-family:'Courier New',monospace;font-size:13px;color:var(--accent3);margin-bottom:12px;line-height:1.8;}
+
+/* Self-assess buttons */
+.assess-row{display:flex;gap:8px;margin-bottom:4px;}
+.btn-knew{background:rgba(105,219,124,.1);border:1.5px solid rgba(105,219,124,.4);color:var(--green);border-radius:8px;padding:8px 18px;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;flex:1;}
+.btn-knew:hover{background:rgba(105,219,124,.2);}
+.btn-stuck{background:rgba(255,107,107,.1);border:1.5px solid rgba(255,107,107,.4);color:var(--accent4);border-radius:8px;padding:8px 18px;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;flex:1;}
+.btn-stuck:hover{background:rgba(255,107,107,.2);}
+.btn-knew.selected{background:rgba(105,219,124,.25);border-color:var(--green);}
+.btn-stuck.selected{background:rgba(255,107,107,.25);border-color:var(--accent4);}
+
+/* Explanation */
+.explanation{display:none;margin-top:12px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px;}
+.explanation.show{display:block;}
+.exp-title{font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
+.exp-step{display:flex;gap:10px;margin-bottom:8px;font-size:13px;line-height:1.6;}
+.exp-num{background:rgba(100,255,218,.15);color:var(--accent);border-radius:50%;width:22px;height:22px;min-width:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;margin-top:1px;}
+.hl{color:var(--accent3);font-weight:600;}
+.hl-r{color:var(--accent4);font-weight:600;}
+.hl-b{color:var(--accent2);font-weight:600;}
+.hl-g{color:var(--green);font-weight:600;}
+code{background:rgba(124,131,253,.1);color:var(--accent2);padding:1px 6px;border-radius:4px;font-family:'Courier New',monospace;font-size:12px;}
+.formula-box{background:rgba(247,201,72,.06);border:1px solid rgba(247,201,72,.3);border-radius:8px;padding:10px 14px;font-family:'Courier New',monospace;font-size:13px;color:var(--accent3);margin:8px 0;line-height:1.8;text-align:center;}
+.trap-box{background:rgba(255,107,107,.06);border-left:3px solid var(--accent4);border-radius:0 8px 8px 0;padding:8px 12px;font-size:12px;color:var(--accent4);margin-top:8px;line-height:1.5;}
+.memory-trick{background:rgba(100,255,218,.04);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:8px 12px;font-size:12px;color:var(--accent);margin-top:8px;line-height:1.5;}
+
+/* ── SCORE SECTION ── */
+.score-section{max-width:900px;margin:32px auto 0;padding:0 24px;}
+.score-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:24px;text-align:center;}
+.score-card h2{font-size:16px;color:var(--text);margin-bottom:6px;}
+.score-val{font-size:36px;font-weight:800;color:var(--accent3);margin:10px 0;}
+.score-msg{font-size:13px;color:var(--muted);margin-bottom:18px;}
+.btn-reset{background:rgba(124,131,253,.1);border:1.5px solid rgba(124,131,253,.4);color:var(--accent2);border-radius:8px;padding:10px 24px;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;}
+.btn-reset:hover{background:rgba(124,131,253,.2);}
+
+/* ── HOT TABLE ── */
+.hot-table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:8px;}
+.hot-table th{background:var(--bg3);color:var(--muted);padding:8px 12px;text-align:left;border:1px solid var(--border);font-size:11px;text-transform:uppercase;letter-spacing:.5px;}
+.hot-table td{padding:8px 12px;border:1px solid var(--border);color:var(--text);vertical-align:top;}
+.hot-table tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+.hot-fire{color:var(--accent4);font-weight:700;}
+.hot-warm{color:var(--accent3);font-weight:700;}
+
+@media(max-width:600px){.cheat-grid{grid-template-columns:1fr;}.assess-row{flex-direction:column;}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="index.html" class="nav-back">← Back to Hub</a>
+  <span class="nav-title">⚡ Device-A Exam Blitz</span>
+  <span class="nav-badge" id="prog-text">0 / 28 answered</span>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>⚡ Real Past Exam Questions</h1>
+  <p>28 problems extracted from 10 UniMe Device-A exams (2021–2024). Every recurring pattern, every HOT question. Click → reveal method → self-score.</p>
+  <div class="badge-row">
+    <span class="badge hot">🔥 10 Exam Years</span>
+    <span class="badge hot">28 Real Problems</span>
+    <span class="badge warn">⚡ HOT = appears 3+ exams</span>
+    <span class="badge">Jan 2022 – Nov 2024</span>
+    <span class="badge">Source: Device mode Qa.pdf + Q&A Device mode a.pdf</span>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <div class="prog-label"><span>Progress</span><span id="prog-score">Score: 0 / 0</span></div>
+  <div class="prog-bar"><div class="prog-fill" id="prog-fill"></div></div>
+</div>
+
+<!-- ═══════════ HOT PATTERN TABLE ═══════════ -->
+<div class="section">
+  <div class="section-title">🔥 HOT Pattern Map — What Appears Every Exam <span class="pill">10 years analysed</span></div>
+  <table class="hot-table">
+    <tr><th>Exercise</th><th>Topic</th><th>Frequency</th><th>Key Pattern</th></tr>
+    <tr><td><strong>Ex 1</strong></td><td>Node Analysis (G Matrix)</td><td><span class="hot-fire">🔥 8/10 exams</span></td><td>Write G matrix + compute VA, VB with numbers. ALWAYS 3–4 nodes.</td></tr>
+    <tr><td><strong>Ex 1</strong></td><td>Mesh Analysis (R Matrix)</td><td><span class="hot-fire">🔥 6/10 exams</span></td><td>Write R matrix + compute I₁, I₂, I₃. 2–3 meshes. Check for supermesh.</td></tr>
+    <tr><td><strong>Ex 2</strong></td><td>Op-Amp / Millman Vo</td><td><span class="hot-fire">🔥 10/10 exams</span></td><td>EVERY EXAM. Find Vo expression then numerical value. 1 or 2 stage.</td></tr>
+    <tr><td><strong>Ex 2</strong></td><td>Thevenin Equivalent</td><td><span class="hot-warm">⚡ 4/10 exams</span></td><td>Find VTH at A-B, then RTH. Sometimes includes Norton conversion.</td></tr>
+    <tr><td><strong>Ex 3</strong></td><td>RL Transient iL(t)</td><td><span class="hot-fire">🔥 8/10 exams</span></td><td>Universal formula. R=10Ω L=0.02H repeats TWICE. τ=L/R.</td></tr>
+    <tr><td><strong>Ex 3</strong></td><td>RC Transient vC(t)</td><td><span class="hot-warm">⚡ 4/10 exams</span></td><td>Same formula. R=1Ω C=0.1F or R=10Ω C=0.2mF.</td></tr>
+    <tr><td><strong>Ex 4</strong></td><td>Analog Computing ODE</td><td><span class="hot-fire">🔥 8/10 exams</span></td><td>2nd-order ODE → op-amp circuit. RC=1s. ALWAYS 2nd order.</td></tr>
+  </table>
+</div>
+
+<!-- ═══════════ CHEAT SHEET ═══════════ -->
+<div class="section" style="margin-top:24px;">
+  <div class="section-title">📋 Cheat Sheet — Walk In Knowing These Cold <span class="pill">12 formulas</span></div>
+  <div class="cheat-grid">
+
+    <div class="cheat-item red">
+      <div class="cheat-q">🔥 G Matrix — Diagonal</div>
+      <div class="cheat-a">Gii = Σ all conductances at node i</div>
+      <div class="cheat-tip">Sum ALL G = 1/R values touching node i. Off-diagonal Gij = −G between i and j (ALWAYS negative).</div>
+    </div>
+
+    <div class="cheat-item red">
+      <div class="cheat-q">🔥 R Matrix — Diagonal</div>
+      <div class="cheat-a">Rii = Σ all resistances in mesh i</div>
+      <div class="cheat-tip">Off-diagonal Rij = −R shared between mesh i and j. Source vector: +E if aids clockwise current.</div>
+    </div>
+
+    <div class="cheat-item">
+      <div class="cheat-q">🔥 Millman / Op-Amp (EVERY EXAM)</div>
+      <div class="cheat-a">Vo = −Rf·(E₁/R₁ + E₂/R₂ ± I·Rf)</div>
+      <div class="cheat-tip">V₋ = V₊ = 0 (virtual ground). KCL at node A → set numerator = 0. Solve for Vo.</div>
+    </div>
+
+    <div class="cheat-item blue">
+      <div class="cheat-q">🔥 RL Transient (appears every exam)</div>
+      <div class="cheat-a">iL(t) = iL(∞) + [iL(0)−iL(∞)]·e^(−t/τ)</div>
+      <div class="cheat-tip">τ = L/Rth. At t=∞: inductor = SHORT. At t=0: current cannot jump. Find Rth by killing sources.</div>
+    </div>
+
+    <div class="cheat-item blue">
+      <div class="cheat-q">RC Transient</div>
+      <div class="cheat-a">vC(t) = vC(∞) + [vC(0)−vC(∞)]·e^(−t/τ)</div>
+      <div class="cheat-tip">τ = RC. At t=∞: capacitor = OPEN. At t=0: voltage cannot jump.</div>
+    </div>
+
+    <div class="cheat-item green">
+      <div class="cheat-q">🔥 Analog Computing (ODE Circuit)</div>
+      <div class="cheat-a">d²y/dt² = −a·dy/dt − b·y + f(t)</div>
+      <div class="cheat-tip">RC=1s. 2 integrators + 2 inverters + 1 summer. Feed back ẏ (gain a) and y (gain b) to summer.</div>
+    </div>
+
+    <div class="cheat-item teal">
+      <div class="cheat-q">Thevenin Voltage VTH</div>
+      <div class="cheat-a">VTH = Voc (open circuit voltage at A-B)</div>
+      <div class="cheat-tip">Leave A-B open. Solve the circuit normally. VTH is the voltage across the open terminals.</div>
+    </div>
+
+    <div class="cheat-item teal">
+      <div class="cheat-q">Thevenin Resistance RTH</div>
+      <div class="cheat-a">Kill sources (V→short, I→open). Rth = resistance seen at A-B.</div>
+      <div class="cheat-tip">With dependent sources: use V_test method. Apply Vt at A-B, find It, Rth = Vt/It.</div>
+    </div>
+
+    <div class="cheat-item purple">
+      <div class="cheat-q">Two-Stage Op-Amp Cascade</div>
+      <div class="cheat-a">Solve Stage 1 → get Vo1 → feed into Stage 2</div>
+      <div class="cheat-tip">Each stage is independent. Vo1 becomes the input source for Stage 2. Two inversions = positive gain.</div>
+    </div>
+
+    <div class="cheat-item">
+      <div class="cheat-q">HOT RL Values (appear twice)</div>
+      <div class="cheat-a">R=10Ω, L=0.02H → τ=2ms</div>
+      <div class="cheat-tip">iL(1ms) = iL(0)·e^(−0.5). Also: R=100Ω, L=0.01H → τ=0.1ms. R=1000Ω, L=0.01H → τ=10μs.</div>
+    </div>
+
+    <div class="cheat-item">
+      <div class="cheat-q">HOT RC Values</div>
+      <div class="cheat-a">R=1Ω, C=0.1F → τ=0.1s</div>
+      <div class="cheat-tip">vC(200ms) = vC(∞) + [vC(0)−vC(∞)]·e^(−2). Also: R=10Ω, C=0.2mF → τ=2ms.</div>
+    </div>
+
+    <div class="cheat-item">
+      <div class="cheat-q">HOT ODE Forms</div>
+      <div class="cheat-a">d²y/dt² + 4dy/dt + by = f(t)</div>
+      <div class="cheat-tip">Coefficient "4" on dy/dt appears in 4+ exams. Always 2nd order. RC=1s means R×C=1Ω·F.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- TOPIC 1: NODE ANALYSIS             -->
+<!-- ═══════════════════════════════════ -->
+<div class="section" style="margin-top:28px;">
+<div class="topic-block">
+  <div class="topic-header">
+    <span class="topic-icon">📐</span>
+    <span class="topic-name">Exercise 1A — Node Analysis (G Matrix)</span>
+    <span class="topic-freq freq-hot">🔥 8/10 exams</span>
+  </div>
+
+  <!-- Q1 -->
+  <div class="quiz-block" data-qid="q1">
+    <div class="q-meta">
+      <span class="q-label">Q1</span>
+      <span class="q-freq high">HOT — 8 exams</span>
+    </div>
+    <div class="q-text">Write the G matrix in analytical form for a 3-node circuit with nodes A, B, C (reference D).</div>
+    <div class="q-sub">This is part (a) of Exercise 1 in almost every exam. The circuit has resistors R₁…R₅ connecting nodes and voltage/current sources.</div>
+    <div class="assess-row">
+      <button class="btn-knew" onclick="assess(this,'correct','q1')">✅ I know how to build it</button>
+      <button class="btn-stuck" onclick="assess(this,'wrong','q1')">❌ Need to review</button>
+    </div>
+    <div class="explanation" id="exp-q1">
+      <div class="exp-title">Method — G Matrix Construction</div>
+      <div class="exp-step"><div class="exp-num">1</div><div>Label all nodes A, B, C with reference D (ground). Convert all resistors to conductances: <code>Gk = 1/Rk</code>.</div></div>
+      <div class="exp-step"><div class="exp-num">2</div><div><span class="hl">Diagonal Gii</span> = sum of ALL conductances connected to node i (regardless of where they go).</div></div>
+      <div class="exp-step"><div class="exp-num">3</div><div><span class="hl-r">Off-diagonal Gij = Gji</span> = −(conductance directly between node i and node j). <strong>Always negative.</strong></div></div>
+      <div class="exp-step"><div class="exp-num">4</div><div><span class="hl-b">Source vector bi</span>: current source flowing INTO node i = +I. Flowing OUT = −I. Voltage source from node to ground: that node is KNOWN (remove its row, substitute value).</div></div>
+      <div class="formula-box">
+        [G]·[V] = [b]<br>
+        ⎡ GAA  GAB  GAC ⎤ ⎡ VA ⎤ = ⎡ bA ⎤<br>
+        ⎢ GBA  GBB  GBC ⎥ ⎢ VB ⎥ = ⎢ bB ⎥<br>
+        ⎣ GCA  GCB  GCC ⎦ ⎣ VC ⎦ = ⎣ bC ⎦
+      </div>
+      <div class="trap-box">❌ TRAP: Off-diagonal is ALWAYS negative. Students write +G instead of −G. GAB = −G between A and B, never positive.</div>
+      <div class="memory-trick">💡 SPEED: Diagonal = "all roads from this node". Off-diagonal = "the road between these two nodes, negated".</div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="quiz-block" data-qid="q2">
+    <div class="q-meta">
+      <span class="q-label">Q2</span>
+      <span class="q-freq high">HOT — Jan 2022, May 2023, Dec 2021, June 2022</span>
+    </div>
+    <div class="q-text">Compute the node voltages VA, VB using: R₁=2Ω, R₂=3Ω, R₃=4Ω, R₄=2Ω, α=2S, I₁=1A, I₂=−2A.</div>
+    <div class="q-sub">Part (b): substitute the numerical values into the G matrix from part (a) and solve. [May 2023 exact values]</div>
+    <div class="assess-row">
+      <button class="btn-knew" onclick="assess(this,'correct','q2')">✅ I can do this</button>
+      <button class="btn-stuck" onclick="assess(this,'wrong','q2')">❌ Need help</button>
+    </div>
+    <div class="explanation" id="exp-q2">
+      <div class="exp-title">Method — Substitute and Solve</div>
+      <div class="exp-step"><div class="exp-num">1</div><div>Compute all conductances: G₁=1/2, G₂=1/3, G₃=1/4, G₄=1/2 S.</div></div>
+      <div class="exp-step"><div class="exp-num">2</div><div>Build the matrix. Diagonal: GAA = G₁+G₂+G₃ (all G at A). GBB = G₃+G₄ (all G at B).</div></div>
+      <div class="exp-step"><div class="exp-num">3</div><div>Off-diagonal: GAB = GBA = −G₃ = −1/4.</div></div>
+      <div class="exp-step"><div class="exp-num">4</div><div>Solve 2×2 system: multiply through by LCM to eliminate fractions. Use substitution or Cramer's rule.</div></div>
+      <div class="trap-box">❌ If α (dependent source) appears: it modifies one off-diagonal entry. α adds to the G matrix. Don't forget it!</div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="quiz-block" data-qid="q3">
+    <div class="q-meta">
+      <span class="q-label">Q3</span>
+      <span class="q-freq">Supernode variant — June 2022, Dec 2021</span>
+    </div>
+    <div class="q-text">A voltage source exists between two unknown nodes (supernode). How do you handle this in the G matrix?</div>
+    <div class="assess-row">
+      <button class="btn-knew" onclick="assess(this,'correct','q3')">✅ I know the supernode trick</button>
+      <button class="btn-stuck" onclick="assess(this,'wrong','q3')">❌ Need to review</button>
+    </div>
+    <div class="explanation" id="exp-q3">
+      <div class="exp-title">Supernode Method</div>
+      <div class="exp-step"><div class="exp-num">1</div><div>A voltage source between nodes i and j = SUPERNODE. You can't use the normal KCL for either node separately.</div></div>
+      <div class="exp-step"><div class="exp-num">2</div><div><span class="hl">Merge the two rows</span>: write ONE combined KCL for the boundary of the supernode (currents leaving the supernode = currents entering).</div></div>
+      <div class="exp-step"><div class="exp-num">3</div><div><span class="hl-b">Add constraint equation</span>: Vi − Vj = E (voltage source value).</div></div>
+      <div class="exp-step"><div class="exp-num">4</div><div>Now you have the same number of equations as unknowns. Solve.</div></div>
+      <div class="trap-box">❌ Forget the constraint equation → 1 equation, 2 unknowns → unsolvable. ALWAYS add Vi − Vj = E.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- TOPIC 2: MESH ANALYSIS             -->
+<!-- ═══════════════════════════════════ -->
+<div class="topic-block">
+  <div class="topic-header">
+    <span class="topic-icon">🔁</span>
+    <span class="topic-name">Exercise 1B — Mesh Analysis (R Matrix)</span>
+    <span class="topic-freq freq-hot">🔥 6/10 exams</span>
+  </div>
+
+  <!-- Q4 -->
+  <div class="quiz-block" data-qid="q4">
+    <div class="q-meta">
+      <span class="q-label">Q4</span>
+      <span class="q-freq high">HOT — Feb 2022, June 2022, Sept 2023, Dec 2022</span>
+    </div>
+    <div class="q-text">Write the R matrix in analytical form for a circuit with 3 mesh currents I₁, I₂, I₃ (all clockwise).</div>
+    <div class="assess-row">
+      <button class="btn-knew" onclick="assess(this,'correct','q4')">✅ I know the R matrix rules</button>
+      <button class="btn-stuck" onclick="assess(this,'wrong','q4')">❌ Need review</button>
+    </div>
+    <div class="explanation" id="exp-q4">
+      <div class="exp-title">Method — R Matrix Construction</div>
+      <div class="exp-step"><div class="exp-num">1</div><div>Draw ALL mesh currents CLOCKWISE (I₁, I₂, I₃). This makes all off-diagonals negative.</div></div>
+      <div class="exp-step"><div class="exp-num">2</div><div><span class="hl">Diagonal Rii</span> = total resistance in mesh i (sum of ALL resistors in that mesh).</div></div>
+      <div class="exp-step"><div class="exp-num">3</div><div><span class="hl-r">Off-diagonal Rij</span> = −(resistance shared between mesh i and mesh j). Always negative if currents are both clockwise.</div></div>
+      <div class="exp-step"><div class="exp-num">4</div><div><span class="hl-b">Source vector bi</span>: walk clockwise around mesh i. +E if source aids you (+ terminal first), −E if it opposes.</div></div>
+      <div class="formula-box">
+        ⎡ R₁₁  −R₁₂  0   ⎤ ⎡ I₁ ⎤ = ⎡ b₁ ⎤<br>
+        ⎢ −R₂₁  R₂₂ −R₂₃ ⎥ ⎢ I₂ ⎥ = ⎢ b₂ ⎥<br>
+        ⎣  0   −R₃₂  R₃₃ ⎦ ⎣ I₃ ⎦ = ⎣ b₃ ⎦
+      </div>
+      <div class="trap-box">❌ Source vector sign is the #1 error. Walk clockwise: if you hit the − terminal of a source first, the source is AIDING → +E. If + terminal first → −E.</div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="quiz-block" data-qid="q5">
+    <div class="q-meta">
+      <span class="q-label">Q5</span>
+      <span class="q-freq high">HOT — Feb 2022 exact: R₁=4Ω, R₂=6Ω, R₃=4Ω, E₁=2V, E₂=−5V, E₃=4V, n=2</span>
+    </div>
+    <div class="q-text">Compute I₁, I₂, I₃ for: R₁=4Ω, R₂=6Ω, R₃=4Ω, R₄=8Ω, R₅=n·R₁=8Ω, E₁=2V, E₂=−5V, E₃=4V.</div>
+    <div class="q-sub">This exact parameter set appears in the Feb 2022 exam. High probability of similar values.</div>
+    <div class="assess-row">
+      <button class="btn-knew" onclick="assess(this,'correct','q5')">✅ I can compute these</button>
+      <button class="btn-stuck" onclick="assess(this,'wrong','q5')">❌ Need help</button>
+    </div>
+    <div class="explanation" id="exp-q5">
+      <div class="exp-title">Method</div>
+      <div class="exp-step"><div class="exp-num">1</div><div>Build R matrix with given values. The 3×3 system gives I₁, I₂, I₃.</div></div>
+      <div class="exp-step"><div class="exp-num">2</div><div>Use substitution or Cramer's rule. Multiply rows by LCM to get integer coefficients before solving.</div></div>
+      <div class="exp-step"><div class="exp-num">3</div><div><span class="hl">Verify</span>: write KVL for one mesh and check it balances.</div></div>
+      <div class="trap-box">❌ n=2 in the problem means R₅=2×R₁. Substitute n before building the matrix, not after.</div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="quiz-block" data-qid="q6">
+    <div class="q-meta">
+      <span class="q-label">Q6</span>
+      <span class="q-freq">Supermesh variant — Sept 2023, June 2022</span>
+    </div>
+    <div class="q-text">A current source exists between two meshes (supermesh). Write the combined KVL and constraint equation.</div>
+    <div class="assess-row">
+      <button class="btn-knew" onclick="assess(this,'correct','q6')">✅ I know supermesh</button>
+      <button class="btn-stuck" onclick="assess(this,'wrong','q6')">❌ Need review</button>
+    </div>
+    <div class="explanation" id="exp-q6">
+      <div class="exp-title">Supermesh Method</div>
+      <div class="exp-step"><div class="exp-num">1</div><div>Current source between meshes i and j = SUPERMESH. Cannot write separate KVL for either mesh.</div></div>
+      <div class="exp-step"><div class="exp-num">2</div><div><span class="hl">Outer KVL</span>: write KVL around the combined outer loop, skipping the current source branch.</div></div>
+      <div class="exp-step"><div class="exp-num">3</div><div><span class="hl-b">Constraint</span>: Ij − Ii = IS (if source flows from i-mesh side to j-mesh side).</div></div>
+      <div class="trap-box">❌ Direction of IS matters. If IS flows from mesh 1 to mesh 2: I₂ − I₁ = IS. Draw the arrow carefully.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- TOPIC 3: OP-AMP MILLMAN            -->
+<!-- ═══════════════════════════════════ -->
+<div class="topic-block">
+  <div class="topic-header">
+    <span class="topic-icon">🔌</span>
+    <span class="topic-name">Exercise 2 — Op-Amp / Millman Theorem</span>
+    <span class="topic-freq freq-hot">🔥 10/10 exams — GUARANTEED</span>
+  </div>
+
+  <!-- Q7 -->
+  <div class="quiz-block" data-qid="q7">
+    <div class="q-meta">
+      <span class="q-label">Q7</span>
+      <span class="q-freq high">HOT — EVERY SINGLE EXAM (10/10)</span>
+    </div>
+    <div class="q-text">Write the analytical expression of Vo as a function of the input sources (E₁, E₂, I₁, etc.).</div>
+    <div class="q-sub">Part (a) always asks for the symbolic expression first. This is the formula derivation using virtual short + Millman.</div>
+    <div class="assess-row">
+      <button class="btn-knew" onclick="assess(this,'correct','q7')">✅ I can derive Vo expression</button>
+      <button class="btn-stuck" onclick="assess(this,'wrong','q7')">❌ Need review</button>
+    </div>
+    <div class="explanation" id="exp-q7">
+      <div class="exp-title">Golden Rules + Millman Method</div>
+      <div class="exp-step"><div class="exp-num">1</div><div><span class="hl">Virtual Short</span>: V₋ = V₊. Since V₊ = 0 (grounded), V₋ = 0. Node A (inverting input) is at virtual ground.</div></div>
+      <div class="exp-step"><div class="exp-num">2</div><div><span class="hl">Virtual Open</span>: I₋ = I₊ = 0. No current enters the op-amp terminals.</div></div>
+      <div class="exp-step"><div class="exp-num">3</div><div><span class="hl-b">KCL at Node A</span>: Σ currents into A = 0. Each branch: (Ek − 0)/Rk flows into A. Feedback: (Vo − 0)/Rf flows into A. Current source Ik adds directly.</div></div>
+      <div class="formula-box">
+        Vo = −Rf · (E₁/R₁ + E₂/R₂ + … ± Ik)
+      </div>
+      <div class="exp-step"><div class="exp-num">4</div><div>Sign of current source: INTO node A = + in KCL, so it appears <span class="hl">+Ik</span> in the Vo formula.</div></div>
+      <div class="trap-box">❌ Current source OUT of node A → appears as +Ik in the formula (because KCL: into = +, but the formula has a − sign from the inverting sum).</div>
+      <div class="memory-trick">💡 Shortcut: Vo = −Rf × (numerator of Millman). Numerator = Σ(Ek/Rk) ± Σ(Ik).</div>
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="quiz-block" data-qid="q8">
+    <div class="q-meta">
+      <span class="q-label">Q8</span>
+      <span class="q-freq high">HOT — Feb 2022: R₁=2Ω, R₂=1Ω, R₃=10Ω, R₄=5Ω, I₁=2A, E₁=14V</span>
+    </div>
+    <div class="q-text">Compute the numerical value of Vo: R₁=2Ω, R₂=1Ω, Rf=10Ω, R₄=5Ω, I₁=2A, E₁=14V.</div>
+    <div class="q-sub">Recurring parameter set from Feb 2022. Very high chance similar values appear.</div>
+    <div class="assess-row">
+      <button class="btn-knew" onclick="assess(this,'correct','q8')">✅ I can compute Vo</button>
+      <button class="btn-stuck" onclick="assess(this,'wrong','q8')">❌ Need help</button>
+    </div>
+    <div class="explanation" id="exp-q8">
+      <div class="exp-title">Numerical Computation</div>
+      <div class="exp-step"><div class="exp-num">1</div><div>Use the formula: Vo = −Rf·(E₁/R₁ + E₂/R₂ ± I·Rf_branch)</div></div>
+      <div class="exp-step"><div class="exp-num">2</div><div>Substitute: Vo = −10·(14/2 + I₁_contribution + ...) = calculate step by step.</div></div>
+      <div class="exp-step"><div class="exp-num">3</div><div><span class="hl">Also find I_Rf</span> (current through feedback resistor): I_Rf = (0 − Vo)/Rf = −Vo/Rf</div></div>
+      <div class="trap-box">❌ Part (c) asks for "I_Rf4" or similar — compute AFTER finding Vo. Use Ohm's law on each branch with known node voltages.</div>
+    </div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="quiz-block" data-qid="q9">
+    <div class="q-meta">
+      <span class="q-label">Q9</span>
+      <span class="q-freq high">HOT — Two-stage cascade: June 2022, May 2023, Sept 2023, Nov 2024</span>
+    </div>
+    <div class="q-text">Two-stage op-amp cascade: find VA and Vo. Stage 1 output becomes input to Stage 2.</div>
+    <div class="q-sub">Appears in ~5 of the 10 exams. The circuit shows two op-amps in series.</div>
+    <div class="assess-row">
+      <button class="btn-knew" onclick="assess(this,'correct','q9')">✅ I know two-stage cascade</button>
+      <button class="btn-stuck" onclick="assess(this,'wrong','q9')">❌ Need review</button>
+    </div>
+    <div class="explanation" id="exp-q9">
+      <div class="exp-title">Two-Stage Method</div>
+      <div class="exp-step"><div class="exp-num">1</div><div><span class="hl">Solve Stage 1 independently</span>. Apply virtual ground at its inverting input. Find Vo1 (= VA often).</div></div>
+      <div class="exp-step"><div class="exp-num">2</div><div><span class="hl-b">Vo1 becomes an input source</span> for Stage 2. Treat it exactly like E₁ feeding Stage 2 through its input resistor.</div></div>
+      <div class="exp-step"><div class="exp-num">3</div><div>Apply Millman to Stage 2: Vo = −Rf2·(Vo1/R_in2 + other inputs).</div></div>
+      <div class="exp-step"><div class="exp-num">4</div><div>Two inversions = net non-inverting: if Vo1 = −kX, then Vo = +k'X. Check the signs.</div></div>
+      <div class="trap-box">❌ Don't use the output of Stage 2 as the feedback of Stage 1. Each stage is independent. Vo1 is NOT Vo.</div>
+      <div class="memory-trick">💡 Two-stage cascade: solve LEFT to RIGHT. VA first, then Vo. Never mix the two stages.</div>
+    </div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="quiz-block" data-qid="q10">
+    <div class="q-meta">
+      <span class="q-label">Q10</span>
+      <span class="q-freq warm">HOT — Nov 2024, May 2023: R₁=1Ω, R₂=5Ω, R₃=10Ω, R₄=5Ω, R₅=100Ω, R₆=2Ω, I₁=1A</span>
+    </div>
+    <div class="q-text">Two-stage: compute VA and Vo analytically, then compute with R₁=1Ω, R₂=5Ω, Rf1=10Ω, R₄=5Ω, Rf2=100Ω, I₁=1A.</div>
+    <div class="assess-row">
+      <button class="btn-knew" onclick="assess(this,'correct','q10')">✅ I can solve this</button>
+      <button class="btn-stuck" onclick="assess(this,'wrong','q10')">❌ Need help</button>
+    </div>
+    <div class="explanation" id="exp-q10">
+      <div class="exp-title">Stage 1 → Stage 2</div>
+      <div class="exp-step"><div class="exp-num">1</div><div>Stage 1: VA = −Rf1·(E₁/R₁ + I₁·(some path)). Compute VA numerically.</div></div>
+      <div class="exp-step"><div class="exp-num">2</div><div>Stage 2: Vo = −Rf2·(VA/R₄). Substitute VA from Step 1.</div></div>
+      <div class="exp-step"><div class="exp-num">3</div><div>The current source I₁ in the first stage: if it flows INTO node A, add +I₁ to numerator. If OUT, add −I₁.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- TOPIC 4: THEVENIN                  -->
+<!-- ═══════════════════════════════════ -->
+<div class="topic-block">
+  <div class="topic-header">
+    <span class="topic-icon">🔴</span>
+    <span class="topic-name">Exercise 2 (variant) — Thévenin Equivalent</span>
+    <span class="topic-freq freq-warm">⚡ 4/10 exams</span>
+  </div>
+
+  <!-- Q11 -->
+  <div class="quiz-block" data-qid="q11">
+    <div class="q-meta">
+      <span class="q-label">Q11</span>
+      <span class="q-freq">Jan 2022, Sept 2023, Dec 2021, June 2023</span>
+    </div>
+    <div class="q-text">Find the Thevenin equivalent circuit at terminals A-B: find VTH and RTH analytically.</div>
+    <div class="assess-row">
+      <button class="btn-knew" onclick="assess(this,'correct','q11')">✅ I know Thevenin method</button>
+      <button class="btn-stuck" onclick="assess(this,'wrong','q11')">❌ Need review</button>
+    </div>
+    <div class="explanation" id="exp-q11">
+      <div class="exp-title">Thévenin Step-by-Step</div>
+      <div class="exp-step"><div class="exp-num">1</div><div><span class="hl">VTH = Voc</span>: open-circuit A-B, solve the circuit. VTH = voltage across the open terminals. Use node analysis or voltage divider.</div></div>
+      <div class="exp-step"><div class="exp-num">2</div><div><span class="hl-b">RTH</span>: kill ALL independent sources (V→short circuit, I→open circuit). Find resistance "looking in" from A-B.</div></div>
+      <div class="exp-step"><div class="exp-num">3</div><div>If dependent sources: use V_test method. Apply Vt at A-B, find It = current from +Vt into circuit. RTH = Vt/It.</div></div>
+      <div class="exp-step"><div class="exp-num">4</div><div><span class="hl">Norton</span>: IN = VTH/RTH, RN = RTH. Always related by source transformation.</div></div>
+      <div class="trap-box">❌ Do NOT kill dependent sources. Only kill independent V and I sources. Dependent sources stay in the circuit always.</div>
+    </div>
+  </div>
+
+  <!-- Q12 -->
+  <div class="quiz-block" data-qid="q12">
+    <div class="q-meta">
+      <span class="q-label">Q12</span>
+      <span class="q-freq">Jan 2022: R₁=5Ω, R₂=1Ω, R₃=2Ω, E=2V, I=1A. Also Dec 2021 variant.</span>
+    </div>
+    <div class="q-text">Compute VTH and RTH for the circuit with: R₁=5Ω, R₂=1Ω, R₃=2Ω, E=2V, I=1A.</div>
+    <div class="assess-row">
+      <button class="btn-knew" onclick="assess(this,'correct','q12')">✅ I can compute these</button>
+      <button class="btn-stuck" onclick="assess(this,'wrong','q12')">❌ Need help</button>
+    </div>
+    <div class="explanation" id="exp-q12">
+      <div class="exp-title">Numerical Thevenin</div>
+      <div class="exp-step"><div class="exp-num">1</div><div>Open A-B. Use node analysis to find voltage at the open terminal. That's VTH.</div></div>
+      <div class="exp-step"><div class="exp-num">2</div><div>Kill sources (E→short, I→open). Find R seen at A-B = RTH. Usually involves parallel/series combinations.</div></div>
+      <div class="exp-step"><div class="exp-num">3</div><div>Norton: IN = VTH/RTH.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- TOPIC 5: FIRST-ORDER TRANSIENTS    -->
+<!-- ═══════════════════════════════════ -->
+<div class="topic-block">
+  <div class="topic-header">
+    <span class="topic-icon">⚡</span>
+    <span class="topic-name">Exercise 3 — First-Order Transients (RL &amp; RC)</span>
+    <span class="topic-freq freq-hot">🔥 10/10 exams</span>
+  </div>
+
+  <!-- Q13 -->
+  <div class="quiz-block" data-qid="q13">
+    <div class="q-meta">
+      <span class="q-label">Q13</span>
+      <span class="q-freq high">HOT — Universal formula for ALL transients</span>
+    </div>
+    <div class="q-text">Write the universal transient formula and explain how to find x(0), x(∞), and τ.</div>
+    <div class="assess-row">
+      <button class="btn-knew" onclick="assess(this,'correct','q13')">✅ I know all three steps</button>
+      <button class="btn-stuck" onclick="assess(this,'wrong','q13')">❌ Need to review</button>
+    </div>
+    <div class="explanation" id="exp-q13">
+      <div class="exp-title">The Universal Formula</div>
+      <div class="formula-box">x(t) = x(∞) + [x(0) − x(∞)] · e^(−t/τ)</div>
+      <div class="exp-step"><div class="exp-num">1</div><div><span class="hl">x(0)</span>: initial condition. Capacitor V and inductor I CANNOT jump. For iL: use t&lt;0 circuit with L=short. For vC: use t&lt;0 circuit with C=open.</div></div>
+      <div class="exp-step"><div class="exp-num">2</div><div><span class="hl-b">x(∞)</span>: final steady state. Use t&gt;0 circuit. C=open (blocks DC), L=short (wire at DC). Solve the simplified circuit.</div></div>
+      <div class="exp-step"><div class="exp-num">3</div><div><span class="hl-g">τ</span>: time constant. Kill all independent sources in t&gt;0 circuit. Find Rth seen by L or C. τ=L/Rth (RL) or τ=RthC (RC).</div></div>
+      <div class="trap-box">❌ THE #1 EXAM TRAP: Using t&lt;0 circuit for x(∞) or τ. ALWAYS use the t&gt;0 circuit (after the switch changes) for both x(∞) and τ.</div>
+      <div class="memory-trick">💡 "0 from before, ∞ and τ from after." The initial condition is the only thing that uses the old circuit.</div>
+    </div>
+  </div>
+
+  <!-- Q14 -->
+  <div class="quiz-block" data-qid="q14">
+    <div class="q-meta">
+      <span class="q-label">Q14</span>
+      <span class="q-freq high">HOT — Appears TWICE with identical values: R=10Ω, L=0.02H, iL(0)=2A</span>
+    </div>
+    <div class="q-text">RL circuit: R=10Ω, L=0.02H. Compute iL(1ms) given iL(0)=2A.</div>
+    <div class="q-sub">This EXACT problem appeared in two different exam years. Memorise the answer.</div>
+    <div class="assess-row">
+      <button class="btn-knew" onclick="assess(this,'correct','q14')">✅ I can compute iL(1ms)</button>
+      <button class="btn-stuck" onclick="assess(this,'wrong','q14')">❌ Need to see working</button>
+    </div>
+    <div class="explanation" id="exp-q14">
+      <div class="exp-title">HOT Problem — Memorise This Answer</div>
+      <div class="exp-step"><div class="exp-num">1</div><div>τ = L/R = 0.02/10 = <span class="hl">0.002 s = 2 ms</span></div></div>
+      <div class="exp-step"><div class="exp-num">2</div><div>x(∞) = 0 (no source after switch opens — energy decays). x(0) = 2A (given).</div></div>
+      <div class="exp-step"><div class="exp-num">3</div><div>iL(t) = 2·e^(−t/0.002)</div></div>
+      <div class="formula-box">iL(1ms) = 2·e^(−0.001/0.002) = 2·e^(−0.5) ≈ 2 × 0.6065 ≈ <strong>1.21 A</strong></div>
+      <div class="memory-trick">💡 τ=2ms, t=1ms → exponent is −0.5 → e^(−0.5)≈0.607. MEMORISE: 2×0.607 = 1.21A</div>
+    </div>
+  </div>
+
+  <!-- Q15 -->
+  <div class="quiz-block" data-qid="q15">
+    <div class="q-meta">
+      <span class="q-label">Q15</span>
+      <span class="q-freq high">HOT — June 2022, May 2023: R=10Ω, L=0.1H, iL(0)=6A or 1A</span>
+    </div>
+    <div class="q-text">RL circuit: R=10Ω, L=0.1H. Compute iL(0.2ms) given iL(0)=6A.</div>
+    <div class="assess-row">
+      <button class="btn-knew" onclick="assess(this,'correct','q15')">✅ I can solve this</button>
+      <button class="btn-stuck" onclick="assess(this,'wrong','q15')">❌ Need help</button>
+    </div>
+    <div class="explanation" id="exp-q15">
+      <div class="exp-title">Working</div>
+      <div class="exp-step"><div class="exp-num">1</div><div>τ = L/R = 0.1/10 = <span class="hl">0.01 s = 10 ms</span></div></div>
+      <div class="exp-step"><div class="exp-num">2</div><div>iL(0.2ms) = 6·e^(−0.0002/0.01) = 6·e^(−0.02) ≈ 6×0.980 ≈ <span class="hl">5.88 A</span></div></div>
+      <div class="trap-box">❌ Convert time units carefully. 0.2ms = 0.0002s. τ in seconds. Don't mix ms and s.</div>
+    </div>
+  </div>
+
+  <!-- Q16 -->
+  <div class="quiz-block" data-qid="q16">
+    <div class="q-meta">
+      <span class="q-label">Q16</span>
+      <span class="q-freq high">HOT — RL with voltage source: R=100Ω, L=0.01H, E=2V, iL(0)=5A</span>
+    </div>
+    <div class="q-text">RL circuit with voltage source E=2V, R=100Ω, L=0.01H. Write iL(t) and compute iL(0.5ms). iL(0)=5A.</div>
+    <div class="q-sub">This type appears in Nov 2024, Nov 2023 exams. Voltage source means iL(∞) ≠ 0.</div>
+    <div class="assess-row">
+      <button class="btn-knew" onclick="assess(this,'correct','q16')">✅ I know this type</button>
+      <button class="btn-stuck" onclick="assess(this,'wrong','q16')">❌ Need to see working</button>
+    </div>
+    <div class="explanation" id="exp-q16">
+      <div class="exp-title">RL with Non-Zero Final Value</div>
+      <div class="exp-step"><div class="exp-num">1</div><div>τ = L/R = 0.01/100 = <span class="hl">0.1ms = 0.0001s</span></div></div>
+      <div class="exp-step"><div class="exp-num">2</div><div>x(∞) = E/R = 2/100 = <span class="hl">0.02A</span> (at DC steady state, L=short, V=IR)</div></div>
+      <div class="exp-step"><div class="exp-num">3</div><div>x(0) = 5A (given)</div></div>
+      <div class="formula-box">iL(t) = 0.02 + (5 − 0.02)·e^(−t/0.0001) = 0.02 + 4.98·e^(−10000t)</div>
+      <div class="exp-step"><div class="exp-num">4</div><div>iL(0.5ms) = 0.02 + 4.98·e^(−0.0005/0.0001) = 0.02 + 4.98·e^(−5) ≈ 0.02 + 4.98×0.0067 ≈ <span class="hl">0.053A</span></div></div>
+    </div>
+  </div>
+
+  <!-- Q17 -->
+  <div class="quiz-block" data-qid="q17">
+    <div class="q-meta">
+      <span class="q-label">Q17</span>
+      <span class="q-freq high">HOT — RC circuit: R=1Ω, C=0.1F, vC(0)=1V [Feb 2022, Dec 2022]</span>
+    </div>
+    <div class="q-text">RC circuit: R=1Ω, C=0.1F. Compute vC(200ms). Initial condition vC(0)=1V.</div>
+    <div class="assess-row">
+      <button class="btn-knew" onclick="assess(this,'correct','q17')">✅ I know RC transient</button>
+      <button class="btn-stuck" onclick="assess(this,'wrong','q17')">❌ Need help</button>
+    </div>
+    <div class="explanation" id="exp-q17">
+      <div class="exp-title">RC Transient</div>
+      <div class="exp-step"><div class="exp-num">1</div><div>τ = RC = 1×0.1 = <span class="hl">0.1s = 100ms</span></div></div>
+      <div class="exp-step"><div class="exp-num">2</div><div>x(∞): if no source → capacitor fully discharges → vC(∞) = 0V.</div></div>
+      <div class="exp-step"><div class="exp-num">3</div><div>vC(t) = 0 + (1−0)·e^(−t/0.1) = e^(−t/0.1)</div></div>
+      <div class="formula-box">vC(200ms) = e^(−0.2/0.1) = e^(−2) ≈ <strong>0.135V</strong></div>
+      <div class="memory-trick">💡 e^(−2) ≈ 0.135. Keep this in memory. τ=100ms, t=200ms → 2τ.</div>
+    </div>
+  </div>
+
+  <!-- Q18 -->
+  <div class="quiz-block" data-qid="q18">
+    <div class="q-meta">
+      <span class="q-label">Q18</span>
+      <span class="q-freq">RC with voltage source: R=10Ω, C=0.2mF [Dec 2022]</span>
+    </div>
+    <div class="q-text">RC circuit: R=10Ω, C=0.2mF=0.0002F, E source. Compute vC(500ms). vC(0)=initial value given.</div>
+    <div class="assess-row">
+      <button class="btn-knew" onclick="assess(this,'correct','q18')">✅ I can solve this</button>
+      <button class="btn-stuck" onclick="assess(this,'wrong','q18')">❌ Need help</button>
+    </div>
+    <div class="explanation" id="exp-q18">
+      <div class="exp-title">RC with Source</div>
+      <div class="exp-step"><div class="exp-num">1</div><div>τ = RC = 10×0.0002 = <span class="hl">0.002s = 2ms</span></div></div>
+      <div class="exp-step"><div class="exp-num">2</div><div>x(∞): with C=open (DC steady state), no current flows through R. vC(∞) = E (all voltage drops across the open cap).</div></div>
+      <div class="exp-step"><div class="exp-num">3</div><div>Apply universal formula with computed x(0), x(∞), τ.</div></div>
+      <div class="trap-box">❌ 0.2mF = 0.2×10⁻³ F = 0.0002F. Don't forget the milli factor!</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- TOPIC 6: ANALOG COMPUTING          -->
+<!-- ═══════════════════════════════════ -->
+<div class="topic-block">
+  <div class="topic-header">
+    <span class="topic-icon">🖥️</span>
+    <span class="topic-name">Exercise 4 — Analog Computing (ODE → Circuit)</span>
+    <span class="topic-freq freq-hot">🔥 8/10 exams — guaranteed since 2022</span>
+  </div>
+
+  <!-- Q19 -->
+  <div class="quiz-block" data-qid="q19">
+    <div class="q-meta">
+      <span class="q-label">Q19</span>
+      <span class="q-freq high">HOT — method appears in ALL exams from 2022 onward</span>
+    </div>
+    <div class="q-text">What are the building blocks for analog computing and what does each do?</div>
+    <div class="assess-row">
+      <button class="btn-knew" onclick="assess(this,'correct','q19')">✅ I know all 3 blocks</button>
+      <button class="btn-stuck" onclick="assess(this,'wrong','q19')">❌ Need review</button>
+    </div>
+    <div class="explanation" id="exp-q19">
+      <div class="exp-title">The 3 Building Blocks</div>
+      <div class="formula-box">
+        1. INTEGRATOR: Vout = −(1/RC)∫Vin dt = −∫Vin dt (with RC=1s)<br>
+        2. INVERTER:   Vout = −Vin  (Rf = Rin, unity gain with sign flip)<br>
+        3. SUMMER:     Vout = −Rf·(V₁/R₁ + V₂/R₂ + …)  (inverted weighted sum)
+      </div>
+      <div class="exp-step"><div class="exp-num">★</div><div><span class="hl">RC=1s constraint</span>: Messina always specifies "do not assign values to R and C, use RC=1s". This means the integrator gain is exactly 1 (no scaling).</div></div>
+      <div class="exp-step"><div class="exp-num">★</div><div><span class="hl">Integrator circuit</span>: C in the FEEDBACK path, R at input. (NOT the reverse — that's a differentiator!)</div></div>
+      <div class="trap-box">❌ BIGGEST TRAP: Putting C at the input and R in feedback = DIFFERENTIATOR, not integrator. Capacitor goes in FEEDBACK for integration.</div>
+    </div>
+  </div>
+
+  <!-- Q20 -->
+  <div class="quiz-block" data-qid="q20">
+    <div class="q-meta">
+      <span class="q-label">Q20</span>
+      <span class="q-freq high">HOT — d²y/dt² + 4·dy/dt + by = f(t) — "4" coefficient appears in 4+ exams</span>
+    </div>
+    <div class="q-text">Draw the circuit for: d²y/dt² + 4·dy/dt + 6cos(4t). Use RC=1s, zero initial conditions.</div>
+    <div class="q-sub">From Feb 2024 exam. The "4" coefficient on dy/dt is a recurring value across 4 different exam years.</div>
+    <div class="assess-row">
+      <button class="btn-knew" onclick="assess(this,'correct','q20')">✅ I can draw this circuit</button>
+      <button class="btn-stuck" onclick="assess(this,'wrong','q20')">❌ Need method review</button>
+    </div>
+    <div class="explanation" id="exp-q20">
+      <div class="exp-title">ODE → Circuit Method</div>
+      <div class="exp-step"><div class="exp-num">1</div><div><span class="hl">Isolate highest derivative</span>: ÿ = −4ẏ − 0·y + 6cos(4t) [note: no y term here, just ÿ and ẏ]</div></div>
+      <div class="exp-step"><div class="exp-num">2</div><div><span class="hl-b">Signal chain</span>: ÿ → [Int1] → −ẏ → [Inv1] → +ẏ → [Int2] → −y → [Inv2] → +y</div></div>
+      <div class="exp-step"><div class="exp-num">3</div><div><span class="hl">Summer inputs</span>: feed +ẏ with gain 4 (for −4ẏ term) and the forcing function −6cos(4t).</div></div>
+      <div class="exp-step"><div class="exp-num">4</div><div>Summer: Rf/R_ẏ = 4 → if Rf=4Ω, R_ẏ=1Ω. Forcing term gain=6: Rf/R_f=6 → R_f=Rf/6.</div></div>
+      <div class="formula-box">Blocks: OA1(Summer) → OA2(Int1) → OA3(Inv1) → OA4(Int2) → OA5(Inv2) = y(t)</div>
+      <div class="trap-box">❌ Forcing term sign: the summer is inverting. To get +6cos(4t) at the output, feed −6cos(4t) into the summer. If only +cos(4t) is available, add an inverter on the input branch.</div>
+    </div>
+  </div>
+
+  <!-- Q21 -->
+  <div class="quiz-block" data-qid="q21">
+    <div class="q-meta">
+      <span class="q-label">Q21</span>
+      <span class="q-freq high">HOT — d²y/dt² + 4·dy/dt + 4·y = 2cos(2t) [June 2022, Dec 2022]</span>
+    </div>
+    <div class="q-text">Draw the circuit for: d²y/dt² + 4·dy/dt + 4·y = 2cos(2t). RC=1s, initial conditions zero.</div>
+    <div class="q-sub">This exact ODE (or very similar) appears in June 2022 AND Dec 2022 — extremely HOT.</div>
+    <div class="assess-row">
+      <button class="btn-knew" onclick="assess(this,'correct','q21')">✅ I can draw this</button>
+      <button class="btn-stuck" onclick="assess(this,'wrong','q21')">❌ Need help</button>
+    </div>
+    <div class="explanation" id="exp-q21">
+      <div class="exp-title">Full Setup for this HOT ODE</div>
+      <div class="exp-step"><div class="exp-num">1</div><div>Rearrange: ÿ = −4ẏ − 4y + 2cos(2t)</div></div>
+      <div class="exp-step"><div class="exp-num">2</div><div>Summer needs: +ẏ (gain 4), +y (gain 4), and −2cos(2t) (gain 2 but negated input)</div></div>
+      <div class="exp-step"><div class="exp-num">3</div><div>Choose Rf = 4Ω (LCM of 4 and 4). Then: R_ẏ = 4/4 = 1Ω, R_y = 4/4 = 1Ω, R_cos = 4/2 = 2Ω</div></div>
+      <div class="exp-step"><div class="exp-num">4</div><div>All integrators: R=1Ω, C=1F (RC=1s ✓)</div></div>
+      <div class="formula-box">
+        OA1 Summer: Rf=4Ω, R₁=1Ω (+ẏ, gain4), R₂=1Ω (+y, gain4), R₃=2Ω (−cos input, gain2)<br>
+        OA2: Integrator (R=1Ω, C=1F) → output: −ẏ<br>
+        OA3: Inverter → output: +ẏ (feeds back to OA1 and into OA4)<br>
+        OA4: Integrator → output: −y<br>
+        OA5: Inverter → output: +y = Vo (also feeds back to OA1)
+      </div>
+    </div>
+  </div>
+
+  <!-- Q22 -->
+  <div class="quiz-block" data-qid="q22">
+    <div class="q-meta">
+      <span class="q-label">Q22</span>
+      <span class="q-freq high">HOT — d²y/dt² − 4·dy/dt − 3y + 2sin(10t) [Dec 2021, Sept 2023]</span>
+    </div>
+    <div class="q-text">Draw the circuit for: d²y/dt² − 4·dy/dt − 3y = −2sin(10t). RC=1s.</div>
+    <div class="q-sub">Negative coefficients! The sign handling is the key difficulty here.</div>
+    <div class="assess-row">
+      <button class="btn-knew" onclick="assess(this,'correct','q22')">✅ I can handle negative coefficients</button>
+      <button class="btn-stuck" onclick="assess(this,'wrong','q22')">❌ Confused by the signs</button>
+    </div>
+    <div class="explanation" id="exp-q22">
+      <div class="exp-title">Negative Coefficients — Sign Tracking</div>
+      <div class="exp-step"><div class="exp-num">1</div><div>Rearrange: ÿ = +4ẏ + 3y − 2sin(10t)</div></div>
+      <div class="exp-step"><div class="exp-num">2</div><div>Summer needs: <span class="hl-r">−4ẏ into summer</span> (so summer output = +4ẏ after inversion). Feed +ẏ × gain 4 → summer negates → −4(+ẏ)? NO. Summer output = −(Rf/R·ẏ) so to get +4ẏ, we need to feed −ẏ with gain 4.</div></div>
+      <div class="exp-step"><div class="exp-num">3</div><div>Signal available: from Int1 we get −ẏ directly. Feed that with gain 4 into the summer → summer outputs −(4·(−ẏ)) = +4ẏ ✓. No need for Inv1!</div></div>
+      <div class="exp-step"><div class="exp-num">4</div><div>Similarly for +3y: use −y from Int2 with gain 3 → summer outputs +3y ✓.</div></div>
+      <div class="formula-box">
+        OA1 uses: −ẏ (directly from Int1) with gain 4, −y (directly from Int2) with gain 3, +sin input with gain 2<br>
+        No inverters needed! Int1 and Int2 outputs used directly.
+      </div>
+      <div class="trap-box">❌ When coefficients are POSITIVE in the ODE, you can sometimes skip the inverters by using the integrator output directly (which already has a sign flip).</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- TOPIC 7: CIRCUIT FUNDAMENTALS      -->
+<!-- ═══════════════════════════════════ -->
+<div class="topic-block">
+  <div class="topic-header">
+    <span class="topic-icon">📏</span>
+    <span class="topic-name">Circuit Fundamentals — Theory Questions</span>
+    <span class="topic-freq freq-cool">📖 Summary-based (from Q&amp;A PDF pages 74–83)</span>
+  </div>
+
+  <!-- Q23 -->
+  <div class="quiz-block" data-qid="q23">
+    <div class="q-meta"><span class="q-label">Q23</span><span class="q-freq">Definition — appears in written exams</span></div>
+    <div class="q-text">What is the difference between an ideal independent source and an ideal dependent source?</div>
+    <div class="assess-row">
+      <button class="btn-knew" onclick="assess(this,'correct','q23')">✅ I know this</button>
+      <button class="btn-stuck" onclick="assess(this,'wrong','q23')">❌ Need review</button>
+    </div>
+    <div class="explanation" id="exp-q23">
+      <div class="exp-title">Independent vs Dependent Sources</div>
+      <div class="exp-step"><div class="exp-num">★</div><div><span class="hl">Independent source</span>: provides a fixed V or I regardless of anything else in the circuit. Symbol: circle.</div></div>
+      <div class="exp-step"><div class="exp-num">★</div><div><span class="hl-b">Dependent source</span>: its V or I is controlled by a voltage or current elsewhere in the circuit. Symbol: diamond. 4 types: VCVS, CCVS, VCCS, CCCS.</div></div>
+      <div class="trap-box">❌ Dependent sources are NEVER killed when finding Rth. Only independent sources are killed (V→short, I→open).</div>
+    </div>
+  </div>
+
+  <!-- Q24 -->
+  <div class="quiz-block" data-qid="q24">
+    <div class="q-meta"><span class="q-label">Q24</span><span class="q-freq high">HOT — Wye-Delta: formula recalled in exam theory section</span></div>
+    <div class="q-text">Write the Wye-to-Delta and Delta-to-Wye conversion formulas for resistors Ra, Rb, Rc ↔ R1, R2, R3.</div>
+    <div class="assess-row">
+      <button class="btn-knew" onclick="assess(this,'correct','q24')">✅ I know Wye-Delta</button>
+      <button class="btn-stuck" onclick="assess(this,'wrong','q24')">❌ Need to review</button>
+    </div>
+    <div class="explanation" id="exp-q24">
+      <div class="exp-title">Wye-Delta Conversion</div>
+      <div class="formula-box">
+        Δ → Y:  R1 = (Rb·Rc)/(Ra+Rb+Rc)<br>
+                R2 = (Ra·Rc)/(Ra+Rb+Rc)<br>
+                R3 = (Ra·Rb)/(Ra+Rb+Rc)<br><br>
+        Y → Δ:  Ra = (R1R2 + R2R3 + R1R3)/R1<br>
+                Rb = (R1R2 + R2R3 + R1R3)/R2<br>
+                Rc = (R1R2 + R2R3 + R1R3)/R3
+      </div>
+      <div class="memory-trick">💡 Balanced: RY = RΔ/3 or RΔ = 3RY. Star (Y) = series-like, Delta = parallel-like.</div>
+    </div>
+  </div>
+
+  <!-- Q25 -->
+  <div class="quiz-block" data-qid="q25">
+    <div class="q-meta"><span class="q-label">Q25</span><span class="q-freq">KCL and KVL sign conventions</span></div>
+    <div class="q-text">State KCL and KVL and give the sign conventions used in this course.</div>
+    <div class="assess-row">
+      <button class="btn-knew" onclick="assess(this,'correct','q25')">✅ I know KCL + KVL signs</button>
+      <button class="btn-stuck" onclick="assess(this,'wrong','q25')">❌ Need review</button>
+    </div>
+    <div class="explanation" id="exp-q25">
+      <div class="exp-title">KCL and KVL</div>
+      <div class="exp-step"><div class="exp-num">★</div><div><span class="hl">KCL</span>: algebraic sum of currents INTO a node = 0. Current away from node = negative in node equations.</div></div>
+      <div class="exp-step"><div class="exp-num">★</div><div><span class="hl-b">KVL</span>: algebraic sum of voltages around any closed loop = 0. Walk clockwise: +E if you cross − before + (gain). −E if you cross + before − (drop). For resistors: −Ri if walking in direction of current.</div></div>
+    </div>
+  </div>
+
+  <!-- Q26 -->
+  <div class="quiz-block" data-qid="q26">
+    <div class="q-meta"><span class="q-label">Q26</span><span class="q-freq high">HOT — Equivalent resistance appeared in Nov 2024 exam</span></div>
+    <div class="q-text">Calculate equivalent resistance RAB for a mixed series-parallel network with R₁=6Ω, R₂=5Ω, R₃=2Ω, R₄=5Ω, R₅=3Ω, R₆=6Ω, R₇=4Ω. [Nov 2024]</div>
+    <div class="assess-row">
+      <button class="btn-knew" onclick="assess(this,'correct','q26')">✅ I can reduce series/parallel</button>
+      <button class="btn-stuck" onclick="assess(this,'wrong','q26')">❌ Need to review reduction</button>
+    </div>
+    <div class="explanation" id="exp-q26">
+      <div class="exp-title">Method — Systematic Reduction</div>
+      <div class="exp-step"><div class="exp-num">1</div><div>Identify series groups (same current) and parallel groups (same voltage).</div></div>
+      <div class="exp-step"><div class="exp-num">2</div><div>Series: Req = R₁ + R₂ + … Parallel: 1/Req = 1/R₁ + 1/R₂ + … (or Req = R₁‖R₂ = R₁R₂/(R₁+R₂)).</div></div>
+      <div class="exp-step"><div class="exp-num">3</div><div>Reduce from the inside out. Replace each group with its equivalent, redraw, repeat.</div></div>
+      <div class="trap-box">❌ A resistor connected from one node to an open terminal carries NO current (not in any loop). It doesn't affect RAB.</div>
+    </div>
+  </div>
+
+  <!-- Q27 -->
+  <div class="quiz-block" data-qid="q27">
+    <div class="q-meta"><span class="q-label">Q27</span><span class="q-freq">BJT Transistor — appeared in Feb 2024 CLE exam</span></div>
+    <div class="q-text">For a BJT transistor (NPN): write the key equations relating IB, IC, IE and β.</div>
+    <div class="assess-row">
+      <button class="btn-knew" onclick="assess(this,'correct','q27')">✅ I know BJT equations</button>
+      <button class="btn-stuck" onclick="assess(this,'wrong','q27')">❌ Need review</button>
+    </div>
+    <div class="explanation" id="exp-q27">
+      <div class="exp-title">BJT Key Equations</div>
+      <div class="formula-box">
+        IC = β·IB<br>
+        IE = IB + IC = IB + β·IB = (1+β)·IB<br>
+        VCE = VCC − VE  (where VE = IE·RE)<br>
+        VCB = VC − VB
+      </div>
+      <div class="exp-step"><div class="exp-num">★</div><div>3 terminals: Emitter (E), Base (B), Collector (C). Two types: NPN and PNP.</div></div>
+      <div class="memory-trick">💡 β (beta) is the current gain. Typical values: 50–200. IC ≈ β·IB always.</div>
+    </div>
+  </div>
+
+  <!-- Q28 -->
+  <div class="quiz-block" data-qid="q28">
+    <div class="q-meta"><span class="q-label">Q28</span><span class="q-freq high">HOT — Maximum Power Transfer theorem</span></div>
+    <div class="q-text">State the Maximum Power Transfer theorem. What is the condition for maximum power to the load RL?</div>
+    <div class="assess-row">
+      <button class="btn-knew" onclick="assess(this,'correct','q28')">✅ I know max power transfer</button>
+      <button class="btn-stuck" onclick="assess(this,'wrong','q28')">❌ Need review</button>
+    </div>
+    <div class="explanation" id="exp-q28">
+      <div class="exp-title">Maximum Power Transfer</div>
+      <div class="formula-box">
+        Condition: RL = RTH (load resistance = Thevenin resistance)<br>
+        Pmax = VTH² / (4·RTH)
+      </div>
+      <div class="exp-step"><div class="exp-num">★</div><div>The load RL receives maximum power when RL equals the Thevenin resistance seen from its terminals.</div></div>
+      <div class="exp-step"><div class="exp-num">★</div><div>At maximum power: half the power from the source goes to RTH, half to RL.</div></div>
+    </div>
+  </div>
+
+</div>
+</div><!-- /section -->
+
+<!-- ═══════════ SCORE SECTION ═══════════ -->
+<div class="score-section">
+  <div class="score-card">
+    <h2>🏆 Your Blitz Score</h2>
+    <div class="score-val" id="final-score">0 / 0</div>
+    <div class="score-msg" id="final-msg">Answer all questions to see your result.</div>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <button class="btn-reset" onclick="resetAll()">🔄 Reset &amp; Try Again</button>
+      <a href="index.html" style="display:inline-block;background:rgba(100,255,218,.1);border:1.5px solid rgba(100,255,218,.4);color:var(--accent);border-radius:8px;padding:10px 24px;font-size:14px;font-weight:700;text-decoration:none;">← Back to Study Hub</a>
+    </div>
+  </div>
+  <div style="text-align:center;font-size:11px;color:var(--muted);margin-top:16px;padding-top:12px;border-top:1px solid var(--border);">
+    Questions sourced from: Device mode Qa.pdf (25 pages, 10 exams 2021–2024) · Q&amp;A Device mode a.pdf (83 pages) · Circuit A summary.pdf · UniMe Messina
+  </div>
+</div>
+
+<script>
+const TOTAL = 28;
+let answered = new Set();
+let correct = 0;
+
+function assess(el, type, qid) {
+  const block = el.closest('.quiz-block');
+  if (block.dataset.answered) return;
+  block.dataset.answered = '1';
+  answered.add(qid);
+
+  // Style the buttons
+  block.querySelectorAll('.btn-knew, .btn-stuck').forEach(b => {
+    b.style.pointerEvents = 'none';
+  });
+  el.classList.add('selected');
+
+  if (type === 'correct') {
+    correct++;
+    el.style.background = 'rgba(105,219,124,.25)';
+    el.style.borderColor = 'var(--green)';
+  } else {
+    el.style.background = 'rgba(255,107,107,.25)';
+    el.style.borderColor = 'var(--accent4)';
+  }
+
+  // Show explanation
+  const exp = document.getElementById('exp-' + qid);
+  if (exp) exp.classList.add('show');
+
+  updateProgress();
+}
+
+function updateProgress() {
+  const pct = (answered.size / TOTAL) * 100;
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-text').textContent = answered.size + ' / ' + TOTAL + ' answered';
+  document.getElementById('prog-score').textContent = 'Score: ' + correct + ' / ' + answered.size;
+  document.getElementById('final-score').textContent = correct + ' / ' + answered.size;
+
+  if (answered.size === TOTAL) {
+    const p = Math.round((correct / TOTAL) * 100);
+    let msg = p >= 90 ? '🏆 You are ready. Walk into that exam with confidence.' :
+              p >= 70 ? '✅ Good shape — go back over the red ones once more.' :
+              p >= 50 ? '⚠️ Decent start — review the topic pages, then retry.' :
+                        '📖 Work through each topic page first, then come back to this blitz.';
+    document.getElementById('final-msg').textContent = msg;
+  }
+}
+
+function resetAll() {
+  answered.clear(); correct = 0;
+  document.querySelectorAll('.quiz-block').forEach(b => { delete b.dataset.answered; });
+  document.querySelectorAll('.btn-knew, .btn-stuck').forEach(b => {
+    b.classList.remove('selected');
+    b.style.pointerEvents = '';
+    b.style.background = '';
+    b.style.borderColor = '';
+  });
+  document.querySelectorAll('.explanation').forEach(e => e.classList.remove('show'));
+  document.getElementById('prog-fill').style.width = '0%';
+  document.getElementById('prog-text').textContent = '0 / ' + TOTAL + ' answered';
+  document.getElementById('prog-score').textContent = 'Score: 0 / 0';
+  document.getElementById('final-score').textContent = '0 / 0';
+  document.getElementById('final-msg').textContent = 'Answer all questions to see your result.';
+}
+</script>
+</body>
+</html>
