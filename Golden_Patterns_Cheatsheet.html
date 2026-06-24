@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎯 Golden Patterns — Dependent Sources &amp; Millman Mastery</title>
+<style>
+:root {
+  --bg:#0f1117; --bg2:#1a1d27; --bg3:#22263a; --border:#2e3248;
+  --text:#e8eaf6; --muted:#8892b0;
+  --accent:#64ffda; --accent2:#7c83fd; --accent3:#f7c948;
+  --accent4:#ff6b6b; --accent5:#c084fc; --green:#69db7c; --orange:#ffa94d;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;line-height:1.65;padding:0 0 60px;}
+.nav{background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.nav-back{color:var(--accent);text-decoration:none;font-size:13px;font-weight:600;}
+.nav-back:hover{text-decoration:underline;}
+.nav-title{font-size:14px;font-weight:700;}
+.hero{padding:34px 24px 22px;text-align:center;background:linear-gradient(180deg,rgba(192,132,252,.07) 0%,transparent 100%);border-bottom:1px solid var(--border);}
+.hero h1{font-size:27px;font-weight:800;background:linear-gradient(135deg,var(--accent5),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;}
+.hero p{color:var(--muted);font-size:13px;max-width:680px;margin:0 auto 14px;}
+.badge-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
+.badge{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:4px 14px;font-size:11px;font-weight:600;color:var(--muted);}
+.badge.gold{border-color:rgba(247,201,72,.5);color:var(--accent3);background:rgba(247,201,72,.08);}
+
+.section{max-width:920px;margin:0 auto;padding:30px 24px 0;}
+.toc{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:8px;}
+.toc a{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;text-decoration:none;color:var(--text);font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px;transition:.2s;}
+.toc a:hover{border-color:var(--accent2);transform:translateY(-2px);}
+
+.topic-header{display:flex;align-items:center;gap:10px;margin:36px 0 16px;padding:12px 16px;background:var(--bg2);border-radius:10px;border:1px solid var(--border);}
+.topic-icon{font-size:22px;}
+.topic-name{font-size:16px;font-weight:800;}
+.topic-tag{margin-left:auto;font-size:11px;padding:3px 10px;border-radius:20px;font-weight:700;background:rgba(192,132,252,.12);color:var(--accent5);border:1px solid rgba(192,132,252,.35);}
+
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:16px;}
+.card-title{font-size:13px;font-weight:800;color:var(--accent3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.step{display:flex;gap:10px;margin-bottom:10px;font-size:13.5px;line-height:1.65;}
+.step-num{background:rgba(124,131,253,.15);color:var(--accent2);border-radius:50%;width:23px;height:23px;min-width:23px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;margin-top:1px;}
+.formula{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px 16px;font-family:'Courier New',monospace;font-size:13.5px;color:var(--accent3);margin:10px 0;line-height:1.9;text-align:center;}
+.formula.master{border:2px solid var(--accent5);background:rgba(192,132,252,.06);font-size:14.5px;color:var(--accent5);}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 5px;font-size:.84em;line-height:1.18;position:relative;top:3px;}
+.frac .num{padding:0 4px 2px;border-bottom:1.4px solid currentColor;}
+.frac .den{padding:2px 4px 0;}
+svg{max-width:100%;}
+.hl{color:var(--accent3);font-weight:700;}
+.hl-r{color:var(--accent4);font-weight:700;}
+.hl-b{color:var(--accent2);font-weight:700;}
+.hl-g{color:var(--green);font-weight:700;}
+code{background:rgba(124,131,253,.1);color:var(--accent2);padding:1px 7px;border-radius:4px;font-family:'Courier New',monospace;font-size:12.5px;}
+.trap{background:rgba(255,107,107,.07);border-left:3px solid var(--accent4);border-radius:0 8px 8px 0;padding:10px 14px;font-size:12.5px;color:#ffb3b3;margin-top:10px;line-height:1.6;}
+.trick{background:rgba(100,255,218,.05);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:10px 14px;font-size:12.5px;color:var(--accent);margin-top:10px;line-height:1.6;}
+.confirm{background:rgba(105,219,124,.06);border-left:3px solid var(--green);border-radius:0 8px 8px 0;padding:10px 14px;font-size:12.5px;color:#a8e8b0;margin-top:10px;line-height:1.6;}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0;}
+.compare .card{margin-bottom:0;}
+.compare .winner{border:2px solid var(--green);}
+.compare .winner .card-title{color:var(--green);}
+@media(max-width:680px){.compare{grid-template-columns:1fr;}}
+
+table.matrix{border-collapse:collapse;margin:10px auto;font-family:'Courier New',monospace;font-size:13px;}
+table.matrix td{padding:6px 12px;text-align:center;border:1px solid var(--border);color:var(--text);}
+table.matrix td.diag{color:var(--accent3);font-weight:700;}
+table.matrix td.changed{color:var(--accent4);font-weight:700;background:rgba(255,107,107,.08);}
+
+.cheat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-bottom:8px;}
+.cheat-item{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px;border-left:3px solid var(--accent5);}
+.cheat-q{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.cheat-a{font-size:13px;color:var(--accent3);font-family:'Courier New',monospace;font-weight:600;line-height:1.5;margin-bottom:5px;}
+.cheat-tip{font-size:11.5px;color:var(--muted);line-height:1.5;}
+.footer{text-align:center;font-size:11px;color:var(--muted);margin-top:36px;padding-top:16px;border-top:1px solid var(--border);max-width:920px;margin-left:auto;margin-right:auto;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-back">← Back to Hub</a>
+  <span class="nav-title">🎯 Golden Patterns — Dependent Sources &amp; Millman</span>
+</nav>
+
+<div class="hero">
+  <h1>🎯 Golden Patterns Cheat Sheet</h1>
+  <p>Built directly from your June 2026 exam paper + your own worked solutions. Your analytical formulas were correct — this page gives you the fastest reliable <em>method</em> to reach them, plus the Millman-only shortcut for Exercise 3.</p>
+  <div class="badge-row">
+    <span class="badge gold">Source: Messina, 09 June 2026 exam</span>
+    <span class="badge">Your handwritten solutions verified ✓</span>
+    <span class="badge">Method 2: Pure Millman for Ex.3</span>
+  </div>
+</div>
+
+<div class="section">
+  <div class="toc">
+    <a href="#ex1">🔴 Ex.1 — Thévenin + Dependent Source</a>
+    <a href="#ex2">🔁 Ex.2 — Mesh + Dependent Source</a>
+    <a href="#ex3">🔌 Ex.3 — Op-Amp Millman (2 methods)</a>
+    <a href="#ex4">🖥️ Ex.4 — ODE → Circuit</a>
+    <a href="#ex5">🔋 RL/RC Natural Decay — Exam's Exercise 3</a>
+  </div>
+</div>
+
+<!-- ═══════════════════ EXERCISE 1 ═══════════════════ -->
+<div class="section" id="ex1">
+  <div class="topic-header">
+    <span class="topic-icon">🔴</span>
+    <span class="topic-name">Exercise 1 — Thévenin Equivalent with a Dependent Source</span>
+    <span class="topic-tag">Source-Transform + Millman</span>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📐 The Golden Pattern (this is exactly what you did, confirmed correct)</div>
+    <div class="step"><div class="step-num">1</div><div>Look for a <span class="hl">current source in parallel with a resistor</span> (here: I<sub>A</sub> ∥ R₁). This is always convertible.</div></div>
+    <div class="step"><div class="step-num">2</div><div><span class="hl-b">Source-transform it</span>: I<sub>A</sub> ∥ R₁ → a voltage source of value <code>I_A·R_1</code> in series with R₁ (resistance unchanged, only the source type changes).</div></div>
+    <div class="step"><div class="step-num">3</div><div>Now every branch feeding the A-B path is a <span class="hl">series E + R</span> branch. If two such branches land on the same node, combine them with <span class="hl">Millman</span> (see diagram below for E_m, R_m).</div></div>
+    <div class="step"><div class="step-num">4</div><div><span class="hl-g">Since A-B is open</span> (no current flows when finding V<sub>TH</sub>), all the series EMFs just <strong>add directly</strong> — no IR drops to worry about. V_TH and R_TH follow immediately (see diagram).</div></div>
+
+    <svg viewBox="0 0 800 290" style="width:100%;max-width:760px;display:block;margin:6px auto 16px;" xmlns="http://www.w3.org/2000/svg">
+      <rect x="6" y="6" width="788" height="278" rx="14" fill="var(--bg3)" stroke="var(--border)" stroke-width="1.5"/>
+      <text x="400" y="32" text-anchor="middle" font-family="'Segoe UI',sans-serif" font-size="13" font-weight="700" fill="var(--accent2)">Millman-combine the two branches feeding node M</text>
+      <line x1="36" y1="44" x2="764" y2="44" stroke="var(--border)" stroke-width="1"/>
+
+      <text x="158" y="106" text-anchor="end" font-family="'Courier New',monospace" font-size="20" font-weight="700" fill="var(--accent3)">E_m</text>
+      <text x="172" y="106" text-anchor="start" font-family="'Courier New',monospace" font-size="18" fill="var(--muted)">=</text>
+      <text x="300" y="90" text-anchor="middle" font-family="'Courier New',monospace" font-size="15.5" fill="var(--text)">E₁ / R₂</text>
+      <line x1="228" y1="102" x2="372" y2="102" stroke="var(--accent3)" stroke-width="2"/>
+      <text x="300" y="124" text-anchor="middle" font-family="'Courier New',monospace" font-size="14.5" fill="var(--text)">1/R₂ + 1/R₃</text>
+      <text x="300" y="148" text-anchor="middle" font-family="'Segoe UI',sans-serif" font-size="10.5" fill="var(--muted)">combined EMF</text>
+
+      <line x1="420" y1="58" x2="420" y2="150" stroke="var(--border)" stroke-width="1" stroke-dasharray="4,4"/>
+
+      <text x="478" y="106" text-anchor="end" font-family="'Courier New',monospace" font-size="20" font-weight="700" fill="var(--accent3)">R_m</text>
+      <text x="492" y="106" text-anchor="start" font-family="'Courier New',monospace" font-size="18" fill="var(--muted)">=</text>
+      <text x="630" y="90" text-anchor="middle" font-family="'Courier New',monospace" font-size="15.5" fill="var(--text)">1</text>
+      <line x1="558" y1="102" x2="702" y2="102" stroke="var(--accent3)" stroke-width="2"/>
+      <text x="630" y="124" text-anchor="middle" font-family="'Courier New',monospace" font-size="14.5" fill="var(--text)">1/R₂ + 1/R₃</text>
+      <text x="630" y="148" text-anchor="middle" font-family="'Segoe UI',sans-serif" font-size="10.5" fill="var(--muted)">combined resistance</text>
+
+      <text x="400" y="175" text-anchor="middle" font-family="'Segoe UI',sans-serif" font-size="11.5" fill="var(--muted)">A-B is open → add I_A·R₁ in series, no current divider needed</text>
+      <line x1="400" y1="181" x2="400" y2="208" stroke="var(--accent2)" stroke-width="2.2"/>
+      <path d="M 391,200 L 400,214 L 409,200 Z" fill="var(--accent2)"/>
+
+      <rect x="170" y="220" width="460" height="58" rx="10" fill="rgba(192,132,252,.08)" stroke="var(--accent5)" stroke-width="2"/>
+      <text x="400" y="242" text-anchor="middle" font-family="'Courier New',monospace" font-size="16" font-weight="700" fill="var(--accent5)">V_TH = E_m + I_A · R₁</text>
+      <text x="400" y="265" text-anchor="middle" font-family="'Courier New',monospace" font-size="16" font-weight="700" fill="var(--accent5)">R_TH = R_m + R₁</text>
+    </svg>
+
+    <div class="confirm">✅ Confirmed against your notes: <code>V_TH = E_m + I_A·R_1</code>, <code>R_TH = R_m + R_1</code> (R_m shown above) — this is exactly the source-transform-then-add-in-series result. Your method was right.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">⚠️ Where a Dependent Source Changes the Story</div>
+    <div class="step"><div class="step-num">★</div><div>Source transformation and plain series-addition only work for the <span class="hl-b">independent-source part</span> of the network.</div></div>
+    <div class="step"><div class="step-num">★</div><div>If a dependent source (like <code>αI₁</code>) sits <strong>inside</strong> the reduced network (not killed), you cannot just add it into V_TH by inspection — you need the <span class="hl-r">V_test method</span>: kill all independent sources only, apply a test source V_t at A-B, express the controlling variable (I₁) in terms of V_t, solve for I_t, then <code>R_TH = V_t / I_t</code>.</div></div>
+    <div class="trap">❌ Never kill a dependent source when computing R_TH. Only independent V/I sources get killed (V→short, I→open). The dependent source ALWAYS stays active.</div>
+    <div class="trick">💡 Decision rule: if the dependent source sits cleanly outside the part you're reducing (in series, away from where the controlling variable is measured), source-transform + Millman is faster. If it's tangled inside the network with its controlling variable, use V_test.</div>
+  </div>
+</div>
+
+<!-- ═══════════════════ EXERCISE 2 ═══════════════════ -->
+<div class="section" id="ex2">
+  <div class="topic-header">
+    <span class="topic-icon">🔁</span>
+    <span class="topic-name">Exercise 2 — Mesh Analysis with a Dependent Source</span>
+    <span class="topic-tag">Matrix Modification Rule</span>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📐 The Golden Pattern — confirmed from your June 2026 exam answer</div>
+    <div class="step"><div class="step-num">1</div><div>Build the R matrix <span class="hl">exactly like a normal mesh problem</span> first — pretend the dependent source isn't even there. Diagonal = ΣR in that mesh, off-diagonal = −R shared.</div></div>
+    <div class="step"><div class="step-num">2</div><div>Find which branch carries the controlling variable. <span class="hl-b">Two cases:</span>
+      <br>• If that branch belongs to <strong>only one mesh</strong> → controlling current = that mesh current directly (e.g. <code>I₁ = i₁</code>, your exam's case).
+      <br>• If the branch is <strong>shared by two meshes</strong> → controlling current = difference of the two mesh currents (e.g. <code>I_x = i_m − i_n</code>).</div></div>
+    <div class="step"><div class="step-num">3</div><div>Write the dependent source term into the KVL of <strong>whichever mesh's loop contains it</strong>, then move it from the source vector to the matrix side.</div></div>
+    <div class="step"><div class="step-num">4</div><div class="hl-g">Result: only ONE row of the matrix changes</div> — the row for the mesh whose KVL contained the dependent source. That row picks up an extra <code>±α</code> term in the column matching the controlling mesh current.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">✅ Your Exact Worked Example (verified)</div>
+    <p style="font-size:13px;margin-bottom:10px;">Your matrix had a CCVS <code>αI₁</code> in mesh 2's loop, with <code>I₁ = i₁</code> directly (simplest case — controlling branch belongs only to mesh 1).</p>
+    <table class="matrix">
+      <tr><td>R₁+R₂+R₃</td><td>−R₃</td><td>−R₂</td><td>i₁</td><td>=</td><td>E₁−E₂−E₃</td></tr>
+      <tr><td class="changed">−R₃ + α</td><td>R₃+R₅</td><td>0</td><td>i₂</td><td>=</td><td>E₃</td></tr>
+      <tr><td>−R₂</td><td>0</td><td>R₂+R₄</td><td>i₃</td><td>=</td><td>+E₂</td></tr>
+    </table>
+    <div class="confirm">✅ Notice row 2, column 1 changed from <code>−R₃</code> to <code>−R₃+α</code> — and <strong>nothing else changed</strong>. Row 1 and row 3 are untouched. This confirms the rule: the dependent source touches exactly one cell (or one row if the controlling variable is a difference of two mesh currents, touching two cells in that row).</div>
+    <div class="trap">❌ The matrix is <strong>no longer symmetric</strong> once a dependent source is present (R₂₁ ≠ R₁₂ here: −R₃+α ≠ −R₃). Don't "fix" this — it's supposed to happen. Symmetry only holds for passive resistor-only networks.</div>
+    <div class="trick">💡 Sanity check on exam day: after adding the dependent source term, if your matrix is still perfectly symmetric, you forgot to include it. Asymmetry is your confirmation that you did it right.</div>
+  </div>
+</div>
+
+<!-- ═══════════════════ EXERCISE 3 ═══════════════════ -->
+<div class="section" id="ex3">
+  <div class="topic-header">
+    <span class="topic-icon">🔌</span>
+    <span class="topic-name">Exercise 3 — Op-Amp / Millman (Two-Stage, Non-Grounded V−)</span>
+    <span class="topic-tag">Method 2 = Pure Millman ⭐</span>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🧩 What makes this exam's circuit tricky</div>
+    <p style="font-size:13.5px;">In your exam, the non-inverting input (V+) of each op-amp is <strong>not grounded</strong> — it's tied directly to a source (E₂ for stage 1, a Millman-combo of E₃/R₅ and E₄/R₆ for stage 2). The classical lecture method splits this into an "inverting" gain term plus a "non-inverting" gain term and adds them by superposition. It works — your numbers prove it — but it's two formulas to remember and apply correctly.</p>
+  </div>
+
+  <div class="compare">
+    <div class="card">
+      <div class="card-title">Method 1 — Superposition (what you used)</div>
+      <div class="formula">V_o = (−R_f/R_in)·V_Millman&nbsp;<br>&nbsp;&nbsp;&nbsp;+ (1+R_f/R_in)·V₊</div>
+      <p style="font-size:12px;color:var(--muted);">Two separate gain formulas (inverting + non-inverting), added together. Correct, but you have to remember both formulas and which one multiplies which source.</p>
+    </div>
+    <div class="card winner">
+      <div class="card-title">Method 2 — Pure Millman ⭐ (your preference)</div>
+      <svg viewBox="0 0 440 150" style="width:100%;display:block;margin:4px auto 6px;" xmlns="http://www.w3.org/2000/svg">
+        <rect x="4" y="4" width="432" height="142" rx="10" fill="rgba(105,219,124,.05)" stroke="var(--green)" stroke-width="1.5"/>
+        <text x="220" y="26" text-anchor="middle" font-family="'Courier New',monospace" font-size="13.5" font-weight="700" fill="var(--green)">V₋ = V₊ (real value — NOT always 0!)</text>
+        <line x1="26" y1="38" x2="414" y2="38" stroke="var(--border)" stroke-width="1"/>
+        <text x="95" y="68" text-anchor="end" font-family="'Courier New',monospace" font-size="16" font-weight="700" fill="var(--green)">V₋ =</text>
+        <text x="255" y="62" text-anchor="middle" font-family="'Courier New',monospace" font-size="13" fill="var(--text)">ΣE_k/R_k + ΣI_k + V_o/R_f</text>
+        <line x1="120" y1="74" x2="390" y2="74" stroke="var(--green)" stroke-width="2"/>
+        <text x="255" y="94" text-anchor="middle" font-family="'Courier New',monospace" font-size="13" fill="var(--text)">Σ1/R_k + 1/R_f</text>
+        <text x="220" y="120" text-anchor="middle" font-family="'Segoe UI',sans-serif" font-size="10.5" fill="var(--muted)">feedback branch V_o/R_f = just another Millman branch</text>
+        <text x="220" y="134" text-anchor="middle" font-family="'Segoe UI',sans-serif" font-size="10.5" fill="var(--muted)">don't forget 1/R_f in the denominator!</text>
+      </svg>
+      <p style="font-size:12px;color:var(--muted);">ONE equation. Solve directly for V_o. No separate formulas to juggle.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📐 The Golden Pattern — Method 2 step by step</div>
+    <div class="step"><div class="step-num">1</div><div><span class="hl">Find V+ first.</span> If the + pin connects straight to ground → V+=0. If it connects straight to a single source → V+ = that source. If it has its own resistor network with multiple sources → compute V+ via its own Millman.</div></div>
+    <div class="step"><div class="step-num">2</div><div><span class="hl-b">Virtual short:</span> V− = V+ (use the real value from step 1 — don't assume it's zero).</div></div>
+    <div class="step"><div class="step-num">3</div><div><span class="hl">Write ONE Millman equation at the V− node</span>, including every branch touching it — input branches AND the feedback branch (treat V_o through R_f exactly like any other E/R branch), then solve for V_o. Full picture below:</div></div>
+
+    <svg viewBox="0 0 800 300" style="width:100%;max-width:760px;display:block;margin:6px auto 16px;" xmlns="http://www.w3.org/2000/svg">
+      <rect x="6" y="6" width="788" height="288" rx="14" fill="var(--bg3)" stroke="var(--border)" stroke-width="1.5"/>
+      <text x="400" y="32" text-anchor="middle" font-family="'Segoe UI',sans-serif" font-size="13" font-weight="700" fill="var(--accent2)">ONE equation at the V− node — every branch, feedback included</text>
+      <line x1="36" y1="44" x2="764" y2="44" stroke="var(--border)" stroke-width="1"/>
+
+      <text x="150" y="92" text-anchor="end" font-family="'Courier New',monospace" font-size="18" font-weight="700" fill="var(--accent3)">V₋ =</text>
+      <text x="430" y="76" text-anchor="middle" font-family="'Courier New',monospace" font-size="16" fill="var(--text)">ΣE_k/R_k + ΣI_k + V_o/R_f</text>
+      <line x1="190" y1="92" x2="670" y2="92" stroke="var(--accent3)" stroke-width="2.2"/>
+      <text x="430" y="116" text-anchor="middle" font-family="'Courier New',monospace" font-size="16" fill="var(--text)">Σ1/R_k + 1/R_f</text>
+
+      <text x="400" y="148" text-anchor="middle" font-family="'Segoe UI',sans-serif" font-size="11.5" fill="var(--muted)">solve algebraically for V_o — the only unknown</text>
+      <line x1="400" y1="154" x2="400" y2="180" stroke="var(--accent2)" stroke-width="2.2"/>
+      <path d="M 391,172 L 400,186 L 409,172 Z" fill="var(--accent2)"/>
+
+      <rect x="60" y="194" width="680" height="84" rx="10" fill="rgba(192,132,252,.08)" stroke="var(--accent5)" stroke-width="2"/>
+      <text x="400" y="228" text-anchor="middle" font-family="'Courier New',monospace" font-size="16" font-weight="700" fill="var(--accent5)">V_o = R_f · [ V₋ · (Σ1/R_k + 1/R_f)</text>
+      <text x="400" y="253" text-anchor="middle" font-family="'Courier New',monospace" font-size="16" font-weight="700" fill="var(--accent5)">− ΣE_k/R_k − ΣI_k ]</text>
+    </svg>
+
+    <div class="confirm">✅ This collapses to the standard summing-amplifier formula <code>V_o = −R_f·Σ(E_k/R_k + I_k)</code> automatically whenever V+=0 — Method 2 is a strict generalization, not a different formula. You only need ONE formula for every op-amp problem on the exam, grounded or not.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">✅ Verified against YOUR circuit (both stages, formula match confirmed)</div>
+    <p style="font-size:13px;margin-bottom:8px;"><strong>Stage 1</strong> — V+ = E₂ directly, input branch = Millman of (E₁,R₁) and (I_A), R_in=R₁∥R₂, feedback R₃:</p>
+    <div class="formula">V₋ = E₂ &nbsp;→&nbsp; E₂ = <span class="frac"><span class="num">V_Millman/R_in + V_A/R₃</span><span class="den">1/R_in + 1/R₃</span></span>
+    <br><br>⟹ &nbsp; V_A = (1+R₃/R_in)·E₂ − (R₃/R_in)·V_Millman</div>
+    <p style="font-size:12.5px;color:var(--green);">↳ Algebraically identical to your Method-1 formula. Same answer, one less formula to memorize.</p>
+    <p style="font-size:13px;margin:12px 0 8px;"><strong>Stage 2</strong> — V+ = Millman of (E₃,R₅) and (E₄,R₆), input branch = V_A through R₇, feedback R₈:</p>
+    <div class="formula">V_o = (1+R₈/R₇)·Millman(E₃,R₅,E₄,R₆) − (R₈/R₇)·V_A</div>
+    <p style="font-size:12.5px;color:var(--green);">↳ Same structure, same result as your written solution. (Per your note — not re-doing the arithmetic, just confirming the method.)</p>
+  </div>
+
+  <div class="trap" style="max-width:920px;margin:0 auto 20px;">❌ Biggest trap with Method 2: forgetting that <code>1/R_f</code> belongs in the <em>denominator</em> sum too (it's a branch like any other). Leaving it out gives you the wrong V_o by a scale factor.</div>
+</div>
+
+<!-- ═══════════════════ EXERCISE 4 ═══════════════════ -->
+<div class="section" id="ex4">
+  <div class="topic-header">
+    <span class="topic-icon">🖥️</span>
+    <span class="topic-name">Exercise 4 — ODE → Op-Amp Circuit</span>
+    <span class="topic-tag">Confirmed + Multi-Forcing-Term</span>
+  </div>
+
+  <div class="card">
+    <div class="card-title">✅ Your circuit for d²v_o/dt² = 4·dv_o/dt − 2v_o + 4sin(4t) − 2sin(6t)</div>
+    <div class="step"><div class="step-num">1</div><div>You correctly isolated: <code>v̈_o = 4v̇_o − 2v_o + 4sin(4t) − 2sin(6t)</code>, then built: Integrator1 (output −v̇_o) → feeds back with gain 4 into the summer, plus Integrator2 (output −v_o, via inverter chain) feeding gain 2, plus <strong>two separate forcing branches</strong> for the two sine terms.</div></div>
+    <div class="step"><div class="step-num">★</div><div class="hl">New pattern vs. the single-forcing-term exams</div>: when the ODE has <strong>two independent forcing functions</strong> (here sin(4t) and sin(6t)), each gets its <span class="hl-b">own dedicated input resistor into the summer</span> — they are NOT combined into one branch, because they're independent signals with different frequencies/sources.</div>
+    <div class="step"><div class="step-num">★</div><div>Gain for each forcing branch = R_f / R_branch = the coefficient of that term in the rearranged ODE. Here: gain 4 for the sin(4t) branch, gain 2 for the sin(6t) branch (sign handled by which integrator output — direct vs inverted — you tap into).</div></div>
+    <div class="confirm">✅ Your hand-drawn circuit (summer + 2 integrators + inverters, RC=1s, two independent forcing branches) matches the standard pattern exactly. This generalizes cleanly: <strong>N forcing terms = N separate summer input branches</strong>, no matter how many there are.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📐 Quick-reference recipe (same as your blitz sheet, restated)</div>
+    <div class="step"><div class="step-num">1</div><div>Isolate the highest derivative on the left: <code>ÿ = −a·ẏ − b·y + f₁(t) + f₂(t) + ...</code></div></div>
+    <div class="step"><div class="step-num">2</div><div>Chain: ÿ → Integrator1 → (−ẏ) → [use directly with gain a, OR invert first if sign needs flipping] → Integrator2 → (−y) → same sign logic for gain b.</div></div>
+    <div class="step"><div class="step-num">3</div><div>Each forcing term f_k(t) gets its own resistor into the summer with gain = R_f/R_k = its coefficient, sign-corrected by whether you feed +f_k or −f_k.</div></div>
+    <div class="step"><div class="step-num">4</div><div>All integrators: pick R=1Ω, C=1F (or any pair with RC=1s) — never assign separate numeric values unless the exam explicitly asks.</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════ EXERCISE 3 PATTERN — RL/RC NATURAL DECAY ═══════════════════ -->
+<div class="section" id="ex5">
+  <div class="topic-header">
+    <span class="topic-icon">🔋</span>
+    <span class="topic-name">RL &amp; RC Natural Decay — the Exam's Real Exercise 3</span>
+    <span class="topic-tag">Pure Decay Shortcut</span>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🧩 Why this exact past-exam wording is the easy version</div>
+    <p style="font-size:13.5px;">Look at how both past papers phrase it: <em>"RL circuit, R=10Ω, L=0.1H. Compute i_L(0.2ms), given i_L(0)=6A"</em> — and the other: <em>"R=0.5mΩ, L=0.5H, i_L(0)=5A, find i_L(200μs)."</em> No E, no I, no switch, no second circuit to redraw. That absence is the tell: <span class="hl">nothing is driving the loop after t=0</span>, so the inductor (or capacitor) just bleeds its stored energy into the resistor on its own. That means <code>x(∞) = 0</code> automatically — you skip the entire "find the post-switch steady-state circuit" step that the harder transient problems require.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📐 The Golden Pattern</div>
+    <div class="step"><div class="step-num">1</div><div><span class="hl">Check for a source.</span> If the problem only gives you R, L (or C), and one initial value — no E, no I — then <code>x(∞) = 0</code>. Don't draw or analyze any steady-state circuit; there's nothing to analyze.</div></div>
+    <div class="step"><div class="step-num">2</div><div>Compute <span class="hl-b">τ</span>: &nbsp; RL circuit → <code>τ = L/R</code> &nbsp;&nbsp;|&nbsp;&nbsp; RC circuit → <code>τ = R·C</code>.</div></div>
+    <div class="step"><div class="step-num">3</div><div>Plug straight into the <span class="hl-g">one-term decay formula</span> below — no addition, no subtraction, just one exponential times the initial value.</div></div>
+    <div class="step"><div class="step-num">4</div><div>Compute <code>t/τ</code> first (convert ms/μs to seconds so units match), then <code>e^(−t/τ)</code>, then multiply by the initial value.</div></div>
+  </div>
+
+  <svg viewBox="0 0 820 300" style="width:100%;max-width:780px;display:block;margin:6px auto 16px;" xmlns="http://www.w3.org/2000/svg">
+    <rect x="6" y="6" width="808" height="288" rx="14" fill="var(--bg3)" stroke="var(--border)" stroke-width="1.5"/>
+    <text x="410" y="32" text-anchor="middle" font-family="'Segoe UI',sans-serif" font-size="13" font-weight="700" fill="var(--accent2)">The general formula collapses when nothing drives the circuit after t=0</text>
+    <line x1="36" y1="44" x2="784" y2="44" stroke="var(--border)" stroke-width="1"/>
+
+    <text x="410" y="68" text-anchor="middle" font-family="'Courier New',monospace" font-size="14" fill="var(--muted)">x(t) = x(∞) + [x(0) − x(∞)] · e^(−t/τ)</text>
+    <text x="410" y="90" text-anchor="middle" font-family="'Segoe UI',sans-serif" font-size="12" fill="var(--muted)">no source after t=0  ⟹  x(∞) = 0</text>
+
+    <line x1="410" y1="98" x2="410" y2="122" stroke="var(--accent2)" stroke-width="2.2"/>
+    <path d="M 401,114 L 410,128 L 419,114 Z" fill="var(--accent2)"/>
+
+    <ellipse cx="225" cy="200" rx="195" ry="62" fill="rgba(255,107,107,.06)" stroke="var(--accent4)" stroke-width="3"/>
+    <text x="225" y="178" text-anchor="middle" font-family="'Segoe UI',sans-serif" font-size="11" font-weight="700" fill="var(--accent4)">RL CIRCUIT</text>
+    <text x="225" y="208" text-anchor="middle" font-family="'Courier New',monospace" font-size="19" font-weight="700" fill="var(--accent4)">i(t) = i(0) · e^(−t/τ)</text>
+    <text x="225" y="232" text-anchor="middle" font-family="'Courier New',monospace" font-size="14" fill="var(--text)">τ = L / R</text>
+
+    <ellipse cx="595" cy="200" rx="195" ry="62" fill="rgba(255,107,107,.06)" stroke="var(--accent4)" stroke-width="3"/>
+    <text x="595" y="178" text-anchor="middle" font-family="'Segoe UI',sans-serif" font-size="11" font-weight="700" fill="var(--accent4)">RC CIRCUIT</text>
+    <text x="595" y="208" text-anchor="middle" font-family="'Courier New',monospace" font-size="19" font-weight="700" fill="var(--accent4)">v(t) = v(0) · e^(−t/τ)</text>
+    <text x="595" y="232" text-anchor="middle" font-family="'Courier New',monospace" font-size="14" fill="var(--text)">τ = R · C</text>
+
+    <text x="410" y="278" text-anchor="middle" font-family="'Segoe UI',sans-serif" font-size="11" fill="var(--muted)">⭐ memorize the circled formula — it's the only one this exam pattern needs</text>
+  </svg>
+
+  <div class="card">
+    <div class="card-title">✅ Worked example 1 — straight from a past Messina paper</div>
+    <p style="font-size:13px;margin-bottom:8px;">RL circuit, R = 10 Ω, L = 0.1 H, i_L(0) = 6 A. Find i_L(0.2 ms).</p>
+    <div class="step"><div class="step-num">1</div><div>No source given → <code>i(∞) = 0</code>.</div></div>
+    <div class="step"><div class="step-num">2</div><div><code>τ = L/R = 0.1/10 = 0.01 s = 10 ms</code></div></div>
+    <div class="step"><div class="step-num">3</div><div><code>t/τ = 0.2ms / 10ms = 0.02</code></div></div>
+    <div class="step"><div class="step-num">4</div><div><code>i(0.2ms) = 6 · e^(−0.02) ≈ 6 × 0.9802 ≈ 5.88 A</code></div></div>
+    <div class="confirm">✅ Barely decayed — 0.2ms is a tiny slice of a 10ms time constant. That ratio (t/τ ≪ 1) is your built-in sanity check: if t is much smaller than τ, the answer should land close to the initial value, not near zero.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">✅ Worked example 2 — same pattern, a τ that's enormous</div>
+    <p style="font-size:13px;margin-bottom:8px;">RL circuit, R = 0.5 mΩ, L = 0.5 H, i_L(0) = 5 A. Find i_L(200 μs).</p>
+    <div class="step"><div class="step-num">1</div><div>No source given → <code>i(∞) = 0</code>.</div></div>
+    <div class="step"><div class="step-num">2</div><div><code>τ = L/R = 0.5 / 0.0005 = 1000 s</code> — a tiny R makes τ huge.</div></div>
+    <div class="step"><div class="step-num">3</div><div><code>t/τ = 200μs / 1000s = 2×10⁻⁷</code> — essentially zero.</div></div>
+    <div class="step"><div class="step-num">4</div><div><code>i(200μs) = 5 · e^(−2×10⁻⁷) ≈ 5.00 A</code> (unchanged to 6 decimal places).</div></div>
+    <div class="trick">💡 Don't panic when a tiny resistance gives you a giant τ — it just means the answer is "basically i(0)" because the exam is testing whether you notice t≪τ, not whether you can grind through a near-zero exponent.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">⚠️ Don't fall for this</div>
+    <div class="trap">❌ If a problem DOES mention a source still connected after t=0 (an E or I that isn't switched out), you're back to the full formula <code>x(t)=x(∞)+[x(0)−x(∞)]e^(−t/τ)</code> from the main Transients exercise page — you have to actually find x(∞) from the post-switch steady-state circuit. This shortcut only applies when nothing is driving the circuit going forward.</div>
+  </div>
+</div>
+
+<!-- ═══════════════════ MASTER CHEAT SHEET ═══════════════════ -->
+<div class="section" style="margin-top:10px;">
+  <div class="topic-header">
+    <span class="topic-icon">📋</span>
+    <span class="topic-name">Master Cheat Sheet — Dependent Sources &amp; Millman</span>
+  </div>
+  <div class="cheat-grid">
+    <div class="cheat-item">
+      <div class="cheat-q">Mesh + Dependent Source</div>
+      <div class="cheat-a">Build normal R matrix → add α term only in the row of the mesh containing the dependent source</div>
+      <div class="cheat-tip">Column = whichever mesh current the controlling variable equals (or the difference of two, if shared branch). Matrix becomes asymmetric — that's correct.</div>
+    </div>
+    <div class="cheat-item">
+      <div class="cheat-q">Node + Dependent Source</div>
+      <div class="cheat-a">Same idea: add the dependent term only to the row (node KCL) where it physically appears</div>
+      <div class="cheat-tip">Controlling variable = a node voltage (VCVS/VCCS) or a branch current expressed via node voltages (CCVS/CCCS).</div>
+    </div>
+    <div class="cheat-item">
+      <div class="cheat-q">Thévenin + Dependent Source</div>
+      <div class="cheat-a">Kill independent sources ONLY. Use V_test if dependent source is tangled in; use source-transform+Millman if it's cleanly separable</div>
+      <div class="cheat-tip">R_TH = V_test/I_test. Never kill the dependent source — ever.</div>
+    </div>
+    <div class="cheat-item">
+      <div class="cheat-q">⭐ Millman Master Formula (Method 2)</div>
+      <div class="cheat-a">V₋ = V₊, then <span class="frac"><span class="num">ΣE_k/R_k + ΣI_k + V_o/R_f</span><span class="den">Σ1/R_k + 1/R_f</span></span> → solve for V_o</div>
+      <div class="cheat-tip">Works whether V+ is grounded or tied to a source. One formula replaces "inverting" + "non-inverting" + superposition. Full diagram in Ex.3 above ↑</div>
+    </div>
+    <div class="cheat-item">
+      <div class="cheat-q">Source Transformation</div>
+      <div class="cheat-a">I ∥ R  ⟷  (I·R) in series with R</div>
+      <div class="cheat-tip">Resistance never changes in a source transform — only the source type and its series/parallel position.</div>
+    </div>
+    <div class="cheat-item">
+      <div class="cheat-q">Sign of Independent Sources (KVL)</div>
+      <div class="cheat-a">Walk your mesh direction. Hit − terminal first → +E. Hit + terminal first → −E.</div>
+      <div class="cheat-tip">Draw the mesh arrow before assigning any signs — don't try to do it from memory mid-equation.</div>
+    </div>
+    <div class="cheat-item">
+      <div class="cheat-q">🔋 RL/RC Natural Decay (Exam's Ex.3)</div>
+      <div class="cheat-a">No E, no I given? Then x(∞)=0 → i(t)=i(0)e^(−t/τ) or v(t)=v(0)e^(−t/τ)</div>
+      <div class="cheat-tip">τ=L/R (RL) or τ=RC (RC). Convert ms/μs to seconds before dividing by τ. Full diagram + worked examples above ↑</div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  Built from your Messina 09 June 2026 exam paper + your own verified handwritten solutions (Exercises 1–4) · Method 2 (pure Millman) confirmed algebraically equivalent to your Method 1 results.
+  <br><a href="index.html" style="color:var(--accent2);">← Back to Study Hub</a> &nbsp;·&nbsp; <a href="device_exam_blitz.html" style="color:var(--accent4);">⚡ Exam Blitz</a>
+</div>
+
+</body>
+</html>
